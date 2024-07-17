@@ -1,0 +1,32 @@
+Package: fastCNV
+Title: fastCNV
+Version: 0.1.7
+Authors@R: 
+    c(person("Gadea", "Cabrejas", , "gadea.cabrejas-saiz@u-paris.fr", role = c("aut", "cre")),
+      person("Clarice", "Groeneveld", , "clarice.groeneveld@inserm.fr", role = c("ctb")))
+Description: Computes CNV quickly on Seurat objects.
+License: GPL-3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    biomaRt,
+    circlize,
+    ComplexHeatmap,
+    ggplot2,
+    grDevices,
+    grid,
+    hdf5r,
+    paletteer,
+    patchwork,
+    qpdf,
+    Seurat,
+    SeuratObject,
+    stats
+LazyData: true
+Depends: R (>= 3.5.0)
+Suggests: data.package, knitr, rmarkdown
+VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2024-04-08 13:48:38 UTC; gadea
+Maintainer: Gadea Cabrejas <gadea.cabrejas-saiz@u-paris.fr>
