@@ -1,6 +1,6 @@
 Package: fastCNV
 Title: fastCNV
-Version: 0.1.7
+Version: 0.1.8
 Authors@R: 
     c(person("Gadea", "Cabrejas", , "gadea.cabrejas-saiz@u-paris.fr", role = c("aut", "cre")),
       person("Clarice", "Groeneveld", , "clarice.groeneveld@inserm.fr", role = c("ctb")))
@@ -25,7 +25,7 @@ Imports:
     stats
 LazyData: true
 Depends: R (>= 3.5.0)
-Suggests: data.package, knitr, rmarkdown
+Suggests: fastCNVdata, knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: no
 Packaged: 2024-04-08 13:48:38 UTC; gadea

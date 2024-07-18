@@ -8,10 +8,11 @@
 #' @param downsizePlot Subset the observations to speed up the plotting process (default = `FALSE`).
 #' @param doPlot If `TRUE` will plot a heatmap for each of the samples (default = `TRUE`)
 #' @param doRecapPlot Default `TRUE`. Will output the CNV heatmaps by annotation if `TRUE`.
+#' @param prepareCounts If `FALSE` will not run the `prepareCountsForCNVAnalysis` function. Default `TRUE`.
 #' @param pooledReference Default `TRUE`. Will build a pooled reference across all samples if `TRUE`.
 #' @param assay Name of the assay to run the CNV on. Takes the results of `prepareCountsForCNVAnalysis` by default if available
 #' @param savePath Default `.`. If `NULL` the heatmap won't be saved as a pdf.
-#' @param aggregFactor The number of counts per spot desired (default 30 000)
+#' @param aggregFactor The number of counts per spot desired (default `30 000`). If less than `1000`, will not run the `prepareCountsForCNVAnalysis` function.
 #' @param seuratClusterResolution The resolution wanted for the seurat clusters (default 0.8)
 #' @param aggregateByVar If `referenceVar` is given, whether to use it to pool the observations
 #' @param reClusterSeurat Whether to re-cluster if the Seurat object given already has a `seurat_clusters` slot in its meta.data
@@ -30,7 +31,7 @@
 
 fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel = NULL,
                      splitPlotOnVar = referenceVar, downsizePlot = FALSE, doPlot = TRUE,
-                     doRecapPlot = TRUE, pooledReference = TRUE, assay = NULL, savePath = ".",
+                     doRecapPlot = TRUE, prepareCounts = TRUE, pooledReference = TRUE, assay = NULL, savePath = ".",
                      aggregFactor=30000, seuratClusterResolution = 0.8, aggregateByVar = T,
                      reClusterSeurat = F, scaleOnReferenceLabel = TRUE, thresholdPercentile = 0.01,
                      genes=getGenes(), windowSize=100, windowStep=20, topNGenes=7000){
@@ -40,16 +41,18 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
   if(length(seuratObj) == 1){
     seuratObj <- list(seuratObj) ; names(seuratObj) <- sampleName
   }
-
-  print("Aggregating counts matrix.")
-  for (i in 1:length(seuratObj)) {
-    seuratObj[[i]] <- prepareCountsForCNVAnalysis(seuratObj[[i]], sampleName = sampleName[[i]],
+  if (prepareCounts == TRUE & aggregFactor>=1000) {
+    print("Aggregating counts matrix.")
+    for (i in 1:length(seuratObj)) {
+      seuratObj[[i]] <- prepareCountsForCNVAnalysis(seuratObj[[i]], sampleName = sampleName[[i]],
                                                    referenceVar = referenceVar,
                                                    aggregateByVar = aggregateByVar ,
                                                    aggregFactor=aggregFactor,
                                                    seuratClusterResolution = seuratClusterResolution,
                                                    reClusterSeurat = reClusterSeurat  )
+    }
   }
+
 
   if (length(seuratObj) > 1) {
     print("Running CNVAnalysis")

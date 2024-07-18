@@ -13,6 +13,7 @@ fastCNV(
   downsizePlot = FALSE,
   doPlot = TRUE,
   doRecapPlot = TRUE,
+  prepareCounts = TRUE,
   pooledReference = TRUE,
   assay = NULL,
   savePath = ".",
@@ -45,13 +46,15 @@ fastCNV(
 
 \item{doRecapPlot}{Default \code{TRUE}. Will output the CNV heatmaps by annotation if \code{TRUE}.}
 
+\item{prepareCounts}{If \code{FALSE} will not run the \code{prepareCountsForCNVAnalysis} function. Default \code{TRUE}.}
+
 \item{pooledReference}{Default \code{TRUE}. Will build a pooled reference across all samples if \code{TRUE}.}
 
 \item{assay}{Name of the assay to run the CNV on. Takes the results of \code{prepareCountsForCNVAnalysis} by default if available}
 
 \item{savePath}{Default \code{.}. If \code{NULL} the heatmap won't be saved as a pdf.}
 
-\item{aggregFactor}{The number of counts per spot desired (default 30 000)}
+\item{aggregFactor}{The number of counts per spot desired (default \verb{30 000}). If less than \code{1000}, will not run the \code{prepareCountsForCNVAnalysis} function.}
 
 \item{seuratClusterResolution}{The resolution wanted for the seurat clusters (default 0.8)}
 
