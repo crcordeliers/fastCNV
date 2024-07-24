@@ -40,10 +40,10 @@ library(fastCNVdata)
 
 `fastCNV` package works both on scRNAseq data or ST data, and we will demonstrate both cases here. 
 
-Here, we load scBreast (scRNAseq data from a breast tumor) and crcsample1, crcsample2, crcsample3 and crcsample4 (spatial transcriptomics data from colorectal tumors).
+Here, we load scColon (scRNAseq data from a colorectal tumor) and crcsample1, crcsample2, crcsample3 and crcsample4 (spatial transcriptomics data from colorectal tumors).
 
 ``` {r imports}
-utils::data(scBreast)
+utils::data(scColon)
 utils::data(crcsample1)
 utils::data(crcsample2)
 utils::data(crcsample3)
@@ -62,13 +62,13 @@ crcsample[["annot"]] <- annotation_file$Annot
 ```
 
 ```{r see_annots}
+unique(scColon[["annot"]])
 unique(crcsample1[["annot"]])
 unique(crcsample2[["annot"]])
 unique(crcsample3[["annot"]])
 unique(crcsample4[["annot"]])
 ```
 
-scBreast does not have any annotations. 
 
 ## Run fastCNV 
 
@@ -81,17 +81,21 @@ During this step, fastCNV() will use:
 - `plotCNVResults` : to visualize the results (stored in the assays slot of the Seurat data). By default, the parameter `downsizePlot` is set to `FALSE`, which builds a detailed plot, but takes an important time to render. If desired, you can set the parameter to `TRUE`, which decreases the rendering time by plotting the results at the meta-cell level instead of the cell-level, thus decreasing the definition of the CNV results plotted.  
 This function will also build a PDF file for each sample containing their corresponding CNV heatmap in the current working directory, which can be changed using the `savePath` parameter.
 
-We are first going to run `fastCNV()`on our scBreast object, for which we do not have any annotations. 
+We are first going to run `fastCNV()` on our scColon object, taking as reference the cells labeled as `Bcells`, `DC6.pDC`,`EndoArteriel`, `Fibro`, `Mastocytes`, `MyeloLineage`, `NK`, `Pericytes`, `PlasmaCells`, `Schwann.Entericglial`, `SmoothMuscle` and `Tcells`.
 
 ```{r run1, fig.width = 8, fig.height=6}
-scBreast <- fastCNV(seuratObj = scBreast, sampleName = "scBreast")
+scColon <- fastCNV(seuratObj = scColon, sampleName = "scColon", referenceVar =
+                     "annot", referenceLabel = c("Bcells", "DC6.pDC", "EndoArteriel",
+                     "Fibro", "Mastocytes", "MyeloLineage", "NK", "Pericytes",
+                     "PlasmaCells", "Schwann.Entericglial", "SmoothMuscle","Tcells"))
 
 ```
 
-We now run `fastCNV()`on the crcsample1 object, for which we do have the annotations. We decide to take `epithelium&submucosa`, `submucosa` and `non neo epithelium` as reference since these are non-tumor spots. 
+We now run `fastCNV()`on the crcsample1 object We decide to take `epithelium&submucosa`, `submucosa` and `non neo epithelium` as reference since these are non-tumor spots. 
 
 ```{r run2, fig.width = 8, fig.height=6}
-crcsample1 <- fastCNV(crcsample1, sampleName = "crcsample1", referenceVar = "annot", referenceLabel = c("epithelium&submucosa","submucosa","non neo epithelium"))
+crcsample1 <- fastCNV(crcsample1, sampleName = "crcsample1", referenceVar = "annot",
+                      referenceLabel = c("epithelium&submucosa","submucosa","non neo epithelium"))
 ```
 
 Last, we are going to run the `fastCNV()` function on a list of Seurat objects. This time, an additional recap plot will be output in a PDF file, containing the CNV heatmaps per category across samples, since there is more than one Seurat object/sample, but you can turn this off by setting `doRecapPlot = FALSE`. 
@@ -103,7 +107,8 @@ names(seuratList) <- sampleNames
 referencelabels <- c("epithelium&submucosa","submucosa","non neo epithelium",
                      "squamous epithelium", "epithelium&lam propria", "lamina propria")
 
-seuratList <- fastCNV(seuratList, sampleNames, referenceVar = "annot", referenceLabel = referencelabels)
+seuratList <- fastCNV(seuratList, sampleNames, referenceVar = "annot", 
+                      referenceLabel = referencelabels)
 
 ```
 
@@ -114,19 +119,20 @@ fastCNV also computes a `cnv_fraction` for each observation in the Seurat object
 
 ```{r umap, output=FALSE, results='hide'}
 library(Seurat)
-scBreast <- RunUMAP(scBreast, dims = 1:10)
+scColon <- RunUMAP(scColon, dims = 1:10)
 ```
 
-```{r plot_cnv_umap, fig.width=6, fig.height=4}
-FeaturePlot(scBreast, features = "cnv_fraction", reduction = "umap", ) | DimPlot(scBreast, reduction = "umap", group.by =  "seurat_clusters")
+```{r plot_cnv_umap, fig.width=8, fig.height=4}
+FeaturePlot(scColon, features = "cnv_fraction", reduction = "umap", ) |
+  DimPlot(scColon, reduction = "umap", group.by =  "annot")
 ```
 
 Here, we see some clusters with much higher CNV fractions than others. We can directly plot and test this:
 
-```{r plot_cnv_fraction, fig.width=6, fig.height=4}
+```{r plot_cnv_fraction, fig.width=6, fig.height=5}
 library(ggplot2)
-ggplot(FetchData(scBreast, vars = c("seurat_clusters", "cnv_fraction")), 
-       aes(seurat_clusters, cnv_fraction, fill = seurat_clusters)) +
+ggplot(FetchData(scColon, vars = c("annot", "cnv_fraction")), 
+       aes(annot, cnv_fraction, fill = annot)) +
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "black"))
 ```
@@ -135,7 +141,7 @@ Of course, we can also plot `cnv_fraction` with the Spatial plotting functions f
 
 ```{r plot_cnv_fraction2, fig.width=8, fig.height=5}
 library(patchwork)
-SpatialFeaturePlot(crcsample1, "cnv_fraction", pt.size.factor = 35) | SpatialPlot(crcsample1, group.by = "annot", pt.size.factor = 35)
+SpatialFeaturePlot(crcsample1, "cnv_fraction", pt.size.factor = 45) | SpatialPlot(crcsample1, group.by = "annot", pt.size.factor = 45)
 ```
 
 ## CNV clusters
@@ -143,14 +149,14 @@ SpatialFeaturePlot(crcsample1, "cnv_fraction", pt.size.factor = 35) | SpatialPlo
 In addition to the CNV fraction, we can obtain clusters based on the CNV matrix by running `CNVcluster()`. This runs standard Seurat clustering pipeline on the CNV scores per observation -- uses the first 10 PCs to building the neighborhood graph and then Louvain clustering to find the clusters.
 
 ```{r cluster_cnv, results='hide'}
-scBreast <- CNVcluster(scBreast, resolution = 0.4)
+scColon <- CNVcluster(scColon, resolution = 0.4)
 crcsample1 <- CNVcluster(crcsample1, resolution = 0.4)
 ```
 
 Results of `CNVcluster` are saved in the Seurat object under the `"cnv_clusters"` metadata variable, which can be plotted with Seurat functions. We will demonstrate on a ST object, but it also works with regular scRNAseq data.
 
 ```{r plot_cnv_clusters, fig.width=6, fig.height=4}
-SpatialDimPlot(crcsample1, group.by = "cnv_clusters", pt.size.factor = 35)
+SpatialDimPlot(crcsample1, group.by = "cnv_clusters", pt.size.factor = 45)
 ```
 
 And we can retrieve this metadata and plot it directly. Here, we relate the `cnv_clusters` with our annotation variable `annot`.
@@ -169,5 +175,6 @@ We find that tumor tissue are virtually always cnv_cluster 1 or 2 ; meanwhile, n
 Note that we can also use cnv_clusters to label the CNV heatmap, directly using the parameter `splitPlotOfVar` of the `plotCNVResults()` function.
 
 ```{r hm_cnv_cl, fig.width = 7, fig.height=5}
+plotCNVResults(scColon, referenceVar = "annot", splitPlotOnVar = "cnv_clusters")
 plotCNVResults(crcsample1, referenceVar = "annot", splitPlotOnVar = "cnv_clusters")
 ```

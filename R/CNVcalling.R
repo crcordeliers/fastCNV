@@ -49,7 +49,9 @@ Computing the CNV without a reference."))
     } else {
       referenceCells <- list()
       for (i in referenceLabel){
-        referenceCells[[i]] <- Seurat::Cells(seuratObj)[which(Seurat::FetchData(seuratObj, vars = referenceVar) == i)]
+        if (length(Seurat::Cells(seuratObj)[which(Seurat::FetchData(seuratObj, vars = referenceVar) == i)]) >= 5) {
+                  referenceCells[[i]] <- Seurat::Cells(seuratObj)[which(Seurat::FetchData(seuratObj, vars = referenceVar) == i)]
+        }
       }
       numberOfReferenceCells <- sum(sapply(referenceCells, length))
       if (numberOfReferenceCells == 0) {
@@ -104,6 +106,7 @@ Computing the CNV without a reference."))
         scaleFactor[[i]] <- rowMeans(normCounts[,referenceCells[[i]]])
       }
       scaleFactor <- do.call(rbind,scaleFactor)
+      scaleFactor <- na.omit(scaleFactor)
       scaleFactor <- apply(scaleFactor, 2, median)
     }
   } else {
