@@ -21,7 +21,9 @@
 #' @export
 #'
 
-plotCNVResults <- function(seuratObj, referenceVar = NULL, splitPlotOnVar = referenceVar, savePath = ".", downsizePlot = FALSE){
+plotCNVResults <- function(seuratObj, referenceVar = NULL,
+                           splitPlotOnVar = referenceVar, savePath = ".",
+                           downsizePlot = FALSE){
   M <- t(as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")$data))
   if (downsizePlot == TRUE && !is.null(referenceVar)) {
     # K-means clustering
@@ -107,20 +109,28 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL, splitPlotOnVar = refe
   } else if (downsizePlot == FALSE && is.null(splitPlotOnVar)) {
     split_df <- NULL
   }
+  if (referenceVar == splitPlotOnVar) {
+    rown = NULL
+  } else {
+    rown = character(0)
+  }
 
   if(is.null(referenceVar)) {
-    hm <- ComplexHeatmap::pheatmap(M,
-                                 border=T,
-                                 border_color = NA,
-                                 use_raster = F,
-                                 cluster_cols = F,
-                                 show_rownames = F,
-                                 show_colnames = F,
-                                 row_split = split_df,
-                                 clustering_distance_rows = "euclidean",
-                                 clustering_method = "ward.D",
-                                 column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)),".",fixed=T),function(z)z[1])),
-                                 col=circlize::colorRamp2(c(-1, 0, 1), c("blue", "white", "red")))
+    hm <-  ComplexHeatmap::Heatmap(
+      M,
+      border = TRUE,
+      cluster_columns = FALSE,
+      show_row_names = FALSE,
+      show_column_names = FALSE,
+      clustering_distance_rows = "euclidean",
+      clustering_method_rows = "ward.D",
+      column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)), ".", fixed = TRUE), function(z) z[1])),
+      row_split = as.factor(split_df[[1]]),
+      row_title = rown,
+      col = circlize::colorRamp2(c(-1, 0, 1), c("#5050FFFF", "white", "#CE3D32FF")),
+      heatmap_legend_param = list(title = "CNV")
+
+    )
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"), grid::unit(1, "null")))))
     grid::pushViewport(grid::viewport(layout.pos.row = 1))
@@ -132,35 +142,44 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL, splitPlotOnVar = refe
   } else {
     palette <- as.character(paletteer::paletteer_d("pals::glasbey"))
     if (length(unique(annotation_df$Annotation)) > length(palette)) {
-      hm <- ComplexHeatmap::pheatmap(M,
-                                     border=T,
-                                     border_color = NA,
-                                     use_raster = F,
-                                     cluster_cols = F,
-                                     show_rownames = F,
-                                     show_colnames = F,
-                                     clustering_distance_rows = "euclidean",
-                                     clustering_method = "ward.D",
-                                     column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)),".",fixed=T),function(z)z[1])),
-                                     row_split = split_df,
-                                     annotation_row = annotation_df,
-                                     col=circlize::colorRamp2(c(-1, 0, 1), c("blue", "white", "red")))
+      hm <-  ComplexHeatmap::Heatmap(
+        M,
+        right_annotation = ComplexHeatmap::rowAnnotation(
+          Annotations = annotation_df$Annotations
+        ),
+        border = TRUE,
+        cluster_columns = FALSE,
+        show_row_names = FALSE,
+        show_column_names = FALSE,
+        clustering_distance_rows = "euclidean",
+        clustering_method_rows = "ward.D",
+        column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)), ".", fixed = TRUE), function(z) z[1])),
+        row_split = as.factor(split_df[[1]]),
+        row_title = rown,
+        col = circlize::colorRamp2(c(-1, 0, 1), c("#5050FFFF", "white", "#CE3D32FF")),
+        heatmap_legend_param = list(title = "CNV")
+
+      )
     } else {
       annot_colors <- setNames(palette[1:length(unique(annotation_df$Annotation))], unique(annotation_df$Annotation))
-      hm <- ComplexHeatmap::pheatmap(M,
-                                   border=T,
-                                   border_color = NA,
-                                   use_raster = F,
-                                   cluster_cols = F,
-                                   show_rownames = F,
-                                   show_colnames = F,
-                                   clustering_distance_rows = "euclidean",
-                                   clustering_method = "ward.D",
-                                   column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)),".",fixed=T),function(z)z[1])),
-                                   row_split = split_df,
-                                   annotation_row = annotation_df,
-                                   annotation_colors = list(Annotations = annot_colors),
-                                   col=circlize::colorRamp2(c(-1, 0, 1), c("#5050FFFF", "white", "#CE3D32FF")))
+      hm <-  ComplexHeatmap::Heatmap(
+             M,
+             right_annotation = ComplexHeatmap::rowAnnotation(
+                 Annotations = annotation_df$Annotations,
+                 col = list(Annotations = annot_colors)
+             ),
+             border = TRUE,
+             cluster_columns = FALSE,
+             show_row_names = FALSE,
+             show_column_names = FALSE,
+             clustering_distance_rows = "euclidean",
+             clustering_method_rows = "ward.D",
+             column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)), ".", fixed = TRUE), function(z) z[1])),
+             row_split = as.factor(split_df[[1]]),
+             row_title = rown,
+             col = circlize::colorRamp2(c(-1, 0, 1), c("#5050FFFF", "white", "#CE3D32FF")),
+             heatmap_legend_param = list(title = "CNV")
+         )
     }
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"), grid::unit(1, "null")))))
