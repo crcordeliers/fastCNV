@@ -17,7 +17,7 @@
 #' @export
 #'
 prepareCountsForCNVAnalysis <- function(seuratObj, sampleName = NULL, referenceVar = NULL,
-                                        aggregateByVar = T, aggregFactor=30000, seuratClusterResolution = 0.8,
+                                        aggregateByVar = T, aggregFactor=15000, seuratClusterResolution = 0.8,
                                         reClusterSeurat = F ){
 
     assay <- Seurat::Assays(seuratObj)[1]
@@ -81,8 +81,8 @@ prepareCountsForCNVAnalysis <- function(seuratObj, sampleName = NULL, referenceV
           seuratObj <- Seurat::RunPCA(seuratObj, assay = "SCT")
           seuratObj <- Seurat::FindNeighbors(seuratObj, reduction = "pca", dims = 1:10)
           seuratObj <- Seurat::FindClusters(seuratObj, resolution = seuratClusterResolution)
-          if (!is.null(sampleName)){print(paste0("Seurat SCTransform and clustering done for sample ", sampleName))}
-          else {print("Seurat SCTransform and clustering done")}
+          if (!is.null(sampleName)){print(paste0("Seurat SCTransform and clustering done for sample ", sampleName,"."))}
+          else {print("Seurat SCTransform and clustering done.")}
         }
 
         countsMat <- as.matrix(Seurat::GetAssay(seuratObj, assay = Seurat::Assays(seuratObj)[1])$counts)

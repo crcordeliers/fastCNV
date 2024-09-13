@@ -51,6 +51,10 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
                                                    seuratClusterResolution = seuratClusterResolution,
                                                    reClusterSeurat = reClusterSeurat  )
     }
+  } else {
+    for (i in 1:length(seuratList)) {
+      seuratList[[i]]@project.name = sampleName[[i]]
+    }
   }
 
 

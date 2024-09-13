@@ -10,7 +10,7 @@ prepareCountsForCNVAnalysis(
   sampleName = NULL,
   referenceVar = NULL,
   aggregateByVar = T,
-  aggregFactor = 30000,
+  aggregFactor = 15000,
   seuratClusterResolution = 0.8,
   reClusterSeurat = F
 )

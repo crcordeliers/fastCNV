@@ -109,13 +109,9 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL,
   } else if (downsizePlot == FALSE && is.null(splitPlotOnVar)) {
     split_df <- NULL
   }
-  if (referenceVar == splitPlotOnVar) {
-    rown = NULL
-  } else {
-    rown = character(0)
-  }
 
   if(is.null(referenceVar)) {
+    if (is.null(splitPlotOnVar)) {splitPlot = NULL}else{splitPlot = as.factor(split_df[[1]])}
     hm <-  ComplexHeatmap::Heatmap(
       M,
       border = TRUE,
@@ -125,11 +121,15 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL,
       clustering_distance_rows = "euclidean",
       clustering_method_rows = "ward.D",
       column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)), ".", fixed = TRUE), function(z) z[1])),
-      row_split = as.factor(split_df[[1]]),
-      row_title = rown,
-      col = circlize::colorRamp2(c(-1, 0, 1), c("#5050FFFF", "white", "#CE3D32FF")),
-      heatmap_legend_param = list(title = "CNV")
-
+      column_title_gp = grid::gpar(fontsize = 8),
+      row_split = splitPlot,
+      col = circlize::colorRamp2(c(-0.7, 0, 0.7), c("#5050FFFF", "white", "#CE3D32FF")),
+      heatmap_legend_param = list(
+        title = "CNV",
+        title_gp = grid::gpar(fontsize = 11),  # Font size for the title
+        labels_gp = grid::gpar(fontsize = 8),  # Font size for the labels
+        grid_height = grid::unit(1, "cm"),  # Size of the grid cells in the legend
+        grid_width = grid::unit(0.6, "cm"))
     )
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"), grid::unit(1, "null")))))
@@ -140,12 +140,26 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL,
     ComplexHeatmap::draw(hm, newpage = FALSE)
     grid::popViewport()
   } else {
+    if (referenceVar == splitPlotOnVar) {
+      rown = NULL
+    } else {
+      rown = character(0)
+    }
     palette <- as.character(paletteer::paletteer_d("pals::glasbey"))
     if (length(unique(annotation_df$Annotation)) > length(palette)) {
       hm <-  ComplexHeatmap::Heatmap(
         M,
         right_annotation = ComplexHeatmap::rowAnnotation(
-          Annotations = annotation_df$Annotations
+          Annotations = annotation_df$Annotations,
+          annotation_legend_param = list(
+            title = "Annotations",  # Set the title of the annotation legend
+            title_gp = grid::gpar(fontsize = 11),  # Font size for the title
+            labels_gp = grid::gpar(fontsize = 8),  # Font size for the labels
+            legend_height = grid::unit(3, "cm"),  # Height of the annotation legend
+            legend_width = grid::unit(1.5, "cm"),  # Width of the annotation legend
+            grid_height = grid::unit(0.6, "cm"),  # Size of the grid cells in the legend
+            grid_width = grid::unit(0.6, "cm")  # Size of the grid cells in the legend
+          )
         ),
         border = TRUE,
         cluster_columns = FALSE,
@@ -154,32 +168,52 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL,
         clustering_distance_rows = "euclidean",
         clustering_method_rows = "ward.D",
         column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)), ".", fixed = TRUE), function(z) z[1])),
+        column_title_gp = grid::gpar(fontsize = 8),
         row_split = as.factor(split_df[[1]]),
         row_title = rown,
-        col = circlize::colorRamp2(c(-1, 0, 1), c("#5050FFFF", "white", "#CE3D32FF")),
-        heatmap_legend_param = list(title = "CNV")
-
+        col = circlize::colorRamp2(c(-0.7, 0, 0.7), c("#5050FFFF", "white", "#CE3D32FF")),
+        heatmap_legend_param = list(
+          title = "CNV",
+          title_gp = grid::gpar(fontsize = 11),  # Font size for the title
+          labels_gp = grid::gpar(fontsize = 8),  # Font size for the labels
+          grid_height = grid::unit(1, "cm"),  # Size of the grid cells in the legend
+          grid_width = grid::unit(0.6, "cm"))
       )
     } else {
       annot_colors <- setNames(palette[1:length(unique(annotation_df$Annotation))], unique(annotation_df$Annotation))
       hm <-  ComplexHeatmap::Heatmap(
-             M,
-             right_annotation = ComplexHeatmap::rowAnnotation(
-                 Annotations = annotation_df$Annotations,
-                 col = list(Annotations = annot_colors)
-             ),
-             border = TRUE,
-             cluster_columns = FALSE,
-             show_row_names = FALSE,
-             show_column_names = FALSE,
-             clustering_distance_rows = "euclidean",
-             clustering_method_rows = "ward.D",
-             column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)), ".", fixed = TRUE), function(z) z[1])),
-             row_split = as.factor(split_df[[1]]),
-             row_title = rown,
-             col = circlize::colorRamp2(c(-1, 0, 1), c("#5050FFFF", "white", "#CE3D32FF")),
-             heatmap_legend_param = list(title = "CNV")
-         )
+        M,
+        right_annotation = ComplexHeatmap::rowAnnotation(
+          Annotations = annotation_df$Annotations,
+          col = list(Annotations = annot_colors),
+          annotation_legend_param = list(
+            title = "Annotations",  # Set the title of the annotation legend
+            title_gp = grid::gpar(fontsize = 11),  # Font size for the title
+            labels_gp = grid::gpar(fontsize = 8),  # Font size for the labels
+            legend_height = grid::unit(3, "cm"),  # Height of the annotation legend
+            legend_width = grid::unit(1.5, "cm"),  # Width of the annotation legend
+            grid_height = grid::unit(0.6, "cm"),  # Size of the grid cells in the legend
+            grid_width = grid::unit(0.6, "cm")  # Size of the grid cells in the legend
+          )
+        ),
+        border = TRUE,
+        cluster_columns = FALSE,
+        show_row_names = FALSE,
+        show_column_names = FALSE,
+        clustering_distance_rows = "euclidean",
+        clustering_method_rows = "ward.D",
+        column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)), ".", fixed = TRUE), function(z) z[1])),
+        column_title_gp = grid::gpar(fontsize = 8),
+        row_split = as.factor(split_df[[1]]),
+        row_title = rown,
+        col = circlize::colorRamp2(c(-0.7, 0, 0.7), c("#5050FFFF", "white", "#CE3D32FF")),
+        heatmap_legend_param = list(
+          title = "CNV",
+          title_gp = grid::gpar(fontsize = 11),  # Font size for the title
+          labels_gp = grid::gpar(fontsize = 8),  # Font size for the labels
+          grid_height = grid::unit(1, "cm"),  # Size of the grid cells in the legend
+          grid_width = grid::unit(0.6, "cm"))
+      )
     }
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"), grid::unit(1, "null")))))
@@ -193,7 +227,7 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL,
 
   if(!is.null(savePath)) {
     fname <- file.path(savePath, paste0("plot.fastCNV_", splitPlotOnVar,"_",seuratObj@project.name,".pdf"))
-    pdf(width = 20, height = 10, file = fname)
+    pdf(width = 12, height = 7, file = fname)
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"),grid::unit(1, "null")))))
     grid::pushViewport(grid::viewport(layout.pos.row = 1))
