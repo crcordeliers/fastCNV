@@ -11,6 +11,7 @@
 #' @param prepareCounts If `FALSE` will not run the `prepareCountsForCNVAnalysis` function. Default `TRUE`.
 #' @param pooledReference Default `TRUE`. Will build a pooled reference across all samples if `TRUE`.
 #' @param assay Name of the assay to run the CNV on. Takes the results of `prepareCountsForCNVAnalysis` by default if available
+#' @param getCNVFractionPerChromosome If `TRUE`, will save into the metadata the CNV fraction per chromosome arm
 #' @param savePath Default `.`. If `NULL` the heatmap won't be saved as a pdf.
 #' @param aggregFactor The number of counts per spot desired (default `30 000`). If less than `1000`, will not run the `prepareCountsForCNVAnalysis` function.
 #' @param seuratClusterResolution The resolution wanted for the seurat clusters (default 0.8)
@@ -31,8 +32,9 @@
 
 fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel = NULL,
                      splitPlotOnVar = referenceVar, downsizePlot = FALSE, doPlot = TRUE,
-                     doRecapPlot = TRUE, prepareCounts = TRUE, pooledReference = TRUE, assay = NULL, savePath = ".",
-                     aggregFactor=30000, seuratClusterResolution = 0.8, aggregateByVar = T,
+                     doRecapPlot = TRUE, prepareCounts = TRUE, pooledReference = TRUE, assay = NULL,
+                     getCNVFractionPerChromosome = TRUE, savePath = ".",
+                     aggregFactor=15000, seuratClusterResolution = 0.8, aggregateByVar = T,
                      reClusterSeurat = F, scaleOnReferenceLabel = TRUE, thresholdPercentile = 0.01,
                      genes=getGenes(), windowSize=100, windowStep=20, topNGenes=7000){
 
@@ -52,8 +54,8 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
                                                    reClusterSeurat = reClusterSeurat  )
     }
   } else {
-    for (i in 1:length(seuratList)) {
-      seuratList[[i]]@project.name = sampleName[[i]]
+    for (i in 1:length(seuratObj)) {
+      seuratObj[[i]]@project.name = sampleName[[i]]
     }
   }
 
@@ -85,6 +87,16 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
     if (doPlot == TRUE) {
       print("Plotting CNV results. This step may take some time.")
       plotCNVResults(seuratObj = seuratObj, referenceVar = referenceVar, splitPlotOnVar = splitPlotOnVar, savePath = savePath, downsizePlot = downsizePlot)
+    }
+  }
+
+  if (getCNVFractionPerChromosome == TRUE) {
+    if (length(seuratObj) == 1) {
+          seuratObj <- CNVfractionPerChromosome(seuratObj)
+    } else {
+      for (i in 1:length(seuratObj)) {
+        seuratObj[[i]] <- CNVfractionPerChromosome(seuratObj[[i]])
+      }
     }
   }
 

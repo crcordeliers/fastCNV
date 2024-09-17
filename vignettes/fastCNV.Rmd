@@ -81,6 +81,8 @@ During this step, fastCNV() will use:
 - `plotCNVResults` : to visualize the results (stored in the assays slot of the Seurat data). By default, the parameter `downsizePlot` is set to `FALSE`, which builds a detailed plot, but takes an important time to render. If desired, you can set the parameter to `TRUE`, which decreases the rendering time by plotting the results at the meta-cell level instead of the cell-level, thus decreasing the definition of the CNV results plotted.  
 This function will also build a PDF file for each sample containing their corresponding CNV heatmap in the current working directory, which can be changed using the `savePath` parameter.
 
+- `CNVfractionPerChromosome` : to compute the CNV fraction per chromosome arm. This part of `fastCNV()` can be skipped by turning `getCNVFractionPerChromosome` to `FALSE`.  
+
 We are first going to run `fastCNV()` on our scColon object, taking as reference the cells labeled as `Bcells`, `DC6.pDC`,`EndoArteriel`, `Fibro`, `Mastocytes`, `MyeloLineage`, `NK`, `Pericytes`, `PlasmaCells`, `Schwann.Entericglial`, `SmoothMuscle` and `Tcells`.
 
 ```{r run1, fig.width = 8, fig.height=6}
@@ -144,13 +146,25 @@ library(patchwork)
 SpatialFeaturePlot(crcsample1, "cnv_fraction", pt.size.factor = 45) | SpatialPlot(crcsample1, group.by = "annot", pt.size.factor = 45)
 ```
 
+We can also plot the CNV fraction per chromosome arm with the plotting functions from Seurat.
+
+```{r plot_cnv_fraction_2q, fig.width=8, fig.height=5}
+SpatialFeaturePlot(crcsample1, features = "2q", pt.size.factor = 45) | SpatialPlot(crcsample1, group.by = "annot", pt.size.factor = 45)
+
+SpatialFeaturePlot(crcsample1, features = "6q", pt.size.factor = 45) | SpatialPlot(crcsample1, group.by = "annot", pt.size.factor = 45)
+
+```
+
+Here we see for example that the right part of the tumor have a high CNV in the chromosome 2q, while the lower and left part of the tumor do not. 
+Meanwhile, the opposite happens for chromosome 6q.  
+
 ## CNV clusters
 
 In addition to the CNV fraction, we can obtain clusters based on the CNV matrix by running `CNVcluster()`. This runs standard Seurat clustering pipeline on the CNV scores per observation -- uses the first 10 PCs to building the neighborhood graph and then Louvain clustering to find the clusters.
 
 ```{r cluster_cnv, results='hide'}
-scColon <- CNVcluster(scColon, resolution = 0.4)
-crcsample1 <- CNVcluster(crcsample1, resolution = 0.4)
+scColon <- CNVcluster(scColon, resolution = 0.8)
+crcsample1 <- CNVcluster(crcsample1, resolution = 0.8)
 ```
 
 Results of `CNVcluster` are saved in the Seurat object under the `"cnv_clusters"` metadata variable, which can be plotted with Seurat functions. We will demonstrate on a ST object, but it also works with regular scRNAseq data.
@@ -169,7 +183,7 @@ ggplot(FetchData(crcsample1, vars = c("cnv_clusters", "annot")), aes(annot, fill
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "black"))
 ```
 
-We find that tumor tissue are virtually always cnv_cluster 1 or 2 ; meanwhile, normal labels tend to be cnv_cluster 0, 3, 4, 5 or 6, which present very few or no CNV.
+We find that tumor tissue are virtually always cnv_cluster 1, 2 or 3 ; meanwhile, normal labels tend to be cnv_cluster 0, 4, 5, 6 or 7 which present very few or no CNV.
 
 
 Note that we can also use cnv_clusters to label the CNV heatmap, directly using the parameter `splitPlotOfVar` of the `plotCNVResults()` function.

@@ -1,0 +1,19 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/articles/fastCNV.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/CNVanalysis.html</loc></url>
+<url><loc>/reference/CNVcalling.html</loc></url>
+<url><loc>/reference/CNVcallingList.html</loc></url>
+<url><loc>/reference/CNVcluster.html</loc></url>
+<url><loc>/reference/fastCNV-package.html</loc></url>
+<url><loc>/reference/fastCNV.html</loc></url>
+<url><loc>/reference/genes.html</loc></url>
+<url><loc>/reference/getGenes.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/plotCNVResults.html</loc></url>
+<url><loc>/reference/prepareCountsForCNVAnalysis.html</loc></url>
+</urlset>
+
