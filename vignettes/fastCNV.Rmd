@@ -146,17 +146,43 @@ library(patchwork)
 SpatialFeaturePlot(crcsample1, "cnv_fraction", pt.size.factor = 45) | SpatialPlot(crcsample1, group.by = "annot", pt.size.factor = 45)
 ```
 
-We can also plot the CNV fraction per chromosome arm with the plotting functions from Seurat.
+We can also plot the CNV per chromosome arm with the plotting functions from Seurat.
 
 ```{r plot_cnv_fraction_2q, fig.width=8, fig.height=5}
-SpatialFeaturePlot(crcsample1, features = "2q", pt.size.factor = 45) | SpatialPlot(crcsample1, group.by = "annot", pt.size.factor = 45)
+library(scales)
 
-SpatialFeaturePlot(crcsample1, features = "6q", pt.size.factor = 45) | SpatialPlot(crcsample1, group.by = "annot", pt.size.factor = 45)
+SpatialFeaturePlot(crcsample1, features = "11q_CNV", pt.size.factor = 45)  +
+  scale_fill_distiller(palette = "RdBu", direction = -1, limits = c(-1, 1), 
+                       rescaler = function(x, to = c(0, 1), from = NULL) {
+                         rescale_mid(x, to = to, mid = 0)
+                       }) |
+SpatialFeaturePlot(crcsample1, features = "6q_CNV", pt.size.factor = 45) +
+  scale_fill_distiller(palette = "RdBu", direction = -1, limits = c(-1, 1), 
+                       rescaler = function(x, to = c(0, 1), from = NULL) {
+                         rescale_mid(x, to = to, mid = 0)
+                       })
 
 ```
 
-Here we see for example that the right part of the tumor have a high CNV in the chromosome 2q, while the lower and left part of the tumor do not. 
-Meanwhile, the opposite happens for chromosome 6q.  
+Here we see for example that the right part of the tumor have a CNV loss in the chromosome 11q, while the lower and left part of the tumor do not. 
+Meanwhile, the opposite happens for chromosome 6q, having a gain on the lower and left part of the tumor.  
+
+## CNV classification
+
+Using the CNV per chromosome arm and `CNVclassify()` we can get the alterations per chromosome arm (gain, loss or none).
+`CNVclassify()` takes as arguments a Seurat object containing in the metadata the CNV per chromosome arm. 
+It calculates 3 peaks of the CNV, corresponding to a loss, a gain and no alteration. 
+Using these 3 peaks, it builds a table for each cell/spot and each chromosome arm containing either "loss", "gain" or "no_alteration".
+
+``` {r cnv classification, fig.width=8, fig.height=5}
+crcsample1 <- CNVclassification(crcsample1, tumorLabels = c("tumor", "tumor&stroma_IC med to high"))
+
+SpatialDimPlot(crcsample1, group.by = "11p_CNV_classification") +
+  scale_fill_manual(values = c(gain = "red", no_alteration = "grey", loss = "blue"))| SpatialDimPlot(crcsample1, group.by = "13q_CNV_classification") +
+  scale_fill_manual(values = c(gain = "red", no_alteration = "grey", loss = "blue"))
+
+```
+
 
 ## CNV clusters
 

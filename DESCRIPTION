@@ -1,6 +1,6 @@
 Package: fastCNV
 Title: fastCNV
-Version: 0.3
+Version: 0.3.4
 Authors@R: 
     c(person("Gadea", "Cabrejas", , "gadea.cabrejas-saiz@u-paris.fr", role = c("aut", "cre")),
       person("Clarice", "Groeneveld", , "clarice.groeneveld@inserm.fr", role = c("ctb")))
@@ -21,6 +21,7 @@ Imports:
     paletteer,
     patchwork,
     qpdf,
+    scales,
     Seurat,
     SeuratObject,
     stats

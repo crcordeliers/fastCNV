@@ -16,7 +16,7 @@ fastCNV(
   prepareCounts = TRUE,
   pooledReference = TRUE,
   assay = NULL,
-  getCNVFractionPerChromosome = TRUE,
+  getCNVPerChromosomeArm = TRUE,
   savePath = ".",
   aggregFactor = 15000,
   seuratClusterResolution = 0.8,
@@ -53,7 +53,7 @@ fastCNV(
 
 \item{assay}{Name of the assay to run the CNV on. Takes the results of \code{prepareCountsForCNVAnalysis} by default if available}
 
-\item{getCNVFractionPerChromosome}{If \code{TRUE}, will save into the metadata the CNV fraction per chromosome arm}
+\item{getCNVPerChromosomeArm}{If \code{TRUE}, will save into the metadata the CNV per chromosome arm}
 
 \item{savePath}{Default \code{.}. If \code{NULL} the heatmap won't be saved as a pdf.}
 
