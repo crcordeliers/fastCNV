@@ -2,9 +2,6 @@
 #'
 #' @param cnv_vector Vector of CNVs
 #' @param peaks_info peaks info
-#'
-#' @return
-#'
 
 
 classify_cnv <- function(cnv_vector, peaks_info) {

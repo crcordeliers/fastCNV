@@ -6,8 +6,6 @@
 #' @param addlevels ...
 #'
 #' @import stats
-#'
-#' @return
 
 
 cit.discretize <-

@@ -1,0 +1,7 @@
+url: https://must-bioinfo.github.io/fastCNV
+home:
+  title: fastCNV
+  description: Infer CNVs in single-cell or spatial RNA-seq
+template:
+  bootstrap: 5
+  light-switch: true

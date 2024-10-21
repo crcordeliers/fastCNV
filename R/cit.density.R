@@ -6,8 +6,6 @@
 #' @param ... ...
 #'
 #' @import graphics
-#'
-#' @return
 
 
 cit.density <-
