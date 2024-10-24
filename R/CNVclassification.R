@@ -11,20 +11,12 @@
 #' @export
 #'
 
-CNVclassification <- function(seuratObj, tumorLabels) {
+CNVclassification <- function(seuratObj, peaks = c(-0.1,0,0.1)) {
   chromosomes <- c(paste0(1:22, "p_CNV"), paste0(1:22, "q_CNV"))
   chromosomes <- c(chromosomes, "X_CNV")
 
   metadata <- Seurat::FetchData(seuratObj, vars = colnames(seuratObj@meta.data))
 
-  cnvVectorAll <- c()
-
-  for (chrom in chromosomes) {
-    tumor_cells <- metadata$annot %in% tumorLabels
-    cnvVectorAll <- c(cnvVectorAll, metadata[[chrom]][tumor_cells])
-  }
-
-  peaks <- cit.peaks(cnvVectorAll, maxNbPeaks = 3, percentHighestPeak = 0.02)
 
   for (chrom in chromosomes) {
     cnvVector <- metadata[[chrom]]

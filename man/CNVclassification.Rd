@@ -4,7 +4,7 @@
 \alias{CNVclassification}
 \title{CNVclassification}
 \usage{
-CNVclassification(seuratObj, tumorLabels)
+CNVclassification(seuratObj, peaks = c(-0.1, 0, 0.1))
 }
 \arguments{
 \item{seuratObj}{A seurat object containing the results of fastCNV}

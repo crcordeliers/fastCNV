@@ -9,7 +9,6 @@ CNVanalysis(
   object,
   referenceVar = NULL,
   referenceLabel = NULL,
-  doRecapPlot = TRUE,
   pooledReference = TRUE,
   scaleOnReferenceLabel = TRUE,
   assay = NULL,
@@ -26,8 +25,6 @@ CNVanalysis(
 \item{referenceVar}{The variable name of the annotations in the Seurat metadata}
 
 \item{referenceLabel}{The label given to the observations wanted as reference (can be any type of annotation)}
-
-\item{doRecapPlot}{Default \code{TRUE}. Will output the CNV heatmaps by annotation if \code{TRUE}.}
 
 \item{pooledReference}{Default \code{TRUE}. Will build a pooled reference across all samples if \code{TRUE}.}
 

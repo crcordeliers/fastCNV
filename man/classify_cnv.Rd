@@ -4,7 +4,7 @@
 \alias{classify_cnv}
 \title{CNVclassify}
 \usage{
-classify_cnv(cnv_vector, peaks_info)
+classify_cnv(cnv_vector, peaks)
 }
 \arguments{
 \item{cnv_vector}{Vector of CNVs}

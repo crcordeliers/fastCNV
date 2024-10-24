@@ -12,7 +12,6 @@ fastCNV(
   splitPlotOnVar = referenceVar,
   downsizePlot = FALSE,
   doPlot = TRUE,
-  doRecapPlot = TRUE,
   prepareCounts = TRUE,
   pooledReference = TRUE,
   assay = NULL,
@@ -44,8 +43,6 @@ fastCNV(
 \item{downsizePlot}{Subset the observations to speed up the plotting process (default = \code{FALSE}).}
 
 \item{doPlot}{If \code{TRUE} will plot a heatmap for each of the samples (default = \code{TRUE})}
-
-\item{doRecapPlot}{Default \code{TRUE}. Will output the CNV heatmaps by annotation if \code{TRUE}.}
 
 \item{prepareCounts}{If \code{FALSE} will not run the \code{prepareCountsForCNVAnalysis} function. Default \code{TRUE}.}
 

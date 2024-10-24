@@ -1,0 +1,205 @@
+---
+title: "Introduction to fastCNV - scRNAseq data" 
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Introduction to fastCNV - scRNAseq data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Context
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, message = FALSE, warning = FALSE,
+  comment = "#>"
+)
+```
+
+`fastCNV` is a package to detect the putative Copy Number Variations (CNVs) in single cell (scRNAseq) data or Spatial Transcriptomics (ST) data. It also plots the computed CNVs.
+
+In this vignette you will learn how to run this package on single scRNAseq seurat objects and on a list of scRNAseq Seurat objects. 
+
+## Load packages
+
+To get the example data used in this vignette, you'll need to install and load the `fastCNVdata` package. 
+```{r install, eval=FALSE}
+remotes::install_github("must-bioinfo/fastCNV")
+remotes::install_github("must-bioinfo/fastCNVdata")
+```
+
+
+```{r load}
+library(fastCNV)
+library(fastCNVdata)
+```
+
+## Load the example data
+
+`fastCNV` package works both on scRNAseq data or ST data, and we will demonstrate on scRNAseq here, and there is another vignette for ST data. 
+
+Here, we load scColon1, scColon2, scColon3, scColon4 (scRNAseq data from colorectal tumors from Joanito et al. work). 
+
+``` {r imports}
+utils::data(scColon1)
+utils::data(scColon2)
+utils::data(scColon3)
+utils::data(scColon4)
+```
+
+## Check annotation
+
+You can load a separate annotation file for your dataset if this information is not available in the Seurat object. In this example, cell type annotations are already present under the column `"annot"` of the metadata.
+
+```{r annots, eval=FALSE}
+# Import the annotation file corresponding to your sample. For 10X ST data you can annotate your spots with LoupeBrowser
+annotation_file <- read.csv("/path/to/your/annotations/for/scColon1.csv")
+
+scColon1[["annot"]] <- annotation_file$Annot
+```
+
+```{r see_annots}
+unique(scColon1[["annot"]])
+unique(scColon2[["annot"]])
+unique(scColon3[["annot"]])
+unique(scColon4[["annot"]])
+```
+
+
+## Run fastCNV 
+
+During this step, fastCNV() will use: 
+
+- `prepareCountsForCNVAnalysis` : runs the Seurat standard clustering algorithm and then aggregates the observations (cells or spots) to into metaspots with up to the number of counts defined by `aggregFactor` (default 15,000). In addition, the observations can be aggregated on their seurat cluster AND their cell type combined by leaving default `aggregateByVar = TRUE` and specifying parameter `referenceVar`.  If the Seurat object has previously been clustered, the clustering will be re-done on sctransformed (SCT) data using 10 PCs with default parameters to `FindNeighbors` and `FindClusters`. This can be skipped by setting `reClusterSeurat = FALSE`.
+
+- `CNVanalysis` : computes the CNV. If you have annotations for your Seurat object, you can add the parameters `referenceVar` and `referenceLabel`. 
+
+- `plotCNVResults` : to visualize the results (stored in the assays slot of the Seurat object). By default, the parameter `downsizePlot` is set to `FALSE`, which builds a detailed plot, but takes an important time to render. If desired, you can set the parameter to `TRUE`, which decreases the rendering time by plotting the results at the meta-cell level instead of the cell-level, thus decreasing the definition of the CNV results plotted.  
+This function will also build a PDF file for each sample containing their corresponding CNV heatmap in the current working directory, which can be changed using the `savePath` parameter.
+
+- `CNVPerChromosome` : to compute the CNV per chromosome arm, and store it in the metadata of the Seurat object. This part of `fastCNV()` can be skipped by turning `getCNVPerChromosome` to `FALSE`.    
+
+We are first going to run `fastCNV()` on our scColon1 object, taking as reference the cells labeled as `Bcells`, `DC6.pDC`,`EndoArteriel`, `Fibro`, `Mastocytes`, `MyeloLineage`, `NK`, `Pericytes`, `PlasmaCells`, `Schwann.Entericglial`, `SmoothMuscle` and `Tcells`.
+
+```{r run1, fig.width = 8, fig.height=6}
+scColon1 <- fastCNV(seuratObj = scColon1, sampleName = "scColon1", referenceVar =
+                     "annot", referenceLabel = c("Bcells", "DC6.pDC", "EndoArteriel",
+                     "Fibro", "Mastocytes", "MyeloLineage", "NK", "Pericytes",
+                     "PlasmaCells", "Schwann.Entericglial", "SmoothMuscle","Tcells"))
+
+```
+
+Then, we are going to run the `fastCNV()` function on a list of Seurat objects. `fastCNV()` if run on a list of Seurat objects with the default parameters will build a pooled reference between all the samples, which is particularly useful for data not containing any healthy cells to build its own reference. 
+
+```{r run2, fig.width = 8, fig.height=6}
+seuratList <- c(scColon2,scColon3,scColon4)
+sampleNames <- c("scColon2", "scColon3", "scColon4")
+names(seuratList) <- sampleNames
+referencelabels <- c("Bcells", "DC6.pDC", "EndoArteriel",
+                     "Fibro", "Mastocytes", "MyeloLineage", "NK", "Pericytes",
+                     "PlasmaCells", "SmoothMuscle","Tcells")
+
+seuratList <- fastCNV(seuratList, sampleNames, referenceVar = "annot", 
+                      referenceLabel = referencelabels)
+
+```
+
+
+## CNV fraction
+
+fastCNV also computes a `cnv_fraction` for each observation in the Seurat object. This can be directly plotted using Seurat plotting functions, as we'll demonstrate on scColon1:
+
+```{r umap, output=FALSE, results='hide'}
+library(Seurat)
+scColon1 <- RunUMAP(scColon1, dims = 1:10)
+```
+
+```{r plot_cnv_umap, fig.width=8, fig.height=4}
+FeaturePlot(scColon1, features = "cnv_fraction", reduction = "umap", ) |
+  DimPlot(scColon1, reduction = "umap", group.by =  "annot")
+```
+
+Here, we see some clusters with much higher CNV fractions than others. We can directly plot and test this:
+
+```{r plot_cnv_fraction, fig.width=6, fig.height=5}
+library(ggplot2)
+ggplot(FetchData(scColon1, vars = c("annot", "cnv_fraction")), 
+       aes(annot, cnv_fraction, fill = annot)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "black"))
+```
+
+
+We can also plot the CNV per chromosome arm with the plotting functions from Seurat.
+
+```{r plot_cnv_per_chromosome, fig.width=8, fig.height=5}
+library(scales)
+
+FeaturePlot(scColon1, features = "17q_CNV")  +
+  scale_color_distiller(palette = "RdBu", direction = -1, limits = c(-1, 1), 
+                       rescaler = function(x, to = c(0, 1), from = NULL) {
+                         rescale_mid(x, to = to, mid = 0)
+                       }) |
+FeaturePlot(scColon1, features = "X_CNV") +
+  scale_color_distiller(palette = "RdBu", direction = -1, limits = c(-1, 1), 
+                       rescaler = function(x, to = c(0, 1), from = NULL) {
+                         rescale_mid(x, to = to, mid = 0)
+                       })
+
+```
+
+Here we see for example that one part of the epithelial tumor cells have a CNV loss in the chromosome 17q, while another part of the epithelial tumor cells do not, and another part have a gain of this same chromosome (17q) and of the chromosome X too. 
+ 
+
+## CNV classification
+
+Using the CNV per chromosome arm and `CNVclassification()` we can get the alterations per chromosome arm (gain, loss or none).
+`CNVclassification()` takes as arguments a Seurat object containing in the metadata the CNV per chromosome arm, and the thresholds for loss, gain or no alteration (default = c(-0.1, 0, 0.1).  
+Using these 3 peaks, it builds a table for each cell/spot and each chromosome arm containing either "loss", "gain" or "no_alteration".
+
+``` {r cnv classification, fig.width=8, fig.height=5}
+scColon1 <- CNVclassification(scColon1)
+
+DimPlot(scColon1, group.by = "8q_CNV_classification") +
+  scale_color_manual(values = c(gain = "red", no_alteration = "grey", loss = "blue"))| 
+DimPlot(scColon1, group.by = "X_CNV_classification") +
+  scale_color_manual(values = c(gain = "red", no_alteration = "grey", loss = "blue"))
+
+```
+
+
+## CNV clusters
+
+In addition to the CNV fraction, we can obtain clusters based on the CNV matrix by running `CNVcluster()`. This runs standard Seurat clustering pipeline on the CNV scores per observation -- uses the first 10 PCs to building the neighborhood graph and then Louvain clustering to find the clusters.
+
+```{r cluster_cnv, results='hide'}
+scColon1 <- CNVcluster(scColon1, resolution = 0.4)
+```
+
+Results of `CNVcluster` are saved in the Seurat object under the `"cnv_clusters"` metadata variable, which can be plotted with Seurat functions. 
+
+```{r plot_cnv_clusters, fig.width=6, fig.height=4}
+DimPlot(scColon1, group.by = "cnv_clusters")
+```
+
+And we can retrieve this metadata and plot it directly. Here, we relate the `cnv_clusters` with our annotation variable `annot`.
+
+```{r cnv_props, fig.width = 5, fig.height = 4}
+library(ggplot2)
+library(SeuratObject)
+
+ggplot(FetchData(scColon1, vars = c("cnv_clusters", "annot")), aes(annot, fill = cnv_clusters)) +
+  geom_bar(position = "fill") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "black"))
+```
+
+We find that tumor cells are virtually always cnv_cluster 0, 2, 3 5 or 6 ; meanwhile, healthy cells tend to be cnv_cluster 1 or 5 which present very few or no CNV.
+
+
+Note that we can also use cnv_clusters to label the CNV heatmap, directly using the parameter `splitPlotOfVar` of the `plotCNVResults()` function.
+
+```{r hm_cnv_cl, fig.width = 7, fig.height=5}
+plotCNVResults(scColon1, referenceVar = "annot", splitPlotOnVar = "cnv_clusters")
+```

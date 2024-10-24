@@ -7,7 +7,7 @@
 #' @param splitPlotOnVar The name given to the meta.data slot to split the observations on during the `plotCNVResults` step, if different from `referenceVar`.
 #' @param downsizePlot Subset the observations to speed up the plotting process (default = `FALSE`).
 #' @param doPlot If `TRUE` will plot a heatmap for each of the samples (default = `TRUE`)
-#' @param doRecapPlot Default `TRUE`. Will output the CNV heatmaps by annotation if `TRUE`.
+# @param doRecapPlot Default `TRUE`. Will output the CNV heatmaps by annotation if `TRUE`.
 #' @param prepareCounts If `FALSE` will not run the `prepareCountsForCNVAnalysis` function. Default `TRUE`.
 #' @param pooledReference Default `TRUE`. Will build a pooled reference across all samples if `TRUE`.
 #' @param assay Name of the assay to run the CNV on. Takes the results of `prepareCountsForCNVAnalysis` by default if available
@@ -32,7 +32,8 @@
 
 fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel = NULL,
                      splitPlotOnVar = referenceVar, downsizePlot = FALSE, doPlot = TRUE,
-                     doRecapPlot = TRUE, prepareCounts = TRUE, pooledReference = TRUE, assay = NULL,
+                     #doRecapPlot = TRUE,
+                     prepareCounts = TRUE, pooledReference = TRUE, assay = NULL,
                      getCNVPerChromosomeArm = TRUE, savePath = ".",
                      aggregFactor=15000, seuratClusterResolution = 0.8, aggregateByVar = T,
                      reClusterSeurat = F, scaleOnReferenceLabel = TRUE, thresholdPercentile = 0.01,
@@ -63,7 +64,8 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
   if (length(seuratObj) > 1) {
     print("Running CNVAnalysis")
     seuratObj <- CNVanalysis(seuratObj, referenceVar = referenceVar, referenceLabel = referenceLabel,
-                              doRecapPlot = doRecapPlot, pooledReference = pooledReference,
+                              #doRecapPlot = doRecapPlot,
+                              pooledReference = pooledReference,
                               scaleOnReferenceLabel = scaleOnReferenceLabel, assay = assay,
                               thresholdPercentile = thresholdPercentile, genes = genes,
                               windowSize = windowSize, windowStep = windowStep, topNGenes = topNGenes)
@@ -79,7 +81,8 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
   } else {
     print("Running CNVAnalysis")
     seuratObj <- CNVanalysis(seuratObj[[1]], referenceVar = referenceVar, referenceLabel = referenceLabel,
-                         doRecapPlot = doRecapPlot, pooledReference = pooledReference,
+                         #doRecapPlot = doRecapPlot,
+                         pooledReference = pooledReference,
                          scaleOnReferenceLabel = scaleOnReferenceLabel, assay = assay,
                          thresholdPercentile = thresholdPercentile, genes = genes,
                          windowSize = windowSize, windowStep = windowStep, topNGenes = topNGenes)

@@ -232,7 +232,7 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL,
   }
 
   if(!is.null(savePath)) {
-    fname <- file.path(savePath, paste0("plot.fastCNV_", splitPlotOnVar,"_",seuratObj@project.name,".pdf"))
+    fname <- file.path(savePath, paste0("heatmap.fastCNV_", splitPlotOnVar,"_",seuratObj@project.name,".pdf"))
     pdf(width = 12, height = 7, file = fname)
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"),grid::unit(1, "null")))))
