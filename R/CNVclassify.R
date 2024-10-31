@@ -1,9 +1,11 @@
 #' CNVclassify
 #'
 #' @param cnv_vector Vector of CNVs
-#' @param peaks_info peaks info
+#' @param peaks A list containing the thresholds for loss or gain.
 #'
-#' @return
+#' @return The classification of each spot for a given chromosome arm
+#'
+#' @keywords internal
 #'
 
 

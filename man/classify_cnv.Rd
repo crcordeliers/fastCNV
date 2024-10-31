@@ -9,8 +9,12 @@ classify_cnv(cnv_vector, peaks)
 \arguments{
 \item{cnv_vector}{Vector of CNVs}
 
-\item{peaks_info}{peaks info}
+\item{peaks}{A list containing the thresholds for loss or gain.}
+}
+\value{
+The classification of each spot for a given chromosome arm
 }
 \description{
 CNVclassify
 }
+\keyword{internal}

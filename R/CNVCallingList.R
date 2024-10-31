@@ -94,6 +94,7 @@ CNVcallingList <- function(seuratList,
   LrawcountsByPatient <- lapply(LrawcountsByPatient, function(x) x[commonGenes,])
 
   aveExpr <- rowMeans(sapply(LrawcountsByPatient, rowMeans))
+  if (length(aveExpr) < topNGenes) {topNGenes = length(aveExpr)}
   topExprGenes <- commonGenes[order(aveExpr, decreasing = T)[1:topNGenes]]
   LrawcountsByPatient <- lapply(LrawcountsByPatient, function(x) x[topExprGenes,])
 

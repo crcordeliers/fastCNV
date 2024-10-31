@@ -1,7 +1,7 @@
 #' CNVclassification
 #'
 #' @param seuratObj A seurat object containing the results of fastCNV
-#' @param tumorLabels A list containing the tumor labels
+#' @param peaks A list containing the thresholds for loss or gain.
 #'
 #' @return A seurat object containing the classification (loss gain no_alteration) for
 #' each observation and each chromosome arm.

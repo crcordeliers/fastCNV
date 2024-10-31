@@ -31,7 +31,7 @@ CNVcalling <- function(seuratObj,
                        windowSize=100,
                        windowStep=20,
                        topNGenes=7000) {
-
+  if (dim(seuratObj)[1] < topNGenes) {topNGenes = dim(seuratObj)[1]}
   # getting reference cells / spots
   if (is.null(referenceVar) || is.null(referenceLabel)){
     print(paste0("referenceVar and/or referenceLabel parameters not found. Computing the CNV without a reference."))

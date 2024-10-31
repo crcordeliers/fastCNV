@@ -9,7 +9,7 @@ CNVclassification(seuratObj, peaks = c(-0.1, 0, 0.1))
 \arguments{
 \item{seuratObj}{A seurat object containing the results of fastCNV}
 
-\item{tumorLabels}{A list containing the tumor labels}
+\item{peaks}{A list containing the thresholds for loss or gain.}
 }
 \value{
 A seurat object containing the classification (loss gain no_alteration) for
