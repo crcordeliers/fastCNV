@@ -86,7 +86,7 @@ Computing the CNV without a reference."))
     }
   }
 
-  rawCounts <- as.matrix(Seurat::GetAssay(seuratObj, assay = assay)$counts)
+  rawCounts <- as.matrix(Seurat::GetAssay(seuratObj, assay = assay)["counts"])
 
   commonGenes <- intersect(rownames(rawCounts),genes2$hgnc_symbol)
   rawCounts <- rawCounts[commonGenes,]

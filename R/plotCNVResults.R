@@ -24,7 +24,7 @@
 plotCNVResults <- function(seuratObj, referenceVar = NULL,
                            splitPlotOnVar = referenceVar, savePath = ".",
                            downsizePlot = FALSE){
-  M <- t(as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")$data))
+  M <- t(as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")["data"]))
   if (downsizePlot == TRUE && !is.null(referenceVar)) {
     # K-means clustering
     LClust <- kmeans(M, centers = 40)
@@ -121,7 +121,7 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL,
       use_raster = TRUE,
       clustering_distance_rows = "euclidean",
       clustering_method_rows = "ward.D",
-      column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)), ".", fixed = TRUE), function(z) z[1])),
+      column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")["data"])), ".", fixed = TRUE), function(z) z[1])),
       column_title_gp = grid::gpar(fontsize = 8),
       column_title = c(1:22,"X"),
       row_split = splitPlot,
@@ -170,7 +170,7 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL,
         use_raster = TRUE,
         clustering_distance_rows = "euclidean",
         clustering_method_rows = "ward.D",
-        column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)), ".", fixed = TRUE), function(z) z[1])),
+        column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")["data"])), ".", fixed = TRUE), function(z) z[1])),
         column_title_gp = grid::gpar(fontsize = 8),
         column_title = c(1:22,"X"),
         row_split = as.factor(split_df[[1]]),
@@ -207,7 +207,7 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL,
         use_raster = TRUE,
         clustering_distance_rows = "euclidean",
         clustering_method_rows = "ward.D",
-        column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data)), ".", fixed = TRUE), function(z) z[1])),
+        column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")["data"])), ".", fixed = TRUE), function(z) z[1])),
         column_title_gp = grid::gpar(fontsize = 8),
         column_title = c(1:22,"X"),
         row_split = as.factor(split_df[[1]]),

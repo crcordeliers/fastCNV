@@ -98,7 +98,7 @@ CNVanalysis <- function(object,
         #       Seurat::Cells(x)[which(x@meta.data[[referenceVar]] == i)])
         #     Lmat[[i]] <- Lmat[[i]][which(sapply(Lmat[[i]], length)>=5)]
         #     for (j in names(Lmat[[i]])) {
-        #       Lmat[[i]][[j]] <- as.matrix(Seurat::GetAssay(object[[j]], assay = "genomicScores")$counts)[,Lmat[[i]][[j]]]
+        #       Lmat[[i]][[j]] <- as.matrix(Seurat::GetAssay(object[[j]], assay = "genomicScores")["counts"])[,Lmat[[i]][[j]]]
         #     }
         #   }
         #   Lhm <- list()

@@ -8,7 +8,7 @@
 #'
 
 CNVPerChromosomeArm <- function(seuratObject) {
-  genomicScores <- as.matrix(Seurat::GetAssay(seuratObject, assay = "genomicScores")$data)
+  genomicScores <- as.matrix(Seurat::GetAssay(seuratObject, assay = "genomicScores")["data"])
 
   proportions <- list(
     '1' = c(0.48, 0.52),

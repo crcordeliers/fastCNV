@@ -33,7 +33,7 @@ prepareCountsForCNVAnalysis <- function(seuratObj, sampleName = NULL, referenceV
           else {print("Seurat SCTransform and clustering done.")}
         }
 
-        countsMat <- as.matrix(Seurat::GetAssay(seuratObj, assay = assay)$counts)
+        countsMat <- as.matrix(Seurat::GetAssay(seuratObj, assay = assay)["counts"])
         LC = split(Seurat::Cells(seuratObj), Seurat::FetchData(seuratObj, vars = "seurat_clusters"))
         LC = lapply(lapply(LC, function(cells) {nc <- Seurat::FetchData(seuratObj, vars = paste0("nCount_",assay))[cells,] ; names(nc) <- cells ; nc}), sort)
 
@@ -85,7 +85,7 @@ prepareCountsForCNVAnalysis <- function(seuratObj, sampleName = NULL, referenceV
           else {print("Seurat SCTransform and clustering done.")}
         }
 
-        countsMat <- as.matrix(Seurat::GetAssay(seuratObj, assay = Seurat::Assays(seuratObj)[1])$counts)
+        countsMat <- as.matrix(Seurat::GetAssay(seuratObj, assay = Seurat::Assays(seuratObj)[1])["counts"])
         spotsCateg <- split(Seurat::Cells(seuratObj),Seurat::FetchData(seuratObj, vars = referenceVar))
         LC <- lapply(spotsCateg, function(x) split(x, Seurat::FetchData(seuratObj, vars = "seurat_clusters", cells = x)))
 
