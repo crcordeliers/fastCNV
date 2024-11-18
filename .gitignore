@@ -1,2 +1,4 @@
-/doc/
-/Meta/
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
