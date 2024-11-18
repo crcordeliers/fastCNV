@@ -25,9 +25,9 @@ prepareCountsForCNVAnalysis <- function(seuratObj, sampleName = NULL, referenceV
         if (!"seurat_clusters" %in% colnames(seuratObj[[]]) | reClusterSeurat) {
           print("Running Seurat SCTransform and clustering. This could take some time.")
           if (!is.null(sampleName)){print(paste0("Sample : ", sampleName))}
-          seuratObj <- Seurat::SCTransform(seuratObj, assay = assay)
-          seuratObj <- Seurat::RunPCA(seuratObj, assay = "SCT")
-          seuratObj <- Seurat::FindNeighbors(seuratObj, reduction = "pca", dims = 1:10)
+          seuratObj <- Seurat::SCTransform(seuratObj, assay = assay, verbose = F)
+          seuratObj <- Seurat::RunPCA(seuratObj, assay = "SCT", verbose = F)
+          seuratObj <- Seurat::FindNeighbors(seuratObj, reduction = "pca", dims = 1:10, verbose = F)
           seuratObj <- Seurat::FindClusters(seuratObj, resolution = seuratClusterResolution)
           if (!is.null(sampleName)){print(paste0("Seurat SCTransform and clustering done for sample ", sampleName))}
           else {print("Seurat SCTransform and clustering done.")}
@@ -77,9 +77,9 @@ prepareCountsForCNVAnalysis <- function(seuratObj, sampleName = NULL, referenceV
         if (!"seurat_clusters" %in% colnames(seuratObj[[]]) | reClusterSeurat) {
           print("Running Seurat SCTransform and clustering. This could take some time.")
           if (!is.null(sampleName)){print(paste0("Sample : ", sampleName))}
-          seuratObj <- Seurat::SCTransform(seuratObj, assay = assay)
-          seuratObj <- Seurat::RunPCA(seuratObj, assay = "SCT")
-          seuratObj <- Seurat::FindNeighbors(seuratObj, reduction = "pca", dims = 1:10)
+          seuratObj <- Seurat::SCTransform(seuratObj, assay = assay, verbose = F)
+          seuratObj <- Seurat::RunPCA(seuratObj, assay = "SCT", verbose = F)
+          seuratObj <- Seurat::FindNeighbors(seuratObj, reduction = "pca", dims = 1:10, verbose = F)
           seuratObj <- Seurat::FindClusters(seuratObj, resolution = seuratClusterResolution)
           if (!is.null(sampleName)){print(paste0("Seurat SCTransform and clustering done for sample ", sampleName,"."))}
           else {print("Seurat SCTransform and clustering done.")}
@@ -142,7 +142,7 @@ prepareCountsForCNVAnalysis <- function(seuratObj, sampleName = NULL, referenceV
 
       }
 
-  if (!is.null(sampleName)) {
+   if (!is.null(sampleName)) {
     if (Seurat::Project(seuratObj) == "SeuratProject") {
        Seurat::Project(seuratObj) <- sampleName
     }}

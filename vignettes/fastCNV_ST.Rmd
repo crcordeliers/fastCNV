@@ -108,16 +108,16 @@ seuratList <- fastCNV(seuratList, sampleNames, referenceVar = "annot",
 
 fastCNV also computes a `cnv_fraction` for each observation in the Seurat object. This can be directly plotted using Seurat spatial plotting functions, as we'll demonstrate on STColon1:
 
-```{r plot_cnv_fraction, fig.width=8, fig.height=5}
+```{r plot_cnv_fraction, fig.width=8, fig.height=3.2}
 library(Seurat)
 library(patchwork)
-SpatialFeaturePlot(STColon1, "cnv_fraction", pt.size.factor = 3) | SpatialPlot(STColon1, group.by = "annot", pt.size.factor = 3)
+SpatialFeaturePlot(STColon1, "cnv_fraction", pt.size.factor = 2.5) | SpatialPlot(STColon1, group.by = "annot", pt.size.factor = 2.5)
 ```
 
 
 Here, we see some zones with much higher CNV fractions than others. We can directly plot and test this:
 
-```{r plot_cnv_fraction2, fig.width=6, fig.height=5}
+```{r plot_cnv_fraction2, fig.width=6, fig.height=4}
 library(ggplot2)
 ggplot(FetchData(STColon1, vars = c("annot", "cnv_fraction")), 
        aes(annot, cnv_fraction, fill = annot)) +
@@ -128,7 +128,7 @@ ggplot(FetchData(STColon1, vars = c("annot", "cnv_fraction")),
 
 We can also plot the CNV per chromosome arm with the plotting functions from Seurat.
 
-```{r plot_cnv_per_chromosome, fig.width=8, fig.height=5}
+```{r plot_cnv_per_chromosome, fig.width=7, fig.height=4}
 library(scales)
 
 SpatialFeaturePlot(STColon1, features = "11q_CNV", pt.size.factor = 3)  +
@@ -152,7 +152,7 @@ Using the CNV per chromosome arm and `CNVclassification()` we can get the altera
 `CNVclassification()` takes as arguments a Seurat object containing in the metadata the CNV per chromosome arm, and the thresholds for loss, gain or no alteration (default = c(-0.1, 0, 0.1).  
 Using these 3 peaks, it builds a table for each cell/spot and each chromosome arm containing either "loss", "gain" or "no_alteration".
 
-``` {r cnv classification, fig.width=8, fig.height=5}
+``` {r cnv classification, fig.width=7, fig.height=4}
 STColon1 <- CNVclassification(STColon1)
 
 SpatialDimPlot(STColon1, group.by = "11p_CNV_classification") +
@@ -171,7 +171,7 @@ STColon1 <- CNVcluster(STColon1, resolution = 0.5)
 
 Results of `CNVcluster` are saved in the Seurat object under the `"cnv_clusters"` metadata variable, which can be plotted with Seurat functions. 
 
-```{r plot_cnv_clusters, fig.width=6, fig.height=4}
+```{r plot_cnv_clusters, fig.width=5, fig.height=4}
 SpatialDimPlot(STColon1, group.by = "cnv_clusters", pt.size.factor = 3)
 ```
 
