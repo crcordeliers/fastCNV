@@ -152,7 +152,7 @@ Using the CNV per chromosome arm and `CNVclassification()` we can get the altera
 `CNVclassification()` takes as arguments a Seurat object containing in the metadata the CNV per chromosome arm, and the thresholds for loss, gain or no alteration (default = c(-0.1, 0, 0.1).  
 Using these 3 peaks, it builds a table for each cell/spot and each chromosome arm containing either "loss", "gain" or "no_alteration".
 
-``` {r cnv_classification, fig.width=7, fig.height=4}
+``` {r cnv_classification, fig.width=7, fig.height=5}
 STColon1 <- CNVclassification(STColon1)
 
 common_theme <- theme(

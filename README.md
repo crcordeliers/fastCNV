@@ -14,29 +14,31 @@ remotes::install_github("must-bioinfo/fastCNV")
 
 ## Capabilities
 
-`fastCNV` can plot a heatmap of inferred CNVs: ![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/run1-1.png)
+`fastCNV` can plot a heatmap of inferred CNVs: 
+
+![CNV heatmap for scColon1](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/run1-1.jpg)
 
 It also calculates a `cnv_fraction`, which can be plotted with `Seurat` standard plotting functions:
 
-![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/plot_cnv_umap-1.png)
+!["CNV fractions for sc data"](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/plot_cnv_umap-1.png)
 
 `cnv_fractions` can also be visualized spatially for Spatial Transcriptomics samples:
 
-![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_ST_files/figure-html/plot_cnv_fraction2-1.png)
+![CNV fractions for ST data](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_ST_files/figure-html/plot_cnv_fraction1-1.png)
 
 And `cnv_fractions` can be used to obtain clonal clusters (`cnv_clusters`):
 
-![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/plot_cnv_clusters-1.png)
+<img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/plot_cnv_clusters-1.png" alt="Clonal clusters for sc data" width="50%">
 
 Additionally, the inferred CNVs can be plotted by clone cluster : 
 
-![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/hm_cnv_cl-1.png)
+![CNV heatmap by clonal cluster](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/hm_cnv_cl-1.jpg)
 
 And the subclonality tree can be plotted too : 
 
-![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/tree_cnv-1.png)
+<img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/tree_cnv-1.png" alt="Subclonality tree" width="500">
 
 
 ## Usage
 
-An extensive tutorial is available to get started [here](https://must-bioinfo.github.io/fastCNV/articles/fastCNV.html).
+Extensive tutorials to run `fastCNV`on scRNA-seq and spatial transcriptomics data are available to get started [here](https://must-bioinfo.github.io/fastCNV/articles/index.html).
