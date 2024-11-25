@@ -203,7 +203,7 @@ We find that tumor cells are virtually always cnv_cluster 1 or 2 ; meanwhile, he
 
 Note that we can also use cnv_clusters to label the CNV heatmap, directly using the parameter `splitPlotOfVar` of the `plotCNVResults()` function.
 
-```{r hm_cnv_cl, fig.width = 7, fig.height=5}
+```{r hm_cnv_cl, fig.width = 8, fig.height=6}
 plotCNVResults(STColon1, referenceVar = "annot", splitPlotOnVar = "cnv_clusters")
 ``` 
 
