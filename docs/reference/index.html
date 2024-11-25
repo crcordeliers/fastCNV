@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,8 +15,12 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/fastCNV.html">Get started</a></li>
-<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/fastCNV_sc.html">Introduction to fastCNV - scRNAseq data</a></li>
+    <li><a class="dropdown-item" href="../articles/fastCNV_ST.html">Introduction to fastCNV - ST data</a></li>
+  </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item dropdown">
@@ -49,10 +53,10 @@
 
       <dl><dt>
 
-          <code><a href="CNVPerChromosomeArm.html">CNVPerChromosomeArm()</a></code>
+          <code><a href="annotateCNVtree.html">annotateCNVtree()</a></code>
 
         </dt>
-        <dd>CNVPerChromosomeArm Computes the CNV fraction of each spot/cell per chromosome arm, then stocks the results into the metadata</dd>
+        <dd>Annotate a Phylogenetic Tree with CNV Events</dd>
       </dl><dl><dt>
 
           <code><a href="CNVanalysis.html">CNVanalysis()</a></code>
@@ -85,46 +89,28 @@
         <dd>CNV Clustering within a Seurat Object</dd>
       </dl><dl><dt>
 
+          <code><a href="CNVPerChromosomeArm.html">CNVPerChromosomeArm()</a></code>
+
+        </dt>
+        <dd>CNVPerChromosomeArm Computes the CNV fraction of each spot/cell per chromosome arm, then stocks the results into the metadata</dd>
+      </dl><dl><dt>
+
           <code><a href="CNVtree.html">CNVtree()</a></code>
 
         </dt>
         <dd>Construct a Phylogenetic Tree from a Copy Number Variation (CNV) Matrix</dd>
       </dl><dl><dt>
 
-          <code><a href="annotateCNVtree.html">annotateCNVtree()</a></code>
-
-        </dt>
-        <dd>Annotate a Phylogenetic Tree with CNV Events</dd>
-      </dl><dl><dt>
-
-          <code><a href="cit.density.html">cit.density()</a></code>
-
-        </dt>
-        <dd>cit.density</dd>
-      </dl><dl><dt>
-
-          <code><a href="cit.discretize.html">cit.discretize()</a></code>
-
-        </dt>
-        <dd>cit.discretize</dd>
-      </dl><dl><dt>
-
-          <code><a href="cit.peaks.html">cit.peaks()</a></code>
-
-        </dt>
-        <dd>cit.peaks</dd>
-      </dl><dl><dt>
-
-          <code><a href="classify_cnv.html">classify_cnv()</a></code>
-
-        </dt>
-        <dd>CNVclassify</dd>
-      </dl><dl><dt>
-
           <code><a href="fastCNV.html">fastCNV()</a></code>
 
         </dt>
         <dd>fastCNV calls all of the internal functions needed to compute the putative CNV on a seurat object or a list of seurat objects</dd>
+      </dl><dl><dt>
+
+          <code><a href="generateCNVClonesMatrix.html">generateCNVClonesMatrix()</a></code>
+
+        </dt>
+        <dd>Generate CNV Matrix for CNV clusters by Chromosome Arm</dd>
       </dl><dl><dt>
 
           <code><a href="genes.html">genes</a></code>

@@ -152,12 +152,23 @@ Using the CNV per chromosome arm and `CNVclassification()` we can get the altera
 `CNVclassification()` takes as arguments a Seurat object containing in the metadata the CNV per chromosome arm, and the thresholds for loss, gain or no alteration (default = c(-0.1, 0, 0.1).  
 Using these 3 peaks, it builds a table for each cell/spot and each chromosome arm containing either "loss", "gain" or "no_alteration".
 
-``` {r cnv classification, fig.width=7, fig.height=4}
+``` {r cnv_classification, fig.width=7, fig.height=4}
 STColon1 <- CNVclassification(STColon1)
 
+common_theme <- theme(
+  plot.title = element_text(size = 10),
+  legend.text = element_text(size = 8),
+  legend.title = element_text(size = 8),
+  axis.title = element_text(size = 8),
+  axis.text = element_text(size = 6)
+)
+
+
 SpatialDimPlot(STColon1, group.by = "11p_CNV_classification") +
-  scale_fill_manual(values = c(gain = "red", no_alteration = "grey", loss = "blue"))| SpatialDimPlot(STColon1, group.by = "13q_CNV_classification") +
-  scale_fill_manual(values = c(gain = "red", no_alteration = "grey", loss = "blue"))
+  scale_fill_manual(values = c(gain = "red", no_alteration = "grey", loss = "blue")) +
+  common_theme | SpatialDimPlot(STColon1, group.by = "13q_CNV_classification") +
+  scale_fill_manual(values = c(gain = "red", no_alteration = "grey", loss = "blue")) +
+  common_theme
 
 ```
 
@@ -195,3 +206,29 @@ Note that we can also use cnv_clusters to label the CNV heatmap, directly using 
 ```{r hm_cnv_cl, fig.width = 7, fig.height=5}
 plotCNVResults(STColon1, referenceVar = "annot", splitPlotOnVar = "cnv_clusters")
 ``` 
+
+## CNV tree
+
+We can see there are 2 tumor subclusters (1 and 2) in STColon1, and 3 healthy subclusters (0, 3 and 4). 
+In this part of the vignette, we will show how to plot the CNV subclonality tree. 
+
+First, we will build a metacell for each cluster, using `generateCNVClonesMatrix()`. 
+
+```{r metacell_cluster}
+
+cnv_matrix_clusters <- generateCNVClonesMatrix(STColon1, healthyClusters = c("0", "3", "4"))
+
+```
+
+Now, we build the tree, using `CNVtree()`, `annotateCNVtree()` and `plotCNVtree()`.
+  - `CNVtree()` will build the subclonality tree.
+  - `annotateCNVtree()` will annotate each cnv gain/loss in the tree. 
+  - `plotCNVtree()` will output the tree. 
+
+```{r tree_cnv, fig.width = 6, fig.height = 4}
+
+tree <- CNVtree(cnv_matrix_clusters)
+tree_data <- annotateCNVtree(tree, cnv_matrix_clusters, 0.13)
+plotCNVtree(tree_data)
+
+```

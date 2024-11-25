@@ -41,6 +41,8 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
 
   if(!length(seuratObj)==length(sampleName)) stop("error-fastCNV : seuratObj & sampleName should have the same length")
 
+  options(future.globals.maxSize = 8000*1024^2)
+
   if(length(seuratObj) == 1){
     seuratObj <- list(seuratObj) ; names(seuratObj) <- sampleName
   }

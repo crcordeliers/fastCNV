@@ -4,7 +4,7 @@
 \alias{annotateCNVtree}
 \title{Annotate a Phylogenetic Tree with CNV Events}
 \usage{
-annotateCNVtree(tree, cnv_mat, cnv_thresh = 0.2)
+annotateCNVtree(tree, cnv_mat, cnv_thresh = 0.15)
 }
 \arguments{
 \item{tree}{A phylogenetic tree (of class \code{phylo}) that will be annotated.}

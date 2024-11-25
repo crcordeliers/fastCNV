@@ -19,8 +19,15 @@
 #'
 #' @importFrom dplyr left_join full_join
 #' @importFrom ggplot2 fortify
+#' @import stringr
+#' @import dplyr
+#' @import tidyverse
+#' @importFrom utils combn
+#' @import purrr
+#'
 #' @export
-annotateCNVtree <- function(tree, cnv_mat, cnv_thresh = 0.2) {
+#'
+annotateCNVtree <- function(tree, cnv_mat, cnv_thresh = 0.15) {
   tree_data <- fortify(tree)
   # Get events
   major_events <- get_majorEvents(cnv_mat, cnv_thresh)

@@ -20,6 +20,7 @@
 #' @importFrom ggtree ggtree geom_tiplab geom_tippoint theme_tree
 #' @importFrom ggplot2 aes geom_label scale_x_continuous
 #' @export
+
 plotCNVtree <- function(tree_data) {
   tree_plot <- ggtree(tree_data) +
     geom_tiplab(hjust = -0.2) +

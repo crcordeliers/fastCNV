@@ -14,19 +14,28 @@ remotes::install_github("must-bioinfo/fastCNV")
 
 ## Capabilities
 
-`fastCNV` can plot a heatmap of inferred CNVs: ![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_files/figure-html/run1-1.png)
+`fastCNV` can plot a heatmap of inferred CNVs: ![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/run1-1.png)
 
 It also calculates a `cnv_fraction`, which can be plotted with `Seurat` standard plotting functions:
 
-![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_files/figure-html/plot_cnv_umap-1.png)
+![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/plot_cnv_umap-1.png)
 
-`cnv_fractions` can also be visualized spatially:
+`cnv_fractions` can also be visualized spatially for Spatial Transcriptomics samples:
 
-![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_files/figure-html/plot_cnv_fraction2-1.png)
+![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_ST_files/figure-html/plot_cnv_fraction2-1.png)
 
 And `cnv_fractions` can be used to obtain clonal clusters (`cnv_clusters`):
 
-![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_files/figure-html/plot_cnv_clusters-1.png)
+![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/plot_cnv_clusters-1.png)
+
+Additionally, the inferred CNVs can be plotted by clone cluster : 
+
+![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/hm_cnv_cl-1.png)
+
+And the subclonality tree can be plotted too : 
+
+![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/tree_cnv-1.png)
+
 
 ## Usage
 

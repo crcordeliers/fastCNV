@@ -20,7 +20,7 @@
 # plot(tree)
 #'
 #' @importFrom ape nj root drop.tip
-#' @importFrom phangorn wpgma upgma
+#' @importFrom phangorn wpgma upgma Ancestors
 #' @export
 CNVtree <- function(cnv_matrix, tree_function = nj) {
   normal_root <- matrix(rep(0, ncol(cnv_matrix)), nrow = 1,
