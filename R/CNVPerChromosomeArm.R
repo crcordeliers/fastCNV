@@ -80,14 +80,19 @@ CNVPerChromosomeArm <- function(seuratObject) {
   }
 
   chrom_X <- grep(paste0("^", "23", "\\."), rownames(genomicScores), value = TRUE)
-  seuratObject[["X_CNV"]] <- apply(genomicScores[chrom_X,], 2, function(x) {
-    non_zero_values <- x
-    if (length(non_zero_values) > 0) {
-      mean(non_zero_values)
-    } else {
-      0
-    }
-  })
+  if (length(chrom_X) == 1) {
+    seuratObject[["X_CNV"]] <- genomicScores[chrom_X,]
+  } else {
+    seuratObject[["X_CNV"]] <- apply(genomicScores[chrom_X,], 2, function(x) {
+      non_zero_values <- x
+      if (length(non_zero_values) > 0) {
+        mean(non_zero_values)
+      } else {
+        0
+      }
+    })
+  }
+
 
   return(seuratObject)
 }

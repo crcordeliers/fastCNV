@@ -10,9 +10,15 @@ This package does a fast CNV on seurat data
 \author{
 \strong{Maintainer}: Gadea Cabrejas \email{gadea.cabrejas-saiz@u-paris.fr}
 
-Other contributors:
+Authors:
 \itemize{
   \item Clarice Groeneveld \email{clarice.groeneveld@inserm.fr} [contributor]
+}
+
+Other contributors:
+\itemize{
+  \item Marine Sroussi [contributor]
+  \item Aurélien de Reyniès [contributor]
 }
 
 }
