@@ -123,9 +123,12 @@ get_ancestralEvents <- function(tree, cnv_mat, major_events) {
         intersect(major_events[[c1]], major_events[[c2]])
       }))
 
+  cnv_combns$V1_indices <- match(cnv_combns$V1, tree$tip.label)
+  cnv_combns$V2_indices <- match(cnv_combns$V2, tree$tip.label)
+
   cnv_combns$node <- sapply(1:nrow(cnv_combns), function(i) {
-    intersect(Ancestors(tree, cnv_combns$V1[i]),
-              Ancestors(tree, cnv_combns$V2[i]))[1]
+    intersect(Ancestors(tree, cnv_combns$V1_indices[i]),
+              Ancestors(tree, cnv_combns$V2_indices[i]))[1]
   })
   cnv_parent_events <- cnv_combns |>
     group_by(node) |>
