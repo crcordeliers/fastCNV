@@ -87,7 +87,7 @@ We are first going to run `fastCNV()` on our scColon1 object, taking as referenc
 scColon1 <- fastCNV(seuratObj = scColon1, sampleName = "scColon1", referenceVar =
                      "annot", referenceLabel = c("Bcells", "DC6.pDC", "EndoArteriel",
                      "Fibro", "Mastocytes", "MyeloLineage", "NK", "Pericytes",
-                     "PlasmaCells", "Schwann.Entericglial", "SmoothMuscle","Tcells"))
+                     "PlasmaCells", "Schwann.Entericglial", "SmoothMuscle","Tcells"), printPlot = T)
 
 ```
 
@@ -102,7 +102,7 @@ referencelabels <- c("Bcells", "DC6.pDC", "EndoArteriel",
                      "PlasmaCells", "SmoothMuscle","Tcells")
 
 seuratList <- fastCNV(seuratList, sampleNames, referenceVar = "annot", 
-                      referenceLabel = referencelabels)
+                      referenceLabel = referencelabels, printPlot = T)
 
 ```
 
@@ -127,7 +127,7 @@ common_theme <- theme(
   axis.text = element_text(size = 6)
 )
 
-FeaturePlot(scColon1, features = "cnv_fraction", reduction = "umap", ) & common_theme |
+FeaturePlot(scColon1, features = "cnv_fraction", reduction = "umap" ) & common_theme |
   DimPlot(scColon1, reduction = "umap", group.by =  "annot") & common_theme
 ```
 
@@ -146,13 +146,13 @@ We can also plot the CNV per chromosome arm with the plotting functions from Seu
 ```{r plot_cnv_per_chromosome, fig.width=7, fig.height=3}
 library(scales)
 
-FeaturePlot(scColon1, features = "17q_CNV")  +
+FeaturePlot(scColon1, features = "20.p_CNV")  +
   scale_color_distiller(palette = "RdBu", direction = -1, limits = c(-1, 1), 
                        rescaler = function(x, to = c(0, 1), from = NULL) {
                          rescale_mid(x, to = to, mid = 0)
                        }) +
   common_theme |
-FeaturePlot(scColon1, features = "X_CNV") +
+FeaturePlot(scColon1, features = "X.q_CNV") +
   scale_color_distiller(palette = "RdBu", direction = -1, limits = c(-1, 1), 
                        rescaler = function(x, to = c(0, 1), from = NULL) {
                          rescale_mid(x, to = to, mid = 0)
@@ -173,10 +173,10 @@ Using these 3 peaks, it builds a table for each cell/spot and each chromosome ar
 ``` {r cnv_classification, fig.width=7, fig.height=3.2}
 scColon1 <- CNVclassification(scColon1)
 
-DimPlot(scColon1, group.by = "8q_CNV_classification") &
+DimPlot(scColon1, group.by = "20.p_CNV_classification") &
   scale_color_manual(values = c(gain = "red", no_alteration = "grey", loss = "blue")) &
   common_theme |
-DimPlot(scColon1, group.by = "X_CNV_classification") &
+DimPlot(scColon1, group.by = "X.q_CNV_classification") &
   scale_color_manual(values = c(gain = "red", no_alteration = "grey", loss = "blue")) &
   common_theme
 
@@ -207,26 +207,26 @@ ggplot(FetchData(scColon1, vars = c("cnv_clusters", "annot")), aes(annot, fill =
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "black"))
 ```
 
-We find that tumor cells are virtually always cnv_cluster 0, 2, 3 5 or 6 ; meanwhile, healthy cells tend to be cnv_cluster 1 or 5 which present very few or no CNV.
+We find that tumor cells are virtually always cnv_cluster 0, 1, 3 or 4 ; meanwhile, healthy cells tend to be cnv_cluster 2 or 5 which present very few or no CNV.
 
 
 Note that we can also use cnv_clusters to label the CNV heatmap, directly using the parameter `splitPlotOfVar` of the `plotCNVResults()` function.
 
 ```{r hm_cnv_cl, fig.width = 8, fig.height=6}
-plotCNVResults(scColon1, referenceVar = "annot", splitPlotOnVar = "cnv_clusters")
+plotCNVResults(scColon1, referenceVar = "annot", splitPlotOnVar = "cnv_clusters", printPlot = T)
 ```
 
 
 ## CNV tree
 
-As we can see, there are 5 tumor subclusters (0, 2, 3, 4 and 6) in scColon1, and 2 healthy subclusters (1 and 5). 
+As we can see, there are 4 tumor subclusters (0, 1, 3 and 4, with clone 3 being juxtatumoral healthy cells) in scColon1, and 2 healthy subclusters (2 and 5). 
 In this part of the vignette, we will show how to plot the CNV subclonality tree. 
 
 First, we will build a metacell for each cluster, using `generateCNVClonesMatrix()`. 
 
 ```{r metacell_cluster}
 
-cnv_matrix_clusters <- generateCNVClonesMatrix(scColon1, healthyClusters = c("1", "5"))
+cnv_matrix_clusters <- generateCNVClonesMatrix(scColon1, healthyClusters = c("2", "5"))
 
 ```
 

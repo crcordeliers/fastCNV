@@ -5,10 +5,10 @@
 \title{CNVPerChromosomeArm
 Computes the CNV fraction of each spot/cell per chromosome arm, then stocks the results into the metadata}
 \usage{
-CNVPerChromosomeArm(seuratObject)
+CNVPerChromosomeArm(seuratObj)
 }
 \arguments{
-\item{seuratObject}{The output of fastCNV()}
+\item{seuratObj}{The output of fastCNV()}
 }
 \value{
 This function returns the same seurat object with the CNV for each chromosome arm in the metadata

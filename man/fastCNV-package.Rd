@@ -15,11 +15,5 @@ Authors:
   \item Clarice Groeneveld \email{clarice.groeneveld@inserm.fr} [contributor]
 }
 
-Other contributors:
-\itemize{
-  \item Marine Sroussi [contributor]
-  \item Aurélien de Reyniès [contributor]
-}
-
 }
 \keyword{internal}

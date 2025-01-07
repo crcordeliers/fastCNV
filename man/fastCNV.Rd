@@ -12,20 +12,23 @@ fastCNV(
   splitPlotOnVar = referenceVar,
   downsizePlot = FALSE,
   doPlot = TRUE,
+  printPlot = FALSE,
   prepareCounts = TRUE,
   pooledReference = TRUE,
   assay = NULL,
   getCNVPerChromosomeArm = TRUE,
   savePath = ".",
+  denoise = TRUE,
   aggregFactor = 15000,
   seuratClusterResolution = 0.8,
   aggregateByVar = T,
   reClusterSeurat = F,
   scaleOnReferenceLabel = TRUE,
   thresholdPercentile = 0.01,
-  genes = getGenes(),
+  geneMetadata = getGenes(),
   windowSize = 100,
   windowStep = 20,
+  saveGenomicWindows = FALSE,
   topNGenes = 7000
 )
 }
@@ -42,7 +45,9 @@ fastCNV(
 
 \item{downsizePlot}{Subset the observations to speed up the plotting process (default = \code{FALSE}).}
 
-\item{doPlot}{If \code{TRUE} will plot a heatmap for each of the samples (default = \code{TRUE})}
+\item{doPlot}{If \code{TRUE} will build a heatmap for each of the samples (default = \code{TRUE})}
+
+\item{printPlot}{If the heatmap should be printed in the console (default = \code{FALSE}, the plot will only be in a PDF).}
 
 \item{prepareCounts}{If \code{FALSE} will not run the \code{prepareCountsForCNVAnalysis} function. Default \code{TRUE}.}
 
@@ -53,6 +58,8 @@ fastCNV(
 \item{getCNVPerChromosomeArm}{If \code{TRUE}, will save into the metadata the CNV per chromosome arm}
 
 \item{savePath}{Default \code{.}. If \code{NULL} the heatmap won't be saved as a pdf.}
+
+\item{denoise}{If the data needs to be denoised (default = \code{TRUE})}
 
 \item{aggregFactor}{The number of counts per spot desired (default \verb{30 000}). If less than \code{1000}, will not run the \code{prepareCountsForCNVAnalysis} function.}
 
@@ -66,11 +73,13 @@ fastCNV(
 
 \item{thresholdPercentile}{Which quantiles to take (if 0.01 it will take 0.01-0.99). Background noise appears with higher numbers.}
 
-\item{genes}{List of genes (default genes from ensembl version 111)}
+\item{geneMetadata}{List of genes and their metadata (default genes from ensembl version 113)}
 
 \item{windowSize}{Size of the genomic windows}
 
 \item{windowStep}{Step between the genomic windows}
+
+\item{saveGenomicWindows}{If the information of the genomic windows need to be saved in the current directory (default = \code{FALSE}).}
 
 \item{topNGenes}{Number of top expressed genes to keep}
 }

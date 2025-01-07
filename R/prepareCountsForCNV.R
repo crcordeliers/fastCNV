@@ -23,14 +23,14 @@ prepareCountsForCNVAnalysis <- function(seuratObj, sampleName = NULL, referenceV
     assay <- Seurat::Assays(seuratObj)[1]
       if (is.null(referenceVar) || aggregateByVar == F) {
         if (!"seurat_clusters" %in% colnames(seuratObj[[]]) | reClusterSeurat) {
-          print("Running Seurat SCTransform and clustering. This could take some time.")
-          if (!is.null(sampleName)){print(paste0("Sample : ", sampleName))}
+          if (!is.null(sampleName)){message(paste0("Running Seurat SCTransform and clustering for sample ", sampleName,". This could take some time."))
+          }else{message("Running Seurat SCTransform and clustering. This could take some time.")}
           seuratObj <- Seurat::SCTransform(seuratObj, assay = assay, verbose = F)
           seuratObj <- Seurat::RunPCA(seuratObj, assay = "SCT", verbose = F)
           seuratObj <- Seurat::FindNeighbors(seuratObj, reduction = "pca", dims = 1:10, verbose = F)
-          seuratObj <- Seurat::FindClusters(seuratObj, resolution = seuratClusterResolution)
-          if (!is.null(sampleName)){print(paste0("Seurat SCTransform and clustering done for sample ", sampleName))}
-          else {print("Seurat SCTransform and clustering done.")}
+          seuratObj <- Seurat::FindClusters(seuratObj, resolution = seuratClusterResolution, verbose = F)
+          if (!is.null(sampleName)){message(paste0("Seurat SCTransform and clustering done for sample ", sampleName))}
+          else {message("Seurat SCTransform and clustering done.")}
         }
 
         countsMat <- as.matrix(Seurat::GetAssay(seuratObj, assay = assay)["counts"])
@@ -75,14 +75,14 @@ prepareCountsForCNVAnalysis <- function(seuratObj, sampleName = NULL, referenceV
       } else {
 
         if (!"seurat_clusters" %in% colnames(seuratObj[[]]) | reClusterSeurat) {
-          print("Running Seurat SCTransform and clustering. This could take some time.")
-          if (!is.null(sampleName)){print(paste0("Sample : ", sampleName))}
+          if (!is.null(sampleName)){message(paste0("Running Seurat SCTransform and clustering for sample ", sampleName,". This could take some time."))
+          }else{message("Running Seurat SCTransform and clustering. This could take some time.")}
           seuratObj <- Seurat::SCTransform(seuratObj, assay = assay, verbose = F)
           seuratObj <- Seurat::RunPCA(seuratObj, assay = "SCT", verbose = F)
           seuratObj <- Seurat::FindNeighbors(seuratObj, reduction = "pca", dims = 1:10, verbose = F)
-          seuratObj <- Seurat::FindClusters(seuratObj, resolution = seuratClusterResolution)
-          if (!is.null(sampleName)){print(paste0("Seurat SCTransform and clustering done for sample ", sampleName,"."))}
-          else {print("Seurat SCTransform and clustering done.")}
+          seuratObj <- Seurat::FindClusters(seuratObj, resolution = seuratClusterResolution, verbose = F)
+          if (!is.null(sampleName)){message(paste0("Seurat SCTransform and clustering done for sample ", sampleName,"."))}
+          else {message("Seurat SCTransform and clustering done.")}
         }
 
         countsMat <- as.matrix(Seurat::GetAssay(seuratObj, assay = Seurat::Assays(seuratObj)[1])["counts"])

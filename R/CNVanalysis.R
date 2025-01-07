@@ -6,10 +6,12 @@
 #' @param referenceVar The variable name of the annotations in the Seurat metadata
 #' @param referenceLabel The label given to the observations wanted as reference (can be any type of annotation)
 #' @param scaleOnReferenceLabel If you want to scale the results depending on the normal observations
+#' @param denoise If the data needs to be denoised (default = `TRUE`)
 #' @param thresholdPercentile Which quantiles to take (if 0.01 it will take 0.01-0.99). Background noise appears with higher numbers.
-#' @param genes List of genes from ensembl
+#' @param geneMetadata List of genes and their metadata from ensembl
 #' @param windowSize Size of the genomic windows
 #' @param windowStep Step between the genomic windows
+#' @param saveGenomicWindows If the information of the genomic windows need to be saved in the current directory (default = `FALSE`).
 #' @param topNGenes Number of top expressed genes to keep
 # @param doRecapPlot Default `TRUE`. Will output the CNV heatmaps by annotation if `TRUE`.
 #' @param pooledReference Default `TRUE`. Will build a pooled reference across all samples if `TRUE`.
@@ -24,11 +26,14 @@ CNVanalysis <- function(object,
                        #doRecapPlot = TRUE,
                        pooledReference = TRUE,
                        scaleOnReferenceLabel = TRUE,
+                       denoise = TRUE,
                        assay = NULL,
                        thresholdPercentile = 0.01,
-                       genes=getGenes(),
+                       #mclust_thresholds = FALSE,
+                       geneMetadata=getGenes(),
                        windowSize=100,
                        windowStep=20,
+                       saveGenomicWindows = FALSE,
                        topNGenes=7000) {
 
     if (!is.list(object)) {
@@ -37,10 +42,12 @@ CNVanalysis <- function(object,
                            referenceVar = referenceVar,
                            referenceLabel = referenceLabel,
                            scaleOnReferenceLabel = scaleOnReferenceLabel,
+                           denoise = denoise,
                            thresholdPercentile = thresholdPercentile,
-                           genes=genes,
+                           geneMetadata=geneMetadata,
                            windowSize=windowSize,
                            windowStep=windowStep,
+                           saveGenomicWindows = saveGenomicWindows,
                            topNGenes=topNGenes)
     } else {
       if (length(object) == 1) {
@@ -49,10 +56,12 @@ CNVanalysis <- function(object,
                                   referenceVar = referenceVar,
                                   referenceLabel = referenceLabel,
                                   scaleOnReferenceLabel = scaleOnReferenceLabel,
+                                  denoise = denoise,
                                   thresholdPercentile = thresholdPercentile,
-                                  genes=genes,
+                                  geneMetadata=geneMetadata,
                                   windowSize=windowSize,
                                   windowStep=windowStep,
+                                  saveGenomicWindows = saveGenomicWindows,
                                   topNGenes=topNGenes))
       } else {
         if (pooledReference == TRUE) {
@@ -61,10 +70,12 @@ CNVanalysis <- function(object,
                              referenceVar = referenceVar,
                              referenceLabel = referenceLabel,
                              scaleOnReferenceLabel = scaleOnReferenceLabel,
+                             denoise = denoise,
                              thresholdPercentile = thresholdPercentile,
-                             genes=genes,
+                             geneMetadata=geneMetadata,
                              windowSize=windowSize,
                              windowStep=windowStep,
+                             saveGenomicWindows = saveGenomicWindows,
                              topNGenes=topNGenes)
         } else {
           object <- lapply(object, function(x) {
@@ -73,15 +84,17 @@ CNVanalysis <- function(object,
                                     referenceVar = referenceVar,
                                     referenceLabel = referenceLabel,
                                     scaleOnReferenceLabel = scaleOnReferenceLabel,
+                                    denoise = denoise,
                                     thresholdPercentile = thresholdPercentile,
-                                    genes=genes,
+                                    geneMetadata=geneMetadata,
                                     windowSize=windowSize,
                                     windowStep=windowStep,
+                                    saveGenomicWindows = saveGenomicWindows,
                                     topNGenes=topNGenes) } )
         }
 
         # if (doRecapPlot == TRUE) {
-        #   print("Plotting the CNV recap heatmap per category accross samples. This could take some time.")
+        #   message("Plotting the CNV recap heatmap per category accross samples. This could take some time.")
         #   if (!is.null(referenceVar)) {
         #   palette <- as.character(paletteer::paletteer_d("ggsci::default_igv"))
         #   annot_colors <- setNames(palette[1:length(names(object))], names(object))

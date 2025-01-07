@@ -9,6 +9,7 @@ plotCNVResults(
   referenceVar = NULL,
   splitPlotOnVar = referenceVar,
   savePath = ".",
+  printPlot = FALSE,
   downsizePlot = FALSE
 )
 }
@@ -20,6 +21,8 @@ plotCNVResults(
 \item{splitPlotOnVar}{The variable name on which to split the heatmap rows.}
 
 \item{savePath}{Path to save the pdf heatmap. If \code{NULL}, plot won't be saved (default = \code{.}).}
+
+\item{printPlot}{If the heatmap should be printed in the console.}
 
 \item{downsizePlot}{Subset the observations to speed up the plotting process (default = \code{FALSE}).}
 }

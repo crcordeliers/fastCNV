@@ -4,6 +4,7 @@
 #' @param referenceVar The variable name of the annotations in the Seurat metadata
 #' @param splitPlotOnVar The variable name on which to split the heatmap rows.
 #' @param savePath Path to save the pdf heatmap. If `NULL`, plot won't be saved (default = `.`).
+#' @param printPlot If the heatmap should be printed in the console.
 #' @param downsizePlot Subset the observations to speed up the plotting process (default = `FALSE`).
 #'
 #' @import ComplexHeatmap
@@ -23,7 +24,7 @@
 
 plotCNVResults <- function(seuratObj, referenceVar = NULL,
                            splitPlotOnVar = referenceVar, savePath = ".",
-                           downsizePlot = FALSE){
+                           printPlot = FALSE, downsizePlot = FALSE){
   M <- t(as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")["data"]))
   if (downsizePlot == TRUE && !is.null(referenceVar)) {
     # K-means clustering
@@ -70,7 +71,7 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL,
     annotation_df <- as.data.frame(seuratObj@meta.data[[referenceVar]])
     colnames(annotation_df) <- "Annotations"
     if (!is.null(splitPlotOnVar)) {
-      split_df <- as.data.frame(seuratObj@meta.data[[splitPlotOnVar]])
+      split_df <- as.data.frame(Seurat::FetchData(seuratObj, vars = splitPlotOnVar))
       colnames(split_df) <- "Split"
     } else {
       split_df <- NULL
@@ -133,14 +134,6 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL,
         grid_height = grid::unit(1, "cm"),  # Size of the grid cells in the legend
         grid_width = grid::unit(0.6, "cm"))
     )
-    grid::grid.newpage()
-    grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"), grid::unit(1, "null")))))
-    grid::pushViewport(grid::viewport(layout.pos.row = 1))
-    grid::grid.text(paste0("CNV heatmap for sample ", seuratObj@project.name), gp = grid::gpar(fontsize = 20))
-    grid::popViewport()
-    grid::pushViewport(grid::viewport(layout.pos.row = 2))
-    ComplexHeatmap::draw(hm, newpage = FALSE)
-    grid::popViewport()
   } else {
     if (referenceVar == splitPlotOnVar) {
       rown = NULL
@@ -221,6 +214,8 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL,
           grid_width = grid::unit(0.6, "cm"))
       )
     }
+  }
+  if(printPlot == TRUE) {
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"), grid::unit(1, "null")))))
     grid::pushViewport(grid::viewport(layout.pos.row = 1))

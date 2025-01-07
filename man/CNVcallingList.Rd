@@ -10,10 +10,12 @@ CNVcallingList(
   referenceVar = NULL,
   referenceLabel = NULL,
   scaleOnReferenceLabel = TRUE,
+  denoise = TRUE,
   thresholdPercentile = 0.01,
-  genes = getGenes(),
+  geneMetadata = getGenes(),
   windowSize = 100,
   windowStep = 20,
+  saveGenomicWindows = FALSE,
   topNGenes = 7000
 )
 }
@@ -28,13 +30,17 @@ CNVcallingList(
 
 \item{scaleOnReferenceLabel}{If you want to scale the results depending on the reference observations}
 
+\item{denoise}{If the data needs to be denoised (default = \code{TRUE})}
+
 \item{thresholdPercentile}{Which quantiles to take (if 0.01 it will take 0.01-0.99). Background noise appears with higher numbers.}
 
-\item{genes}{List of genes from ensembl}
+\item{geneMetadata}{List of genes from ensembl and their metadata}
 
 \item{windowSize}{Size of the genomic windows}
 
 \item{windowStep}{Step between the genomic windows}
+
+\item{saveGenomicWindows}{If the information of the genomic windows need to be saved in the current directory (default = \code{FALSE}).}
 
 \item{topNGenes}{Number of top expressed genes}
 }

@@ -1,11 +1,9 @@
 Package: fastCNV
 Title: fastCNV
-Version: 0.4.2
+Version: 0.5.2
 Authors@R: 
     c(person("Gadea", "Cabrejas", , "gadea.cabrejas-saiz@u-paris.fr", role = c("aut", "cre")),
-      person("Clarice", "Groeneveld", , "clarice.groeneveld@inserm.fr", role = c("aut", "ctb")),
-      person("Marine", "Sroussi", role = "ctb"),
-      person("Aurélien", "de Reyniès", role = "ctb"))
+      person("Clarice", "Groeneveld", , "clarice.groeneveld@inserm.fr", role = c("aut", "ctb")))
 Description: Computes CNV quickly on Seurat objects.
 License: GPL-3
 Encoding: UTF-8
