@@ -16,6 +16,7 @@
 #' @import patchwork
 #' @import grid
 #' @import paletteer
+#' @import magick
 #'
 #' @return This function builds a heatmap and saves it as a .pdf file in your working directory
 #'

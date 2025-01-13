@@ -33,8 +33,8 @@ CNVcalling <- function(seuratObj,
                        thresholdPercentile = 0.01,
                        geneMetadata=getGenes(),
                        genesToForce = NULL,
-                       windowSize=100,
-                       windowStep=20,
+                       windowSize=150,
+                       windowStep=10,
                        saveGenomicWindows = FALSE,
                        topNGenes=7000) {
   if (dim(seuratObj)[1] < topNGenes) {topNGenes = dim(seuratObj)[1]}

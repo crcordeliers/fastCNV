@@ -41,7 +41,7 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
                      # mclust_thresholds = FALSE,
                      aggregFactor=15000, seuratClusterResolution = 0.8, aggregateByVar = T,
                      reClusterSeurat = F, scaleOnReferenceLabel = TRUE, thresholdPercentile = 0.01,
-                     geneMetadata=getGenes(), windowSize=100, windowStep=20, saveGenomicWindows = FALSE, topNGenes=7000){
+                     geneMetadata=getGenes(), windowSize=150, windowStep=10, saveGenomicWindows = FALSE, topNGenes=7000){
 
   if(!length(seuratObj)==length(sampleName)) stop("error-fastCNV : seuratObj & sampleName should have the same length")
 

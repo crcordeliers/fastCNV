@@ -161,7 +161,7 @@ FeaturePlot(scColon1, features = "X.q_CNV") +
 
 ```
 
-Here we see for example that one part of the epithelial tumor cells have a CNV loss in the chromosome 17q, while another part of the epithelial tumor cells do not, and another part have a gain of this same chromosome (17q) and of the chromosome X too. 
+Here we see for example that one part of the epithelial tumor cells have a CNV loss in the chromosome 20p, while another part of the epithelial tumor cells do not, and some have a gain of the chromosome Xp. 
  
 
 ## CNV classification
@@ -188,7 +188,7 @@ DimPlot(scColon1, group.by = "X.q_CNV_classification") &
 In addition to the CNV fraction, we can obtain clusters based on the CNV matrix by running `CNVcluster()`. This runs standard Seurat clustering pipeline on the CNV scores per observation -- uses the first 10 PCs to building the neighborhood graph and then Louvain clustering to find the clusters.
 
 ```{r cluster_cnv, results='hide'}
-scColon1 <- CNVcluster(scColon1, resolution = 0.4)
+scColon1 <- CNVcluster(scColon1, resolution = 0.4, nPCs = 25)
 ```
 
 Results of `CNVcluster` are saved in the Seurat object under the `"cnv_clusters"` metadata variable, which can be plotted with Seurat functions. 
@@ -219,14 +219,14 @@ plotCNVResults(scColon1, referenceVar = "annot", splitPlotOnVar = "cnv_clusters"
 
 ## CNV tree
 
-As we can see, there are 4 tumor subclusters (0, 1, 3 and 4, with clone 3 being juxtatumoral healthy cells) in scColon1, and 2 healthy subclusters (2 and 5). 
+As we can see, there are 3 tumor subclusters (0, 1 and 4) in scColon1, and 2 healthy subclusters (2 and 3), with clone 5 being the juxtatumoral cells. 
 In this part of the vignette, we will show how to plot the CNV subclonality tree. 
 
 First, we will build a metacell for each cluster, using `generateCNVClonesMatrix()`. 
 
 ```{r metacell_cluster}
 
-cnv_matrix_clusters <- generateCNVClonesMatrix(scColon1, healthyClusters = c("2", "5"))
+cnv_matrix_clusters <- generateCNVClonesMatrix(scColon1, healthyClusters = c("2", "3"))
 
 ```
 

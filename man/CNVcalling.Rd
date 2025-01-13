@@ -15,8 +15,8 @@ CNVcalling(
   thresholdPercentile = 0.01,
   geneMetadata = getGenes(),
   genesToForce = NULL,
-  windowSize = 100,
-  windowStep = 20,
+  windowSize = 150,
+  windowStep = 10,
   saveGenomicWindows = FALSE,
   topNGenes = 7000
 )
