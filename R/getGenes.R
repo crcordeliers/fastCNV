@@ -70,7 +70,7 @@ getGenes <- function(filters=NULL, cache=TRUE){
     geneMetadata <- geneMetadata |>
       dplyr::rowwise() |>
       dplyr::mutate(
-        chr_arm = determine_chr_arm(chromosome_name, start_position, centromere_positions)
+        chr_arm = determine_chr_arm(.data$chromosome_name, .data$start_position, centromere_positions)
       ) |>
       dplyr::ungroup()
   }

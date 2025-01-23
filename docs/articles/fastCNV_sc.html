@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -230,23 +230,7 @@ object, taking as reference the cells labeled as <code>Bcells</code>,
 <code class="sourceCode R"><span><span class="va">scColon1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fastCNV.html">fastCNV</a></span><span class="op">(</span>seuratObj <span class="op">=</span> <span class="va">scColon1</span>, sampleName <span class="op">=</span> <span class="st">"scColon1"</span>, referenceVar <span class="op">=</span></span>
 <span>                     <span class="st">"annot"</span>, referenceLabel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Bcells"</span>, <span class="st">"DC6.pDC"</span>, <span class="st">"EndoArteriel"</span>,</span>
 <span>                     <span class="st">"Fibro"</span>, <span class="st">"Mastocytes"</span>, <span class="st">"MyeloLineage"</span>, <span class="st">"NK"</span>, <span class="st">"Pericytes"</span>,</span>
-<span>                     <span class="st">"PlasmaCells"</span>, <span class="st">"Schwann.Entericglial"</span>, <span class="st">"SmoothMuscle"</span>,<span class="st">"Tcells"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Aggregating counts matrix."</span></span>
-<span><span class="co">#&gt; [1] "Running Seurat SCTransform and clustering. This could take some time."</span></span>
-<span><span class="co">#&gt; [1] "Sample : scColon1"</span></span>
-<span><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of nodes: 2840</span></span>
-<span><span class="co">#&gt; Number of edges: 84183</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Running Louvain algorithm...</span></span>
-<span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8914</span></span>
-<span><span class="co">#&gt; Number of communities: 16</span></span>
-<span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
-<span><span class="co">#&gt; [1] "Seurat SCTransform and clustering done for sample scColon1."</span></span>
-<span><span class="co">#&gt; [1] "Running CNVAnalysis"</span></span>
-<span><span class="co">#&gt; [1] "CNVAnalysis done!"</span></span>
-<span><span class="co">#&gt; [1] "Plotting CNV results. This step may take some time."</span></span></code></pre></div>
+<span>                     <span class="st">"PlasmaCells"</span>, <span class="st">"Schwann.Entericglial"</span>, <span class="st">"SmoothMuscle"</span>,<span class="st">"Tcells"</span><span class="op">)</span>, printPlot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fastCNV_sc_files/figure-html/run1-1.png" width="768"></p>
 <p>Then, we are going to run the <code><a href="../reference/fastCNV.html">fastCNV()</a></code> function on a
 list of Seurat objects. <code><a href="../reference/fastCNV.html">fastCNV()</a></code> if run on a list of
@@ -262,47 +246,7 @@ containing any healthy cells to build its own reference.</p>
 <span>                     <span class="st">"PlasmaCells"</span>, <span class="st">"SmoothMuscle"</span>,<span class="st">"Tcells"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">seuratList</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fastCNV.html">fastCNV</a></span><span class="op">(</span><span class="va">seuratList</span>, <span class="va">sampleNames</span>, referenceVar <span class="op">=</span> <span class="st">"annot"</span>, </span>
-<span>                      referenceLabel <span class="op">=</span> <span class="va">referencelabels</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Aggregating counts matrix."</span></span>
-<span><span class="co">#&gt; [1] "Running Seurat SCTransform and clustering. This could take some time."</span></span>
-<span><span class="co">#&gt; [1] "Sample : scColon2"</span></span>
-<span><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of nodes: 1493</span></span>
-<span><span class="co">#&gt; Number of edges: 41666</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Running Louvain algorithm...</span></span>
-<span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8447</span></span>
-<span><span class="co">#&gt; Number of communities: 14</span></span>
-<span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
-<span><span class="co">#&gt; [1] "Seurat SCTransform and clustering done for sample scColon2."</span></span>
-<span><span class="co">#&gt; [1] "Running Seurat SCTransform and clustering. This could take some time."</span></span>
-<span><span class="co">#&gt; [1] "Sample : scColon3"</span></span>
-<span><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of nodes: 2975</span></span>
-<span><span class="co">#&gt; Number of edges: 87792</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Running Louvain algorithm...</span></span>
-<span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8729</span></span>
-<span><span class="co">#&gt; Number of communities: 13</span></span>
-<span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
-<span><span class="co">#&gt; [1] "Seurat SCTransform and clustering done for sample scColon3."</span></span>
-<span><span class="co">#&gt; [1] "Running Seurat SCTransform and clustering. This could take some time."</span></span>
-<span><span class="co">#&gt; [1] "Sample : scColon4"</span></span>
-<span><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of nodes: 3390</span></span>
-<span><span class="co">#&gt; Number of edges: 99667</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Running Louvain algorithm...</span></span>
-<span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8664</span></span>
-<span><span class="co">#&gt; Number of communities: 13</span></span>
-<span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
-<span><span class="co">#&gt; [1] "Seurat SCTransform and clustering done for sample scColon4."</span></span>
-<span><span class="co">#&gt; [1] "Running CNVAnalysis"</span></span>
-<span><span class="co">#&gt; [1] "CNVAnalysis done!"</span></span>
-<span><span class="co">#&gt; [1] "Plotting CNV results. This step may take some time."</span></span></code></pre></div>
+<span>                      referenceLabel <span class="op">=</span> <span class="va">referencelabels</span>, printPlot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fastCNV_sc_files/figure-html/run2-1.png" width="768"><img src="fastCNV_sc_files/figure-html/run2-2.png" width="768"><img src="fastCNV_sc_files/figure-html/run2-3.png" width="768"></p>
 </div>
 <div class="section level2">
@@ -325,7 +269,7 @@ Seurat plotting functions, as we’ll demonstrate on scColon1:</p>
 <span>  axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span><span class="va">scColon1</span>, features <span class="op">=</span> <span class="st">"cnv_fraction"</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, <span class="op">)</span> <span class="op">&amp;</span> <span class="va">common_theme</span> <span class="op">|</span></span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span><span class="va">scColon1</span>, features <span class="op">=</span> <span class="st">"cnv_fraction"</span>, reduction <span class="op">=</span> <span class="st">"umap"</span> <span class="op">)</span> <span class="op">&amp;</span> <span class="va">common_theme</span> <span class="op">|</span></span>
 <span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">scColon1</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span>  <span class="st">"annot"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">common_theme</span></span></code></pre></div>
 <p><img src="fastCNV_sc_files/figure-html/plot_cnv_umap-1.png" width="768"></p>
 <p>Here, we see some clusters with much higher CNV fractions than
@@ -341,13 +285,13 @@ functions from Seurat.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span><span class="va">scColon1</span>, features <span class="op">=</span> <span class="st">"17q_CNV"</span><span class="op">)</span>  <span class="op">+</span></span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span><span class="va">scColon1</span>, features <span class="op">=</span> <span class="st">"20.p_CNV"</span><span class="op">)</span>  <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"RdBu"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, </span>
 <span>                       rescaler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">to</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="va">from</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span>
 <span>                         <span class="fu"><a href="https://scales.r-lib.org/reference/rescale_mid.html" class="external-link">rescale_mid</a></span><span class="op">(</span><span class="va">x</span>, to <span class="op">=</span> <span class="va">to</span>, mid <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span>                       <span class="op">}</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="va">common_theme</span> <span class="op">|</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span><span class="va">scColon1</span>, features <span class="op">=</span> <span class="st">"X_CNV"</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span><span class="va">scColon1</span>, features <span class="op">=</span> <span class="st">"X.q_CNV"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"RdBu"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, </span>
 <span>                       rescaler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">to</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="va">from</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span>
 <span>                         <span class="fu"><a href="https://scales.r-lib.org/reference/rescale_mid.html" class="external-link">rescale_mid</a></span><span class="op">(</span><span class="va">x</span>, to <span class="op">=</span> <span class="va">to</span>, mid <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
@@ -355,9 +299,9 @@ functions from Seurat.</p>
 <span>  <span class="va">common_theme</span></span></code></pre></div>
 <p><img src="fastCNV_sc_files/figure-html/plot_cnv_per_chromosome-1.png" width="672"></p>
 <p>Here we see for example that one part of the epithelial tumor cells
-have a CNV loss in the chromosome 17q, while another part of the
-epithelial tumor cells do not, and another part have a gain of this same
-chromosome (17q) and of the chromosome X too.</p>
+have a CNV loss in the chromosome 20p, while another part of the
+epithelial tumor cells do not, and some have a gain of the chromosome
+Xp.</p>
 </div>
 <div class="section level2">
 <h2 id="cnv-classification">CNV classification<a class="anchor" aria-label="anchor" href="#cnv-classification"></a>
@@ -373,10 +317,10 @@ chromosome arm containing either “loss”, “gain” or “no_alteration”.<
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scColon1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVclassification.html">CNVclassification</a></span><span class="op">(</span><span class="va">scColon1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">scColon1</span>, group.by <span class="op">=</span> <span class="st">"8q_CNV_classification"</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">scColon1</span>, group.by <span class="op">=</span> <span class="st">"20.p_CNV_classification"</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>gain <span class="op">=</span> <span class="st">"red"</span>, no_alteration <span class="op">=</span> <span class="st">"grey"</span>, loss <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>  <span class="va">common_theme</span> <span class="op">|</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">scColon1</span>, group.by <span class="op">=</span> <span class="st">"X_CNV_classification"</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">scColon1</span>, group.by <span class="op">=</span> <span class="st">"X.q_CNV_classification"</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>gain <span class="op">=</span> <span class="st">"red"</span>, no_alteration <span class="op">=</span> <span class="st">"grey"</span>, loss <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>  <span class="va">common_theme</span></span></code></pre></div>
 <p><img src="fastCNV_sc_files/figure-html/cnv_classification-1.png" width="672"></p>
@@ -385,12 +329,11 @@ chromosome arm containing either “loss”, “gain” or “no_alteration”.<
 <h2 id="cnv-clusters">CNV clusters<a class="anchor" aria-label="anchor" href="#cnv-clusters"></a>
 </h2>
 <p>In addition to the CNV fraction, we can obtain clusters based on the
-CNV matrix by running <code><a href="../reference/CNVcluster.html">CNVcluster()</a></code>. This runs standard
-Seurat clustering pipeline on the CNV scores per observation – uses the
-first 10 PCs to building the neighborhood graph and then Louvain
-clustering to find the clusters.</p>
+CNV matrix by running <code><a href="../reference/CNVcluster.html">CNVcluster()</a></code>. This computes the
+Manhattan distance matrix and performs hierarchical clustering using the
+Ward.D2 method.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scColon1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVcluster.html">CNVcluster</a></span><span class="op">(</span><span class="va">scColon1</span>, resolution <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">scColon1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVcluster.html">CNVcluster</a></span><span class="op">(</span><span class="va">scColon1</span><span class="op">)</span></span></code></pre></div>
 <p>Results of <code>CNVcluster</code> are saved in the Seurat object
 under the <code>"cnv_clusters"</code> metadata variable, which can be
 plotted with Seurat functions.</p>
@@ -407,27 +350,27 @@ relate the <code>cnv_clusters</code> with our annotation variable
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"fill"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, vjust <span class="op">=</span> <span class="fl">1</span>, hjust <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fastCNV_sc_files/figure-html/cnv_props-1.png" width="576"></p>
-<p>We find that tumor cells are virtually always cnv_cluster 0, 2, 3 5
-or 6 ; meanwhile, healthy cells tend to be cnv_cluster 1 or 5 which
-present very few or no CNV.</p>
+<p>We find that tumor cells are virtually always cnv_cluster 2, 3, 4 or
+5 ; meanwhile, healthy cells tend to be cnv_cluster 1 which present very
+few or no CNV.</p>
 <p>Note that we can also use cnv_clusters to label the CNV heatmap,
 directly using the parameter <code>splitPlotOfVar</code> of the
 <code><a href="../reference/plotCNVResults.html">plotCNVResults()</a></code> function.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotCNVResults.html">plotCNVResults</a></span><span class="op">(</span><span class="va">scColon1</span>, referenceVar <span class="op">=</span> <span class="st">"annot"</span>, splitPlotOnVar <span class="op">=</span> <span class="st">"cnv_clusters"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotCNVResults.html">plotCNVResults</a></span><span class="op">(</span><span class="va">scColon1</span>, referenceVar <span class="op">=</span> <span class="st">"annot"</span>, splitPlotOnVar <span class="op">=</span> <span class="st">"cnv_clusters"</span>, printPlot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fastCNV_sc_files/figure-html/hm_cnv_cl-1.png" width="768"></p>
 </div>
 <div class="section level2">
 <h2 id="cnv-tree">CNV tree<a class="anchor" aria-label="anchor" href="#cnv-tree"></a>
 </h2>
-<p>As we can see, there are 5 tumor subclusters (0, 2, 3, 4 and 6) in
-scColon1, and 2 healthy subclusters (1 and 5). In this part of the
-vignette, we will show how to plot the CNV subclonality tree.</p>
+<p>As we can see, there are 4 tumor subclusters (2, 3, 4 and 5) in
+scColon1, and 1 healthy subcluster (1). In this part of the vignette, we
+will show how to plot the CNV subclonality tree.</p>
 <p>First, we will build a metacell for each cluster, using
 <code><a href="../reference/generateCNVClonesMatrix.html">generateCNVClonesMatrix()</a></code>.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">cnv_matrix_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateCNVClonesMatrix.html">generateCNVClonesMatrix</a></span><span class="op">(</span><span class="va">scColon1</span>, healthyClusters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"5"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">cnv_matrix_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateCNVClonesMatrix.html">generateCNVClonesMatrix</a></span><span class="op">(</span><span class="va">scColon1</span>, healthyClusters <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span></span></code></pre></div>
 <p>Now, we build the tree, using <code><a href="../reference/CNVtree.html">CNVtree()</a></code>,
 <code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> and <code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code>. -
 <code><a href="../reference/CNVtree.html">CNVtree()</a></code> will build the subclonality tree. -
@@ -438,7 +381,7 @@ tree. - <code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code> w
 <span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVtree.html">CNVtree</a></span><span class="op">(</span><span class="va">cnv_matrix_clusters</span><span class="op">)</span></span>
 <span><span class="va">tree_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotateCNVtree.html">annotateCNVtree</a></span><span class="op">(</span><span class="va">tree</span>, <span class="va">cnv_matrix_clusters</span>, <span class="fl">0.13</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotCNVtree.html">plotCNVtree</a></span><span class="op">(</span><span class="va">tree_data</span><span class="op">)</span></span></code></pre></div>
-<p><img src="fastCNV_sc_files/figure-html/tree_cnv-1.png" width="576"></p>
+<p><img src="fastCNV_sc_files/figure-html/tree_cnv-1.png" width="624"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

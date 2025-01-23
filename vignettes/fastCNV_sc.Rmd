@@ -185,10 +185,10 @@ DimPlot(scColon1, group.by = "X.q_CNV_classification") &
 
 ## CNV clusters
 
-In addition to the CNV fraction, we can obtain clusters based on the CNV matrix by running `CNVcluster()`. This runs standard Seurat clustering pipeline on the CNV scores per observation -- uses the first 10 PCs to building the neighborhood graph and then Louvain clustering to find the clusters.
+In addition to the CNV fraction, we can obtain clusters based on the CNV matrix by running `CNVcluster()`. This computes the Manhattan distance matrix and performs hierarchical clustering using the Ward.D2 method. 
 
 ```{r cluster_cnv, results='hide'}
-scColon1 <- CNVcluster(scColon1, resolution = 0.4, nPCs = 25)
+scColon1 <- CNVcluster(scColon1)
 ```
 
 Results of `CNVcluster` are saved in the Seurat object under the `"cnv_clusters"` metadata variable, which can be plotted with Seurat functions. 
@@ -207,7 +207,7 @@ ggplot(FetchData(scColon1, vars = c("cnv_clusters", "annot")), aes(annot, fill =
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "black"))
 ```
 
-We find that tumor cells are virtually always cnv_cluster 0, 1, 3 or 4 ; meanwhile, healthy cells tend to be cnv_cluster 2 or 5 which present very few or no CNV.
+We find that tumor cells are virtually always cnv_cluster 2, 3, 4 or 5 ; meanwhile, healthy cells tend to be cnv_cluster 1 which present very few or no CNV.
 
 
 Note that we can also use cnv_clusters to label the CNV heatmap, directly using the parameter `splitPlotOfVar` of the `plotCNVResults()` function.
@@ -219,14 +219,14 @@ plotCNVResults(scColon1, referenceVar = "annot", splitPlotOnVar = "cnv_clusters"
 
 ## CNV tree
 
-As we can see, there are 3 tumor subclusters (0, 1 and 4) in scColon1, and 2 healthy subclusters (2 and 3), with clone 5 being the juxtatumoral cells. 
+As we can see, there are 4 tumor subclusters (2, 3, 4 and 5) in scColon1, and 1 healthy subcluster (1). 
 In this part of the vignette, we will show how to plot the CNV subclonality tree. 
 
 First, we will build a metacell for each cluster, using `generateCNVClonesMatrix()`. 
 
 ```{r metacell_cluster}
 
-cnv_matrix_clusters <- generateCNVClonesMatrix(scColon1, healthyClusters = c("2", "3"))
+cnv_matrix_clusters <- generateCNVClonesMatrix(scColon1, healthyClusters = "1")
 
 ```
 
@@ -235,7 +235,7 @@ Now, we build the tree, using `CNVtree()`, `annotateCNVtree()` and `plotCNVtree(
   - `annotateCNVtree()` will annotate each cnv gain/loss in the tree. 
   - `plotCNVtree()` will output the tree. 
 
-```{r tree_cnv, fig.width = 6, fig.height = 4}
+```{r tree_cnv, fig.width = 6.5, fig.height = 4}
 
 tree <- CNVtree(cnv_matrix_clusters)
 tree_data <- annotateCNVtree(tree, cnv_matrix_clusters, 0.13)

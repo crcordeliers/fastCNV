@@ -2,22 +2,41 @@
 % Please edit documentation in R/CNVcluster.R
 \name{CNVcluster}
 \alias{CNVcluster}
-\title{CNV Clustering within a Seurat Object}
+\title{Perform CNV Clustering with Seurat Object}
 \usage{
-CNVcluster(seuratObj, nPCs = 10, resolution = 0.8, k.param = 20)
+CNVcluster(
+  seuratObj,
+  k = NULL,
+  h = NULL,
+  plotDendrogram = F,
+  plotClustersOnDendrogram = F,
+  plotElbowPlot = F
+)
 }
 \arguments{
-\item{seuratObj}{A Seurat object containing single-cell genomic data.}
+\item{seuratObj}{A Seurat object containing a "genomicScores" assay with a matrix of genomic scores for clustering.}
 
-\item{nPCs}{The number of principal components to use for the clustering. Default is 10.}
+\item{k}{Optional. Number of clusters to cut the dendrogram into. If \code{NULL}, the optimal number of clusters is determined automatically using the elbow method.}
 
-\item{resolution}{Resolution parameter for the clustering algorithm. Affects the granularity of the resulting clusters. Default is 0.8.}
+\item{h}{Optional. The height at which to cut the dendrogram for clustering. If both \code{k} and \code{h} are provided, \code{k} takes precedence.}
 
-\item{k.param}{Number of nearest neighbors to use in the construction of the SNN graph. Default is 20.}
+\item{plotDendrogram}{Logical. Whether to plot the dendrogram. Defaults to \code{FALSE}.}
+
+\item{plotClustersOnDendrogram}{Logical. Whether to highlight clusters on the dendrogram. Defaults to \code{FALSE}.}
+
+\item{plotElbowPlot}{Logical. Whether to plot the elbow plot used for determining the optimal number of clusters. Defaults to \code{FALSE}.}
 }
 \value{
-A Seurat object with CNV-based clusters added
+A Seurat object with an additional metadata column, \code{cnv_clusters}, containing cluster assignments.
 }
 \description{
-Performs clustering based on Copy Number Variations (CNVs) calculated by \code{CNVcalling}.
+The \code{CNVcluster} function performs hierarchical clustering on a genomic score matrix extracted from a Seurat object.
+It provides options for plotting a dendrogram, an elbow plot for optimal cluster determination,
+and cluster visualization on the dendrogram. The resulting cluster assignments are stored in the Seurat object.
+}
+\details{
+The function computes a Manhattan distance matrix and performs hierarchical clustering using the Ward.D2 method.
+If \code{k} is not provided, the elbow method is applied to determine the optimal number of clusters based on within-cluster sum of squares (WSS).
+
+The clusters are assigned to the Seurat object under the metadata column \code{cnv_clusters}.
 }

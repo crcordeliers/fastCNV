@@ -119,7 +119,7 @@ get_ancestralEvents <- function(tree, cnv_mat, major_events) {
     as.data.frame() |>
     tibble() |>
     mutate(
-      shared_events = map2(V1, V2, function(c1,c2) {
+      shared_events = map2(.data$V1, .data$V2, function(c1,c2) {
         intersect(major_events[[c1]], major_events[[c2]])
       }))
 
@@ -131,12 +131,12 @@ get_ancestralEvents <- function(tree, cnv_mat, major_events) {
               Ancestors(tree, cnv_combns$V2_indices[i]))[1]
   })
   cnv_parent_events <- cnv_combns |>
-    group_by(node) |>
-    reframe(all_events = if(length(shared_events) > 1)
-      Reduce(intersect, shared_events)
-      else unlist(shared_events)) |>
-    group_by(node) |>
-    mutate(all_events = paste0(all_events, collapse = " "),
+    group_by(.data$node) |>
+    reframe(all_events = if(length(.data$shared_events) > 1)
+      Reduce(intersect, .data$shared_events)
+      else unlist(.data$shared_events)) |>
+    group_by(.data$node) |>
+    mutate(all_events = paste0(.data$all_events, collapse = " "),
            label = NA) |>
     distinct() |>
     ungroup()

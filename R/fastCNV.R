@@ -59,6 +59,7 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
                                                    aggregFactor=aggregFactor,
                                                    seuratClusterResolution = seuratClusterResolution,
                                                    reClusterSeurat = reClusterSeurat  )
+      invisible(gc())
     }
   } else {
     for (i in 1:length(seuratObj)) {
@@ -75,6 +76,7 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
                               scaleOnReferenceLabel = scaleOnReferenceLabel, denoise = denoise,
                               assay = assay, thresholdPercentile = thresholdPercentile, geneMetadata = geneMetadata,
                               windowSize = windowSize, windowStep = windowStep, saveGenomicWindows = saveGenomicWindows, topNGenes = topNGenes)
+    invisible(gc())
     message("CNVAnalysis done!")
     if (doPlot == TRUE) {
       message("Plotting CNV results. This step may take some time.")
@@ -82,7 +84,8 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
         if (Seurat::Project(seuratObj[[i]]) == "SeuratProject") {Seurat::Project(seuratObj[[i]]) = paste0("Sample",i)}
           plotCNVResults(seuratObj[[i]], referenceVar = referenceVar, splitPlotOnVar = splitPlotOnVar,
                          savePath = savePath, printPlot = printPlot, downsizePlot = downsizePlot)
-        }
+          invisible(gc())
+      }
     }
 
   } else {
@@ -93,11 +96,13 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
                          scaleOnReferenceLabel = scaleOnReferenceLabel, assay = assay,
                          thresholdPercentile = thresholdPercentile, geneMetadata = geneMetadata,
                          windowSize = windowSize, windowStep = windowStep, saveGenomicWindows = saveGenomicWindows, topNGenes = topNGenes)
+    invisible(gc())
     message("CNVAnalysis done!")
     if (doPlot == TRUE) {
       message("Plotting CNV results. This step may take some time.")
       plotCNVResults(seuratObj = seuratObj, referenceVar = referenceVar, splitPlotOnVar = splitPlotOnVar,
                      savePath = savePath, printPlot = printPlot,  downsizePlot = downsizePlot)
+      invisible(gc())
     }
   }
 
@@ -109,6 +114,7 @@ fastCNV <- function (seuratObj, sampleName, referenceVar = NULL, referenceLabel 
         seuratObj[[i]] <- CNVPerChromosomeArm(seuratObj[[i]])
       }
     }
+    invisible(gc())
   }
 
   return (seuratObj)

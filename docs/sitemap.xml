@@ -17,8 +17,10 @@
 <url><loc>https://must-bioinfo.github.io/fastCNV/reference/CNVcluster.html</loc></url>
 <url><loc>https://must-bioinfo.github.io/fastCNV/reference/CNVPerChromosomeArm.html</loc></url>
 <url><loc>https://must-bioinfo.github.io/fastCNV/reference/CNVtree.html</loc></url>
+<url><loc>https://must-bioinfo.github.io/fastCNV/reference/compute_average_expression.html</loc></url>
 <url><loc>https://must-bioinfo.github.io/fastCNV/reference/fastCNV-package.html</loc></url>
 <url><loc>https://must-bioinfo.github.io/fastCNV/reference/fastCNV.html</loc></url>
+<url><loc>https://must-bioinfo.github.io/fastCNV/reference/geneMetadata.html</loc></url>
 <url><loc>https://must-bioinfo.github.io/fastCNV/reference/generateCNVClonesMatrix.html</loc></url>
 <url><loc>https://must-bioinfo.github.io/fastCNV/reference/genes.html</loc></url>
 <url><loc>https://must-bioinfo.github.io/fastCNV/reference/getGenes.html</loc></url>

@@ -25,7 +25,7 @@ plotCNVtree <- function(tree_data) {
   tree_plot <- ggtree(tree_data) +
     geom_tiplab(hjust = -0.2) +
     geom_tippoint() +
-    geom_label(aes(label = events), size = 3, vjust = -1, hjust = 1) +
+    geom_label(aes(label = .data$events), size = 3, vjust = -1, hjust = 1) +
     scale_x_continuous(expand = c(0, 0.2)) +
     theme_tree()
   return(tree_plot)

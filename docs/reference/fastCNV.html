@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,20 +56,23 @@
 <span>  splitPlotOnVar <span class="op">=</span> <span class="va">referenceVar</span>,</span>
 <span>  downsizePlot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  doPlot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  printPlot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  prepareCounts <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  pooledReference <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  assay <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  getCNVPerChromosomeArm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  savePath <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  denoise <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  aggregFactor <span class="op">=</span> <span class="fl">15000</span>,</span>
 <span>  seuratClusterResolution <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  aggregateByVar <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>  reClusterSeurat <span class="op">=</span> <span class="cn">F</span>,</span>
 <span>  scaleOnReferenceLabel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  thresholdPercentile <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>  genes <span class="op">=</span> <span class="fu"><a href="getGenes.html">getGenes</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  windowSize <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  windowStep <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  geneMetadata <span class="op">=</span> <span class="fu"><a href="getGenes.html">getGenes</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  windowSize <span class="op">=</span> <span class="fl">150</span>,</span>
+<span>  windowStep <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  saveGenomicWindows <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  topNGenes <span class="op">=</span> <span class="fl">7000</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -103,7 +106,11 @@
 
 
 <dt id="arg-doplot">doPlot<a class="anchor" aria-label="anchor" href="#arg-doplot"></a></dt>
-<dd><p>If <code>TRUE</code> will plot a heatmap for each of the samples (default = <code>TRUE</code>)</p></dd>
+<dd><p>If <code>TRUE</code> will build a heatmap for each of the samples (default = <code>TRUE</code>)</p></dd>
+
+
+<dt id="arg-printplot">printPlot<a class="anchor" aria-label="anchor" href="#arg-printplot"></a></dt>
+<dd><p>If the heatmap should be printed in the console (default = <code>FALSE</code>, the plot will only be in a PDF).</p></dd>
 
 
 <dt id="arg-preparecounts">prepareCounts<a class="anchor" aria-label="anchor" href="#arg-preparecounts"></a></dt>
@@ -124,6 +131,10 @@
 
 <dt id="arg-savepath">savePath<a class="anchor" aria-label="anchor" href="#arg-savepath"></a></dt>
 <dd><p>Default <code>.</code>. If <code>NULL</code> the heatmap won't be saved as a pdf.</p></dd>
+
+
+<dt id="arg-denoise">denoise<a class="anchor" aria-label="anchor" href="#arg-denoise"></a></dt>
+<dd><p>If the data needs to be denoised (default = <code>TRUE</code>)</p></dd>
 
 
 <dt id="arg-aggregfactor">aggregFactor<a class="anchor" aria-label="anchor" href="#arg-aggregfactor"></a></dt>
@@ -150,8 +161,8 @@
 <dd><p>Which quantiles to take (if 0.01 it will take 0.01-0.99). Background noise appears with higher numbers.</p></dd>
 
 
-<dt id="arg-genes">genes<a class="anchor" aria-label="anchor" href="#arg-genes"></a></dt>
-<dd><p>List of genes (default genes from ensembl version 111)</p></dd>
+<dt id="arg-genemetadata">geneMetadata<a class="anchor" aria-label="anchor" href="#arg-genemetadata"></a></dt>
+<dd><p>List of genes and their metadata (default genes from ensembl version 113)</p></dd>
 
 
 <dt id="arg-windowsize">windowSize<a class="anchor" aria-label="anchor" href="#arg-windowsize"></a></dt>
@@ -160,6 +171,10 @@
 
 <dt id="arg-windowstep">windowStep<a class="anchor" aria-label="anchor" href="#arg-windowstep"></a></dt>
 <dd><p>Step between the genomic windows</p></dd>
+
+
+<dt id="arg-savegenomicwindows">saveGenomicWindows<a class="anchor" aria-label="anchor" href="#arg-savegenomicwindows"></a></dt>
+<dd><p>If the information of the genomic windows need to be saved in the current directory (default = <code>FALSE</code>).</p></dd>
 
 
 <dt id="arg-topngenes">topNGenes<a class="anchor" aria-label="anchor" href="#arg-topngenes"></a></dt>

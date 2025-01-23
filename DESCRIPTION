@@ -1,6 +1,6 @@
 Package: fastCNV
 Title: fastCNV
-Version: 0.5.3
+Version: 0.5.5
 Authors@R: 
     c(person("Gadea", "Cabrejas", , "gadea.cabrejas-saiz@u-paris.fr", role = c("aut", "cre")),
       person("Clarice", "Groeneveld", , "clarice.groeneveld@inserm.fr", role = c("aut", "ctb")))
@@ -33,7 +33,9 @@ Imports:
     tidyverse,
     ape,
     phangorn,
-    utils
+    utils,
+    proxy,
+    graphics
 LazyData: true
 Depends: R (>= 3.5.0)
 Suggests: fastCNVdata, knitr, rmarkdown

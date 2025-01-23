@@ -9,7 +9,7 @@ Runs the CNV functions given a seurat object or a list of seurat objects"></head
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,11 +57,13 @@ Runs the CNV functions given a seurat object or a list of seurat objects</p>
 <span>  referenceLabel <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pooledReference <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  scaleOnReferenceLabel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  denoise <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  assay <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  thresholdPercentile <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>  genes <span class="op">=</span> <span class="fu"><a href="getGenes.html">getGenes</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  windowSize <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  windowStep <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  geneMetadata <span class="op">=</span> <span class="fu"><a href="getGenes.html">getGenes</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  windowSize <span class="op">=</span> <span class="fl">150</span>,</span>
+<span>  windowStep <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  saveGenomicWindows <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  topNGenes <span class="op">=</span> <span class="fl">7000</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -90,6 +92,10 @@ Runs the CNV functions given a seurat object or a list of seurat objects</p>
 <dd><p>If you want to scale the results depending on the normal observations</p></dd>
 
 
+<dt id="arg-denoise">denoise<a class="anchor" aria-label="anchor" href="#arg-denoise"></a></dt>
+<dd><p>If the data needs to be denoised (default = <code>TRUE</code>)</p></dd>
+
+
 <dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
 <dd><p>Name of the assay to run the CNV on. Takes the results of prepareCountsForCNVAnalysis by default if available</p></dd>
 
@@ -98,8 +104,8 @@ Runs the CNV functions given a seurat object or a list of seurat objects</p>
 <dd><p>Which quantiles to take (if 0.01 it will take 0.01-0.99). Background noise appears with higher numbers.</p></dd>
 
 
-<dt id="arg-genes">genes<a class="anchor" aria-label="anchor" href="#arg-genes"></a></dt>
-<dd><p>List of genes from ensembl</p></dd>
+<dt id="arg-genemetadata">geneMetadata<a class="anchor" aria-label="anchor" href="#arg-genemetadata"></a></dt>
+<dd><p>List of genes and their metadata from ensembl</p></dd>
 
 
 <dt id="arg-windowsize">windowSize<a class="anchor" aria-label="anchor" href="#arg-windowsize"></a></dt>
@@ -108,6 +114,10 @@ Runs the CNV functions given a seurat object or a list of seurat objects</p>
 
 <dt id="arg-windowstep">windowStep<a class="anchor" aria-label="anchor" href="#arg-windowstep"></a></dt>
 <dd><p>Step between the genomic windows</p></dd>
+
+
+<dt id="arg-savegenomicwindows">saveGenomicWindows<a class="anchor" aria-label="anchor" href="#arg-savegenomicwindows"></a></dt>
+<dd><p>If the information of the genomic windows need to be saved in the current directory (default = <code>FALSE</code>).</p></dd>
 
 
 <dt id="arg-topngenes">topNGenes<a class="anchor" aria-label="anchor" href="#arg-topngenes"></a></dt>
