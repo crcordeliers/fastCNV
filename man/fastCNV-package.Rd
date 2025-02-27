@@ -7,6 +7,13 @@
 \description{
 This package does a fast CNV on seurat data
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://must-bioinfo.github.io/fastCNV}
+}
+
+}
 \author{
 \strong{Maintainer}: Gadea Cabrejas \email{gadea.cabrejas-saiz@u-paris.fr}
 

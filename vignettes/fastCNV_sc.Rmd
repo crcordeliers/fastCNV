@@ -60,7 +60,7 @@ annotation_file <- read.csv("/path/to/your/annotations/for/scColon1.csv")
 scColon1[["annot"]] <- annotation_file$Annot
 ```
 
-```{r see_annots}
+```{r see_annots, eval=FALSE}
 unique(scColon1[["annot"]])
 unique(scColon2[["annot"]])
 unique(scColon3[["annot"]])
@@ -185,13 +185,7 @@ DimPlot(scColon1, group.by = "X.q_CNV_classification") &
 
 ## CNV clusters
 
-In addition to the CNV fraction, we can obtain clusters based on the CNV matrix by running `CNVcluster()`. This computes the Manhattan distance matrix and performs hierarchical clustering using the Ward.D2 method. 
-
-```{r cluster_cnv, results='hide'}
-scColon1 <- CNVcluster(scColon1)
-```
-
-Results of `CNVcluster` are saved in the Seurat object under the `"cnv_clusters"` metadata variable, which can be plotted with Seurat functions. 
+In addition to the CNV fraction, fastCNV also computes the CNV clusters and saves them in the Seurat object metadata as "cnv_clusters". These can be plotted with the Seurat plotting functions.
 
 ```{r plot_cnv_clusters, fig.width=4, fig.height=4}
 DimPlot(scColon1, group.by = "cnv_clusters") + common_theme
@@ -208,13 +202,6 @@ ggplot(FetchData(scColon1, vars = c("cnv_clusters", "annot")), aes(annot, fill =
 ```
 
 We find that tumor cells are virtually always cnv_cluster 2, 3, 4 or 5 ; meanwhile, healthy cells tend to be cnv_cluster 1 which present very few or no CNV.
-
-
-Note that we can also use cnv_clusters to label the CNV heatmap, directly using the parameter `splitPlotOfVar` of the `plotCNVResults()` function.
-
-```{r hm_cnv_cl, fig.width = 8, fig.height=6}
-plotCNVResults(scColon1, referenceVar = "annot", splitPlotOnVar = "cnv_clusters", printPlot = T)
-```
 
 
 ## CNV tree

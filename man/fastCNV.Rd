@@ -9,16 +9,19 @@ fastCNV(
   sampleName,
   referenceVar = NULL,
   referenceLabel = NULL,
-  splitPlotOnVar = referenceVar,
-  downsizePlot = FALSE,
+  clustersVar = "cnv_clusters",
+  splitPlotOnVar = clustersVar,
   doPlot = TRUE,
   printPlot = FALSE,
   prepareCounts = TRUE,
   pooledReference = TRUE,
   assay = NULL,
   getCNVPerChromosomeArm = TRUE,
+  getCNVClusters = TRUE,
   savePath = ".",
   denoise = TRUE,
+  referencePalette = as.character(paletteer::paletteer_d("pals::glasbey")),
+  clusters_palette = scales::hue_pal(),
   aggregFactor = 15000,
   seuratClusterResolution = 0.8,
   aggregateByVar = T,
@@ -41,9 +44,9 @@ fastCNV(
 
 \item{referenceLabel}{The label given to the observations wanted as reference (can be any type of annotation)}
 
-\item{splitPlotOnVar}{The name given to the meta.data slot to split the observations on during the \code{plotCNVResults} step, if different from \code{referenceVar}.}
+\item{clustersVar}{The variable name of the clusters in the Seurat object metadata}
 
-\item{downsizePlot}{Subset the observations to speed up the plotting process (default = \code{FALSE}).}
+\item{splitPlotOnVar}{The name given to the meta.data slot to split the observations on during the \code{plotCNVResults} step, if different from \code{referenceVar}.}
 
 \item{doPlot}{If \code{TRUE} will build a heatmap for each of the samples (default = \code{TRUE})}
 
@@ -57,9 +60,15 @@ fastCNV(
 
 \item{getCNVPerChromosomeArm}{If \code{TRUE}, will save into the metadata the CNV per chromosome arm}
 
+\item{getCNVClusters}{If \code{TRUE}, will perform clustering on the CNV scores, and save them in the metadata of the seurat object as \code{cnv_clusters}.}
+
 \item{savePath}{Default \code{.}. If \code{NULL} the heatmap won't be saved as a pdf.}
 
 \item{denoise}{If the data needs to be denoised (default = \code{TRUE})}
+
+\item{referencePalette}{The color palette that should be used for \code{referenceVar}}
+
+\item{clusters_palette}{The color palette that should be used for \code{clustersVar}}
 
 \item{aggregFactor}{The number of counts per spot desired (default \verb{30 000}). If less than \code{1000}, will not run the \code{prepareCountsForCNVAnalysis} function.}
 

@@ -62,7 +62,7 @@ annotation_file <- read.csv("/path/to/your/annotations/for/STColon1.csv")
 STColon1[["annot"]] <- annotation_file$Annot
 ```
 
-```{r see_annots}
+```{r see_annots, eval=FALSE}
 unique(STColon1[["annot"]])
 unique(STColon2[["annot"]])
 unique(STColon3[["annot"]])
@@ -175,16 +175,10 @@ SpatialDimPlot(STColon1, group.by = "11.p_CNV_classification") +
 
 ## CNV clusters
 
-In addition to the CNV fraction, we can obtain clusters based on the CNV matrix by running `CNVcluster()`. This runs standard Seurat clustering pipeline on the CNV scores per observation -- uses the first 10 PCs to building the neighborhood graph and then Louvain clustering to find the clusters.
-
-```{r cluster_cnv, results='hide'}
-STColon1 <- CNVcluster(STColon1)
-```
-
-Results of `CNVcluster` are saved in the Seurat object under the `"cnv_clusters"` metadata variable, which can be plotted with Seurat functions. 
+In addition to the CNV fraction, fastCNV also computes the CNV clusters and saves them in the Seurat object metadata as "cnv_clusters". These can be plotted with the Seurat plotting functions.
 
 ```{r plot_cnv_clusters, fig.width=5, fig.height=4}
-SpatialDimPlot(STColon1, group.by = "cnv_clusters", pt.size.factor = 3)
+SpatialDimPlot(STColon1, group.by = "cnv_clusters", pt.size.factor = 3) 
 ```
 
 And we can retrieve this metadata and plot it directly. Here, we relate the `cnv_clusters` with our annotation variable `annot`.
@@ -202,12 +196,6 @@ ggplot(FetchData(STColon1, vars = c("cnv_clusters", "annot")), aes(annot, fill =
 We find that tumor cells are virtually always cnv_cluster 2, 3, 4 or 5 ; meanwhile, healthy cells tend to be cnv_cluster 1  which present very few or no CNV.
 
 
-Note that we can also use cnv_clusters to label the CNV heatmap, directly using the parameter `splitPlotOfVar` of the `plotCNVResults()` function.
-
-```{r hm_cnv_cl, fig.width = 8, fig.height=6}
-plotCNVResults(STColon1, referenceVar = "annot", splitPlotOnVar = "cnv_clusters", printPlot = T)
-``` 
-
 ## CNV tree
 
 We can see there are 4 tumor subclusters (2, 3, 4 and 5) in STColon1, and 1 healthy subcluster (1). 
@@ -216,7 +204,6 @@ In this part of the vignette, we will show how to plot the CNV subclonality tree
 First, we will build a metacell for each cluster, using `generateCNVClonesMatrix()`. 
 
 ```{r metacell_cluster}
-
 cnv_matrix_clusters <- generateCNVClonesMatrix(STColon1, healthyClusters = "1")
 
 ```
@@ -227,7 +214,6 @@ Now, we build the tree, using `CNVtree()`, `annotateCNVtree()` and `plotCNVtree(
   - `plotCNVtree()` will output the tree. 
 
 ```{r tree_cnv, fig.width = 6, fig.height = 4}
-
 tree <- CNVtree(cnv_matrix_clusters)
 tree_data <- annotateCNVtree(tree, cnv_matrix_clusters, 0.13)
 plotCNVtree(tree_data)

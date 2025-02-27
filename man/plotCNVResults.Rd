@@ -7,16 +7,20 @@
 plotCNVResults(
   seuratObj,
   referenceVar = NULL,
-  splitPlotOnVar = referenceVar,
+  clustersVar = "cnv_clusters",
+  splitPlotOnVar = clustersVar,
   savePath = ".",
   printPlot = FALSE,
-  downsizePlot = FALSE
+  referencePalette = as.character(paletteer::paletteer_d("pals::glasbey")),
+  clusters_palette = scales::hue_pal()
 )
 }
 \arguments{
 \item{seuratObj}{Seurat object containing the data used to get the genomicScores.}
 
-\item{referenceVar}{The variable name of the annotations in the Seurat metadata}
+\item{referenceVar}{The variable name of the annotations in the Seurat object metadata}
+
+\item{clustersVar}{The variable name of the clusters in the Seurat object metadata}
 
 \item{splitPlotOnVar}{The variable name on which to split the heatmap rows.}
 
@@ -24,7 +28,9 @@ plotCNVResults(
 
 \item{printPlot}{If the heatmap should be printed in the console.}
 
-\item{downsizePlot}{Subset the observations to speed up the plotting process (default = \code{FALSE}).}
+\item{referencePalette}{The color palette that should be used for \code{referenceVar}}
+
+\item{clusters_palette}{The color palette that should be used for \code{clustersVar}}
 }
 \value{
 This function builds a heatmap and saves it as a .pdf file in your working directory
