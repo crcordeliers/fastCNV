@@ -12,7 +12,8 @@ plotCNVResults(
   savePath = ".",
   printPlot = FALSE,
   referencePalette = as.character(paletteer::paletteer_d("pals::glasbey")),
-  clusters_palette = scales::hue_pal()
+  clusters_palette = scales::hue_pal(),
+  outputType = "png"
 )
 }
 \arguments{
@@ -28,9 +29,11 @@ plotCNVResults(
 
 \item{printPlot}{If the heatmap should be printed in the console.}
 
-\item{referencePalette}{The color palette that should be used for \code{referenceVar}}
+\item{referencePalette}{The color palette that should be used for \code{referenceVar}.}
 
-\item{clusters_palette}{The color palette that should be used for \code{clustersVar}}
+\item{clusters_palette}{The color palette that should be used for \code{clustersVar}.}
+
+\item{outputType}{"png" or "pdf".}
 }
 \value{
 This function builds a heatmap and saves it as a .pdf file in your working directory

@@ -6,8 +6,9 @@
 #' @param splitPlotOnVar The variable name on which to split the heatmap rows.
 #' @param savePath Path to save the pdf heatmap. If `NULL`, plot won't be saved (default = `.`).
 #' @param printPlot If the heatmap should be printed in the console.
-#' @param referencePalette The color palette that should be used for `referenceVar`
-#' @param clusters_palette The color palette that should be used for `clustersVar`
+#' @param referencePalette The color palette that should be used for `referenceVar`.
+#' @param clusters_palette The color palette that should be used for `clustersVar`.
+#' @param outputType "png" or "pdf".
 #'
 #' @import ComplexHeatmap
 #' @import Seurat
@@ -29,7 +30,12 @@
 plotCNVResults <- function(seuratObj, referenceVar = NULL, clustersVar = "cnv_clusters",
                            splitPlotOnVar = clustersVar, savePath = ".",
                            printPlot = FALSE, referencePalette = as.character(paletteer::paletteer_d("pals::glasbey")),
-                           clusters_palette = scales::hue_pal()){
+                           clusters_palette = scales::hue_pal(),
+                           outputType = "png"){
+  if (outputType != "png" && outputType != "pdf"){
+    message("Warning : outputType not valid, should be 'pdf' or 'png'. Setting outputType to 'png'")
+    outputType = "png"
+  }
 
   M <- t(as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")["data"]))
 
@@ -147,8 +153,14 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL, clustersVar = "cnv_cl
   }
 
   if(!is.null(savePath)) {
-    fname <- file.path(savePath, paste0("heatmap.fastCNV_",seuratObj@project.name,".pdf"))
-    pdf(width = 12, height = 7, file = fname)
+    if (outputType == "png") {
+      fname <- file.path(savePath, paste0("heatmap.fastCNV_",seuratObj@project.name,".png"))
+      png(width = 3500, height = 2200, filename = fname, res = 300)
+    }
+    if (outputType == "pdf"){
+      fname <- file.path(savePath, paste0("heatmap.fastCNV_",seuratObj@project.name,".pdf"))
+      pdf(width = 12, height = 7, file = fname)
+    }
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"),grid::unit(1, "null")))))
     grid::pushViewport(grid::viewport(layout.pos.row = 1))
