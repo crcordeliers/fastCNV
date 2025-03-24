@@ -16,7 +16,7 @@ remotes::install_github("must-bioinfo/fastCNV")
 
 `fastCNV` can plot a heatmap of inferred CNVs: 
 
-![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/heatmap_sc.jpg)
+![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/heatmap_sc.png)
 
 It also calculates a `cnv_fraction`, which can be plotted with `Seurat` standard plotting functions:
 
