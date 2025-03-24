@@ -3,20 +3,20 @@
 \docType{data}
 \name{geneMetadata}
 \alias{geneMetadata}
-\title{Genes data from ensemble version 111}
+\title{Genes Data from Ensembl Version 113}
 \format{
-An object of class list.
+An object of class \code{list}, containing gene information as described above.
 }
 \source{
-https://www.ensembl.org/index.html
+Ensembl Genome Browser, Version 113: https://www.ensembl.org/index.html
 }
 \usage{
 data(geneMetadata)
 }
 \description{
-Data downloaded from the ensembl website version 113
-Data containing ensembl gene id, HUGO nomenclature and entrez gene id,
-location on chromosome, biotype and length for each gene (about 76 000 genes)
+Data downloaded from the Ensembl website (version 113), containing detailed gene information for approximately 76,000 genes.
+The dataset includes Ensembl gene IDs, HUGO nomenclature (HGNC symbol), Entrez gene IDs, chromosome locations,
+gene biotype, and gene length for each gene.
 }
 \examples{
 data(geneMetadata)

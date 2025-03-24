@@ -8,8 +8,8 @@
 <title>fastCNV • fastCNV</title>
 <script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="fastCNV">
 <meta name="description" content="Infer CNVs in single-cell or spatial RNA-seq">
 <meta property="og:description" content="Infer CNVs in single-cell or spatial RNA-seq">
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,17 +75,15 @@
 <h2 id="capabilities">Capabilities<a class="anchor" aria-label="anchor" href="#capabilities"></a>
 </h2>
 <p><code>fastCNV</code> can plot a heatmap of inferred CNVs:</p>
-<p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/run1-1.jpg"></p>
+<p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/heatmap_sc.png" alt="fastCNV heatmap results"></p>
 <p>It also calculates a <code>cnv_fraction</code>, which can be plotted with <code>Seurat</code> standard plotting functions:</p>
 <p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/plot_cnv_umap-1.png"></p>
 <p><code>cnv_fractions</code> can also be visualized spatially for Spatial Transcriptomics samples:</p>
 <p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_ST_files/figure-html/plot_cnv_fraction-1.png"></p>
 <p>And <code>cnv_fractions</code> can be used to obtain clonal clusters (<code>cnv_clusters</code>):</p>
 <p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/plot_cnv_clusters-1.png" alt="Clonal clusters for sc data" width="50%"></p>
-<p>Additionally, the inferred CNVs can be plotted by clone cluster :</p>
-<p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/hm_cnv_cl-1.jpg"></p>
-<p>And the subclonality tree can be plotted too :</p>
-<p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/tree_cnv-1.png" alt="Subclonality tree" width="500"></p>
+<p>The subclonality tree can be plotted too :</p>
+<p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/tree_cnv-1.png" alt="Subclonality tree" width="550"></p>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>

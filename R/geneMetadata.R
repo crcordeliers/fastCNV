@@ -1,18 +1,18 @@
-#' Genes data from ensemble version 111
+#' Genes Data from Ensembl Version 113
 #'
-#' Data downloaded from the ensembl website version 113
-#' Data containing ensembl gene id, HUGO nomenclature and entrez gene id,
-#' location on chromosome, biotype and length for each gene (about 76 000 genes)
+#' Data downloaded from the Ensembl website (version 113), containing detailed gene information for approximately 76,000 genes.
+#' The dataset includes Ensembl gene IDs, HUGO nomenclature (HGNC symbol), Entrez gene IDs, chromosome locations,
+#' gene biotype, and gene length for each gene.
 #'
 #' @docType data
 #'
 #' @usage data(geneMetadata)
 #'
-#' @format An object of class list.
+#' @format An object of class `list`, containing gene information as described above.
 #'
 #' @keywords datasets
 #'
-#' @source https://www.ensembl.org/index.html
+#' @source Ensembl Genome Browser, Version 113: https://www.ensembl.org/index.html
 #'
 #' @examples
 #' data(geneMetadata)

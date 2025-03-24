@@ -1,23 +1,30 @@
-#' A function to aggregate observations with the same cell types to get higher counts per observation.
-#' It will help to have higher counts to compute the CNV
+#' Aggregate Observations by Cell Type for CNV Analysis
+#' Aggregates observations with the same cell types to increase counts per observation,
+#' improving Copy Number Variation (CNV) computation.
 #'
-#' @param seuratObj Seurat object containing the data
-#' @param sampleName Name of the sample
-#' @param referenceVar  The variable name of the annotations in the Seurat metadata
-#' @param aggregateByVar If a referenceVar is given, whether to use it to aggregate the observations depending on their type. Default `TRUE`.
-#' @param aggregFactor The number of counts per observation desired (default 30 000)
-#' @param seuratClusterResolution The resolution wanted for the seurat clusters (default 0.8)
-#' @param reClusterSeurat If `TRUE`, clustering is re-done for the Seurat object.
+#' @param seuratObj A Seurat object containing the data.
+#' @param sampleName A character string specifying the sample name.
+#' @param referenceVar The name of the metadata column in the Seurat object that contains reference annotations.
+#' @param aggregateByVar Logical. If `TRUE` (default), aggregates observations based on `referenceVar` annotations.
+#' @param aggregFactor Integer. The target number of counts per observation (default = `15 000`).
+#' @param seuratClusterResolution Numeric. The resolution used for Seurat clustering (default = `0.8`).
+#' @param reClusterSeurat Logical. If `TRUE`, re-runs clustering on the Seurat object.
 #'
-#' @return This function returns a Seurat object with the modified count matrix in a new assay called `AgregatedCounts` and the Seurat clusters in the metadata
+#' @return A Seurat object with:
+#' - A new assay called **"AggregatedCounts"** containing the modified count matrix.
+#' - **Seurat clusters** stored in the metadata.
 #'
 #' @import Seurat
 #' @import hdf5r
 #'
 #' @export
 #'
-prepareCountsForCNVAnalysis <- function(seuratObj, sampleName = NULL, referenceVar = NULL,
-                                        aggregateByVar = T, aggregFactor=15000, seuratClusterResolution = 0.8,
+prepareCountsForCNVAnalysis <- function(seuratObj,
+                                        sampleName = NULL,
+                                        referenceVar = NULL,
+                                        aggregateByVar = T,
+                                        aggregFactor=15000,
+                                        seuratClusterResolution = 0.8,
                                         reClusterSeurat = F ){
 
     assay <- Seurat::Assays(seuratObj)[1]

@@ -8,8 +8,8 @@
 <title>Introduction to fastCNV - scRNAseq data • fastCNV</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to fastCNV - scRNAseq data">
 </head>
 <body>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,7 @@ and load the <code>fastCNVdata</code> package.</p>
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"must-bioinfo/fastCNV"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"must-bioinfo/fastCNVdata"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">fastCNV</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://must-bioinfo.github.io/fastCNV">fastCNV</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">fastCNVdata</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -121,68 +121,9 @@ type annotations are already present under the column
 <span><span class="va">scColon1</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">annotation_file</span><span class="op">$</span><span class="va">Annot</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">scColon1</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                                                       annot</span></span>
-<span><span class="co">#&gt; C113_N_1_1_0_c1_v2_id-AAACCTGTCAGTGTTG               normal</span></span>
-<span><span class="co">#&gt; C113_N_1_1_0_c1_v2_id-AAAGCAACACCCTATC                Fibro</span></span>
-<span><span class="co">#&gt; C113_N_1_1_0_c1_v2_id-AAATGCCGTCACTTCC                   NK</span></span>
-<span><span class="co">#&gt; C113_N_1_1_0_c1_v2_id-AACGTTGAGAGGGATA          PlasmaCells</span></span>
-<span><span class="co">#&gt; C113_N_1_1_0_c1_v2_id-AACTCTTGTCTCACCT         MyeloLineage</span></span>
-<span><span class="co">#&gt; C113_N_1_1_0_c1_v2_id-ACCCACTTCGAATGCT               Tcells</span></span>
-<span><span class="co">#&gt; C113_N_1_1_0_c1_v2_id-ACTGCTCAGACACTAA               Bcells</span></span>
-<span><span class="co">#&gt; C113_N_1_1_0_c1_v2_id-CGGAGTCTCACCAGGC         SmoothMuscle</span></span>
-<span><span class="co">#&gt; C113_N_1_1_0_c1_v2_id-CGGGTCATCTACCAGA           Mastocytes</span></span>
-<span><span class="co">#&gt; C113_N_1_1_0_c1_v2_id-GTTAAGCTCACAGTAC         EndoArteriel</span></span>
-<span><span class="co">#&gt; C113_T_1_1_0_c1_v2_id-AAACCTGAGATCGATA                 EpiT</span></span>
-<span><span class="co">#&gt; C113_T_1_1_0_c1_v2_id-ATCATGGGTCGTCTTC              DC6.pDC</span></span>
-<span><span class="co">#&gt; C113_T_1_1_0_c1_v2_id-CGATTGATCTGCGACG            Pericytes</span></span>
-<span><span class="co">#&gt; C113_T_1_1_1_c1_v2_id-AGCGGTCAGGCTCAGA Schwann.Entericglial</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">scColon2</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                                               annot</span></span>
-<span><span class="co">#&gt; C159_T_1_1_0_c1_v3_id-AAACCCAAGCAATTAG         EpiT</span></span>
-<span><span class="co">#&gt; C159_T_1_1_0_c1_v3_id-AAACCCAGTACTGCGC SmoothMuscle</span></span>
-<span><span class="co">#&gt; C159_T_1_1_0_c1_v3_id-AAACGAAGTATGGAAT       Tcells</span></span>
-<span><span class="co">#&gt; C159_T_1_1_0_c1_v3_id-AACAAGATCTTCCCAG MyeloLineage</span></span>
-<span><span class="co">#&gt; C159_T_1_1_0_c1_v3_id-AACCTGATCAATCTCT       Bcells</span></span>
-<span><span class="co">#&gt; C159_T_1_1_0_c1_v3_id-ACGGTTACACGGCACT EndoArteriel</span></span>
-<span><span class="co">#&gt; C159_T_1_1_0_c1_v3_id-ACGTAGTCATGACACT        Fibro</span></span>
-<span><span class="co">#&gt; C159_T_1_1_0_c1_v3_id-AGTTCGAAGCGCTGCT    Pericytes</span></span>
-<span><span class="co">#&gt; C159_T_1_1_0_c1_v3_id-CAACAGTTCCCGAGAC           NK</span></span>
-<span><span class="co">#&gt; C159_T_1_1_0_c1_v3_id-CACGGGTAGTAACAGT   Mastocytes</span></span>
-<span><span class="co">#&gt; C159_T_1_1_0_c1_v3_id-CTACATTGTATCCTTT      DC6.pDC</span></span>
-<span><span class="co">#&gt; C159_T_1_1_0_c1_v3_id-CTCAGTCTCCTAGCCT  PlasmaCells</span></span>
-<span><span class="co">#&gt; C159_T_1_1_1_c1_v3_id-CATACTTCACACACTA       Neutro</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">scColon3</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                                                       annot</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-AAACCCACATGACTCA                 EpiT</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-AAACGCTGTGATAGAT               Tcells</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-AAACGCTTCAATCTTC         EndoArteriel</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-AAAGAACAGGAAGTAG         MyeloLineage</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-AAAGGGCCACCCTGAG                   NK</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-AACCAACGTTCTCCAC          PlasmaCells</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-AACCTGAAGACTCGAG                Fibro</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-AACGAAAAGTGTACAA            Pericytes</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-ACTGATGAGGGCTAAC               Bcells</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-ATCCATTCACGGCACT               Neutro</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-ATCCCTGTCTACGCGG           Mastocytes</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-CAGTTAGAGCTCTTCC        EndoLymphatic</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-CTGTGGGGTGTTGAGG Schwann.Entericglial</span></span>
-<span><span class="co">#&gt; C160_T_1_1_0_c1_v3_id-GTGCGTGGTGAAGCTG              DC6.pDC</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">scColon4</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                                                       annot</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-AAACCCAAGGAGGGTG               Tcells</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-AAACCCAAGTTGGAGC                 EpiT</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-AAACCCATCGTGGCGT         EndoArteriel</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-AAACGAAGTCACTACA                Fibro</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-AAACGCTTCCGAAGGA          PlasmaCells</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-AAAGGGCGTCTCAAGT         MyeloLineage</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-AAAGTCCGTCCGTTTC              DC6.pDC</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-AACAAGATCATCTGTT               Bcells</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-AACCCAACACATAGCT                   NK</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-AAGTTCGTCTCGGTCT            Pericytes</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-AGCGCCACAGTGTGCC           Mastocytes</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-AGTGCCGGTACATTGC         SmoothMuscle</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-ATTCAGGGTCGTCAGC Schwann.Entericglial</span></span>
-<span><span class="co">#&gt; C161_T_1_1_0_c1_v3_id-GAGTCTAAGGGTTAAT        EndoLymphatic</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">scColon4</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="run-fastcnv">Run fastCNV<a class="anchor" aria-label="anchor" href="#run-fastcnv"></a>
@@ -328,22 +269,16 @@ chromosome arm containing either “loss”, “gain” or “no_alteration”.<
 <div class="section level2">
 <h2 id="cnv-clusters">CNV clusters<a class="anchor" aria-label="anchor" href="#cnv-clusters"></a>
 </h2>
-<p>In addition to the CNV fraction, we can obtain clusters based on the
-CNV matrix by running <code><a href="../reference/CNVcluster.html">CNVcluster()</a></code>. This computes the
-Manhattan distance matrix and performs hierarchical clustering using the
-Ward.D2 method.</p>
+<p>In addition to the CNV fraction, fastCNV also computes the CNV
+clusters and saves them in the Seurat object metadata as “cnv_clusters”.
+These can be plotted with the Seurat plotting functions.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scColon1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVcluster.html">CNVcluster</a></span><span class="op">(</span><span class="va">scColon1</span><span class="op">)</span></span></code></pre></div>
-<p>Results of <code>CNVcluster</code> are saved in the Seurat object
-under the <code>"cnv_clusters"</code> metadata variable, which can be
-plotted with Seurat functions.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">scColon1</span>, group.by <span class="op">=</span> <span class="st">"cnv_clusters"</span><span class="op">)</span> <span class="op">+</span> <span class="va">common_theme</span></span></code></pre></div>
 <p><img src="fastCNV_sc_files/figure-html/plot_cnv_clusters-1.png" width="384"></p>
 <p>And we can retrieve this metadata and plot it directly. Here, we
 relate the <code>cnv_clusters</code> with our annotation variable
 <code>annot</code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.github.io/seurat-object/" class="external-link">SeuratObject</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/FetchData.html" class="external-link">FetchData</a></span><span class="op">(</span><span class="va">scColon1</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cnv_clusters"</span>, <span class="st">"annot"</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">annot</span>, fill <span class="op">=</span> <span class="va">cnv_clusters</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -353,12 +288,6 @@ relate the <code>cnv_clusters</code> with our annotation variable
 <p>We find that tumor cells are virtually always cnv_cluster 2, 3, 4 or
 5 ; meanwhile, healthy cells tend to be cnv_cluster 1 which present very
 few or no CNV.</p>
-<p>Note that we can also use cnv_clusters to label the CNV heatmap,
-directly using the parameter <code>splitPlotOfVar</code> of the
-<code><a href="../reference/plotCNVResults.html">plotCNVResults()</a></code> function.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotCNVResults.html">plotCNVResults</a></span><span class="op">(</span><span class="va">scColon1</span>, referenceVar <span class="op">=</span> <span class="st">"annot"</span>, splitPlotOnVar <span class="op">=</span> <span class="st">"cnv_clusters"</span>, printPlot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<p><img src="fastCNV_sc_files/figure-html/hm_cnv_cl-1.png" width="768"></p>
 </div>
 <div class="section level2">
 <h2 id="cnv-tree">CNV tree<a class="anchor" aria-label="anchor" href="#cnv-tree"></a>
@@ -368,7 +297,7 @@ scColon1, and 1 healthy subcluster (1). In this part of the vignette, we
 will show how to plot the CNV subclonality tree.</p>
 <p>First, we will build a metacell for each cluster, using
 <code><a href="../reference/generateCNVClonesMatrix.html">generateCNVClonesMatrix()</a></code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">cnv_matrix_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateCNVClonesMatrix.html">generateCNVClonesMatrix</a></span><span class="op">(</span><span class="va">scColon1</span>, healthyClusters <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span></span></code></pre></div>
 <p>Now, we build the tree, using <code><a href="../reference/CNVtree.html">CNVtree()</a></code>,
@@ -376,12 +305,12 @@ will show how to plot the CNV subclonality tree.</p>
 <code><a href="../reference/CNVtree.html">CNVtree()</a></code> will build the subclonality tree. -
 <code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> will annotate each cnv gain/loss in the
 tree. - <code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code> will output the tree.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVtree.html">CNVtree</a></span><span class="op">(</span><span class="va">cnv_matrix_clusters</span><span class="op">)</span></span>
 <span><span class="va">tree_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotateCNVtree.html">annotateCNVtree</a></span><span class="op">(</span><span class="va">tree</span>, <span class="va">cnv_matrix_clusters</span>, <span class="fl">0.13</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotCNVtree.html">plotCNVtree</a></span><span class="op">(</span><span class="va">tree_data</span><span class="op">)</span></span></code></pre></div>
-<p><img src="fastCNV_sc_files/figure-html/tree_cnv-1.png" width="624"></p>
+<p><img src="fastCNV_sc_files/figure-html/tree_cnv-1.png" width="672"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

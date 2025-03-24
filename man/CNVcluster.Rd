@@ -16,18 +16,18 @@ CNVcluster(
 \arguments{
 \item{seuratObj}{A Seurat object containing a "genomicScores" assay with a matrix of genomic scores for clustering.}
 
-\item{k}{Optional. Number of clusters to cut the dendrogram into. If \code{NULL}, the optimal number of clusters is determined automatically using the elbow method.}
+\item{k}{Optional. The number of clusters to cut the dendrogram into. If \code{NULL}, the optimal number of clusters is determined automatically using the elbow method.}
 
 \item{h}{Optional. The height at which to cut the dendrogram for clustering. If both \code{k} and \code{h} are provided, \code{k} takes precedence.}
 
-\item{plotDendrogram}{Logical. Whether to plot the dendrogram. Defaults to \code{FALSE}.}
+\item{plotDendrogram}{Logical. If \code{TRUE}, plots the dendrogram. Defaults to \code{FALSE}.}
 
-\item{plotClustersOnDendrogram}{Logical. Whether to highlight clusters on the dendrogram. Defaults to \code{FALSE}.}
+\item{plotClustersOnDendrogram}{Logical. If \code{TRUE}, highlights the clusters on the dendrogram. Defaults to \code{FALSE}.}
 
-\item{plotElbowPlot}{Logical. Whether to plot the elbow plot used for determining the optimal number of clusters. Defaults to \code{FALSE}.}
+\item{plotElbowPlot}{Logical. If \code{TRUE}, plots the elbow plot used for determining the optimal number of clusters. Defaults to \code{FALSE}.}
 }
 \value{
-A Seurat object with an additional metadata column, \code{cnv_clusters}, containing cluster assignments.
+A Seurat object with an additional metadata column, \code{cnv_clusters}, containing the cluster assignments.
 }
 \description{
 The \code{CNVcluster} function performs hierarchical clustering on a genomic score matrix extracted from a Seurat object.
@@ -36,7 +36,7 @@ and cluster visualization on the dendrogram. The resulting cluster assignments a
 }
 \details{
 The function computes a Manhattan distance matrix and performs hierarchical clustering using the Ward.D2 method.
-If \code{k} is not provided, the elbow method is applied to determine the optimal number of clusters based on within-cluster sum of squares (WSS).
+If \code{k} is not provided, the elbow method is applied to determine the optimal number of clusters based on the within-cluster sum of squares (WSS).
 
 The clusters are assigned to the Seurat object under the metadata column \code{cnv_clusters}.
 }

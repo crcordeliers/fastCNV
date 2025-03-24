@@ -1,14 +1,17 @@
-#' A function to plot the CNV results into a heatmap
+#' Plot CNV Results into a Heatmap
+#' Builds a heatmap to visualize the CNV results based on genomic scores.
 #'
-#' @param seuratObj Seurat object containing the data used to get the genomicScores.
-#' @param referenceVar The variable name of the annotations in the Seurat object metadata
-#' @param clustersVar The variable name of the clusters in the Seurat object metadata
-#' @param splitPlotOnVar The variable name on which to split the heatmap rows.
-#' @param savePath Path to save the pdf heatmap. If `NULL`, plot won't be saved (default = `.`).
-#' @param printPlot If the heatmap should be printed in the console.
-#' @param referencePalette The color palette that should be used for `referenceVar`.
-#' @param clusters_palette The color palette that should be used for `clustersVar`.
-#' @param outputType "png" or "pdf".
+#' @param seuratObj A Seurat object containing the genomic scores computed previously.
+#' @param referenceVar The name of the metadata column in the Seurat object containing reference annotations.
+#' @param clustersVar The name of the metadata column containing cluster information (default = `"cnv_clusters"`).
+#' @param splitPlotOnVar The name of the metadata column used to split the heatmap rows (e.g., cell type or cluster) (default = `clustersVar`).
+#' @param savePath The path where the heatmap will be saved. If `NULL`, the plot will not be saved (default = `"."`).
+#' @param printPlot Logical. If `TRUE`, prints the heatmap to the console.
+#' @param referencePalette A color palette for `referenceVar`.
+#' You can provide a custom palette as a vector of color codes (e.g., `c("#FF0000", "#00FF00")`).
+#' @param clusters_palette A color palette for `clustersVar`.
+#' You can provide a custom palette as a vector of color codes (e.g., `c("#F8766D", "#A3A500", "#00BF7D")`).
+#' @param outputType Character. Specifies the file format for saving the plot, either `"png"` or `"pdf"`.
 #'
 #' @import ComplexHeatmap
 #' @import Seurat
@@ -22,23 +25,38 @@
 #' @import magick
 #' @import scales
 #'
-#' @return This function builds a heatmap and saves it as a .pdf file in your working directory
+#' @return This function generates a heatmap and saves it as a `.pdf` or `.png` file in the specified path (default = working directory).
 #'
 #' @export
-#'
 
-plotCNVResults <- function(seuratObj, referenceVar = NULL, clustersVar = "cnv_clusters",
-                           splitPlotOnVar = clustersVar, savePath = ".",
-                           printPlot = FALSE, referencePalette = as.character(paletteer::paletteer_d("pals::glasbey")),
-                           clusters_palette = scales::hue_pal(),
+
+plotCNVResults <- function(seuratObj,
+                           referenceVar = NULL,
+                           clustersVar = "cnv_clusters",
+                           splitPlotOnVar = clustersVar,
+                           savePath = ".",
+                           printPlot = FALSE,
+                           referencePalette = "default",
+                           clusters_palette = "default",
                            outputType = "png"){
   if (outputType != "png" && outputType != "pdf"){
     message("Warning : outputType not valid, should be 'pdf' or 'png'. Setting outputType to 'png'")
     outputType = "png"
   }
 
-  M <- t(as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")["data"]))
+  if (clustersVar == "cnv_clusters"){
+    if (!(clustersVar %in% names(seuratObj@meta.data))) {
+      if(splitPlotOnVar == clustersVar){
+        splitPlotOnVar = referenceVar
+      }
+      clustersVar = NULL
+    }
+  }
 
+  M <- t(as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")["data"]))
+  if (referencePalette == "default") {
+    referencePalette = as.character(paletteer::paletteer_d("pals::glasbey"))
+  }
   if (!is.null(referenceVar)) {
     annotation_df <- as.data.frame(seuratObj@meta.data[[referenceVar]])
     colnames(annotation_df) <- "Annotations"
@@ -55,7 +73,10 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL, clustersVar = "cnv_cl
   if (!is.null(clustersVar)) {
     clusters_df <- as.data.frame(seuratObj@meta.data[[clustersVar]])
     colnames(clusters_df) <- "Clusters"
-    clusters_colors <- setNames(clusters_palette(length(unique(clusters_df$Clusters))), unique(clusters_df$Clusters))
+    if (clusters_palette == "default"){
+      clusters_palette = scales::hue_pal()(length(unique(clusters_df$Clusters)))
+    }
+    clusters_colors <- setNames(clusters_palette, unique(clusters_df$Clusters))
   }
 
   if (!is.null(referenceVar) && is.null(clustersVar)) {
@@ -134,7 +155,7 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL, clustersVar = "cnv_cl
     row_title = NULL,
     col = circlize::colorRamp2(c(-1, -0.6, -0.3, 0, 0.3, 0.6, 1), c("#0B2F7EFF", "#2A4D9EFF", "#A0A0FFFF", "white", "#E3807D", "#A4161A","#7A0A0D")),
     heatmap_legend_param = list(
-      title = "CNV",
+      title = "CNV Score",
       title_gp = grid::gpar(fontsize = 11),
       labels_gp = grid::gpar(fontsize = 8),
       grid_height = grid::unit(1, "cm"),
@@ -163,7 +184,7 @@ plotCNVResults <- function(seuratObj, referenceVar = NULL, clustersVar = "cnv_cl
     }
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"),grid::unit(1, "null")))))
-    grid::pushViewport(grid::viewport(layout.pos.row = 1))
+    grid::pushViewport(grid::viewport(layout.pos.row = 1,gp = grid::gpar(fill = "white")))
     grid::grid.text(paste0("CNV heatmap for sample ", seuratObj@project.name), gp = grid::gpar(fontsize = 20))
     grid::popViewport()
     grid::pushViewport(grid::viewport(layout.pos.row = 2))

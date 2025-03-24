@@ -2,7 +2,8 @@
 % Please edit documentation in R/plotCNVResults.R
 \name{plotCNVResults}
 \alias{plotCNVResults}
-\title{A function to plot the CNV results into a heatmap}
+\title{Plot CNV Results into a Heatmap
+Builds a heatmap to visualize the CNV results based on genomic scores.}
 \usage{
 plotCNVResults(
   seuratObj,
@@ -11,33 +12,36 @@ plotCNVResults(
   splitPlotOnVar = clustersVar,
   savePath = ".",
   printPlot = FALSE,
-  referencePalette = as.character(paletteer::paletteer_d("pals::glasbey")),
-  clusters_palette = scales::hue_pal(),
+  referencePalette = "default",
+  clusters_palette = "default",
   outputType = "png"
 )
 }
 \arguments{
-\item{seuratObj}{Seurat object containing the data used to get the genomicScores.}
+\item{seuratObj}{A Seurat object containing the genomic scores computed previously.}
 
-\item{referenceVar}{The variable name of the annotations in the Seurat object metadata}
+\item{referenceVar}{The name of the metadata column in the Seurat object containing reference annotations.}
 
-\item{clustersVar}{The variable name of the clusters in the Seurat object metadata}
+\item{clustersVar}{The name of the metadata column containing cluster information (default = \code{"cnv_clusters"}).}
 
-\item{splitPlotOnVar}{The variable name on which to split the heatmap rows.}
+\item{splitPlotOnVar}{The name of the metadata column used to split the heatmap rows (e.g., cell type or cluster) (default = \code{clustersVar}).}
 
-\item{savePath}{Path to save the pdf heatmap. If \code{NULL}, plot won't be saved (default = \code{.}).}
+\item{savePath}{The path where the heatmap will be saved. If \code{NULL}, the plot will not be saved (default = \code{"."}).}
 
-\item{printPlot}{If the heatmap should be printed in the console.}
+\item{printPlot}{Logical. If \code{TRUE}, prints the heatmap to the console.}
 
-\item{referencePalette}{The color palette that should be used for \code{referenceVar}.}
+\item{referencePalette}{A color palette for \code{referenceVar}.
+You can provide a custom palette as a vector of color codes (e.g., \code{c("#FF0000", "#00FF00")}).}
 
-\item{clusters_palette}{The color palette that should be used for \code{clustersVar}.}
+\item{clusters_palette}{A color palette for \code{clustersVar}.
+You can provide a custom palette as a vector of color codes (e.g., \code{c("#F8766D", "#A3A500", "#00BF7D")}).}
 
-\item{outputType}{"png" or "pdf".}
+\item{outputType}{Character. Specifies the file format for saving the plot, either \code{"png"} or \code{"pdf"}.}
 }
 \value{
-This function builds a heatmap and saves it as a .pdf file in your working directory
+This function generates a heatmap and saves it as a \code{.pdf} or \code{.png} file in the specified path (default = working directory).
 }
 \description{
-A function to plot the CNV results into a heatmap
+Plot CNV Results into a Heatmap
+Builds a heatmap to visualize the CNV results based on genomic scores.
 }

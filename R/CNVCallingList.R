@@ -1,19 +1,25 @@
-#' CNVcalling but for a list of seurat objects
+#' CNVcalling for a List of Seurat Objects
+#' Performs Copy Number Variation (CNV) analysis on a list of Seurat objects.
 #'
-#' @param seuratList List of seurat objects
-#' @param assay Name of the assay to run the CNV on. Takes the results of `prepareCountsForCNVAnalysis` by default if available
-#' @param referenceVar The variable name of the annotations in the Seurat metadata
-#' @param referenceLabel  The label given to the observations wanted as reference (can be any type of annotation)
-#' @param scaleOnReferenceLabel If you want to scale the results depending on the reference observations
-#' @param denoise If the data needs to be denoised (default = `TRUE`)
-#' @param thresholdPercentile Which quantiles to take (if 0.01 it will take 0.01-0.99). Background noise appears with higher numbers.
-#' @param geneMetadata List of genes from ensembl and their metadata
-#' @param windowSize Size of the genomic windows
-#' @param windowStep Step between the genomic windows
-#' @param saveGenomicWindows If the information of the genomic windows need to be saved in the current directory (default = `FALSE`).
-#' @param topNGenes Number of top expressed genes
+#' @param seuratList A list of Seurat objects containing the data for CNV analysis.
+#' Each object can be either **single-cell** or **spatial transcriptomics** data.
+#' @param assay Name of the assay to run the CNV analysis on. Defaults to the results of `prepareCountsForCNVAnalysis` if available.
+#' @param referenceVar The name of the metadata column in the Seurat object that contains reference annotations.
+#' @param referenceLabel The label within `referenceVar` that specifies the reference population (can be any type of annotation).
+#' @param scaleOnReferenceLabel Logical. If `TRUE` (default), scales the results based on the reference population.
+#' @param denoise Logical. If `TRUE` (default), applies denoising to the data.
+#' @param thresholdPercentile Numeric. Specifies the quantile range to consider (e.g., `0.01` keeps values between the 1st and 99th percentiles). Higher values filter out more background noise.
+#' @param geneMetadata A dataframe containing gene metadata, typically from Ensembl.
+#' @param windowSize Integer. Defines the size of genomic windows for CNV analysis.
+#' @param windowStep Integer. Specifies the step size between genomic windows.
+#' @param saveGenomicWindows Logical. If `TRUE`, saves genomic window information in the current directory (default = `FALSE`).
+#' @param topNGenes Integer. The number of top-expressed genes to retain in the analysis.
+#' @param regionsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
+#' If specified, all genes within the given chromosome arm(s) will be included.
 #'
-#' @return This function returns a list of the genomic scores per genomic window
+#' @return A list of Seurat objects, where each:
+#' - Contains an **additional assay** with genomic scores per genomic window.
+#' - Has a new **CNV fraction column** added to its metadata.
 #'
 #' @import stats
 #' @import Seurat
@@ -33,7 +39,8 @@ CNVcallingList <- function(seuratList,
                            windowSize=150,
                            windowStep=10,
                            saveGenomicWindows = FALSE,
-                           topNGenes=7000
+                           topNGenes=7000,
+                           regionsToForce = NULL
 ){
   LrawcountsByPatient <- lapply(seuratList, function(x) {
     if (!is.null(assay)) {
@@ -116,6 +123,19 @@ CNVcallingList <- function(seuratList,
       genes_by_arm[[arm]] <- unique(c(genes_by_arm[[arm]], top_arm_genes))
     }
   }
+
+  if(!is.null(regionsToForce)){
+    if (length(regionsToForce > 1)){
+      for (chr in regionsToForce){
+        genesToAdd <- geneMetadata2$hgnc_symbol[which(paste0(geneMetadata2$chromosome_num,geneMetadata2$chr_arm) == chr)]
+        genes_by_arm[[chr]] <- genesToAdd
+      }
+    } else {
+      genesToAdd <- geneMetadata2$hgnc_symbol[which(paste0(geneMetadata2$chromosome_num,geneMetadata2$chr_arm) == regionsToForce)]
+      genes_by_arm[[regionsToForce]] <- genesToAdd
+    }
+  }
+
   final_selected_genes <- unlist(genes_by_arm)
 
   LrawcountsByPatient <- lapply(LrawcountsByPatient, function(x) x[final_selected_genes,])

@@ -1,9 +1,16 @@
-#' Downloads the gene information from the ensembl site
+#' Download Gene Information from Ensembl
 #'
-#' @param filters Filters (one or more) that should be used in the query
-#' @param cache Whether to use the data from the cache or to download the latest version
+#' This function retrieves gene information from the Ensembl database using the specified filters.
+#' It can either fetch the latest data or use cached data if available.
 #'
-#' @return The function returns a list of all the genes and the information related to these genes
+#' @param filters A character vector of filters to be applied in the query. These filters determine
+#' which genes and their associated information are returned from the Ensembl database.
+#' @param cache Logical. If `TRUE`, the function will use cached data if available. If `FALSE`, it will
+#' download the latest version of the gene data from Ensembl.
+#'
+#' @return A list containing gene information retrieved from Ensembl, with each element representing
+#' data for a specific gene (e.g., gene IDs, descriptions, associated attributes).
+#'
 #' @import biomaRt
 #' @importFrom utils data
 #' @export

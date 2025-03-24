@@ -1,17 +1,18 @@
-#' Generate CNV Matrix for CNV clusters by Chromosome Arm
+#' Generate CNV Matrix for CNV Clusters by Chromosome Arm
 #'
 #' This function generates a matrix of metacells where each metacell corresponds to a CNV cluster.
 #' The CNV matrix is calculated by chromosome arm. If specified, certain clusters will be labeled as "Benign"
 #' rather than "Clone".
 #'
 #' @param seuratObj A Seurat object containing CNV data and metadata.
-#' @param healthyClusters A numeric vector or NULL. If provided, clusters specified in this vector
-#' will be labeled as "Benign" instead of "Clone". Default is NULL.
+#' @param healthyClusters A numeric vector or `NULL`. If provided, clusters specified in this vector
+#' will be labeled as "Benign" instead of "Clone". Default is `NULL`.
 #'
 #' @return A matrix of CNVs with row names corresponding to the clone or benign labels and columns representing
 #' the chromosome arms.
 #'
 #' @export
+
 
 generateCNVClonesMatrix <- function(seuratObj, healthyClusters = NULL) {
   # Extract CNV matrix based on chromosome arms

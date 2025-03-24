@@ -5,19 +5,19 @@
 #' and cluster visualization on the dendrogram. The resulting cluster assignments are stored in the Seurat object.
 #'
 #' @param seuratObj A Seurat object containing a "genomicScores" assay with a matrix of genomic scores for clustering.
-#' @param k Optional. Number of clusters to cut the dendrogram into. If `NULL`, the optimal number of clusters is determined automatically using the elbow method.
+#' @param k Optional. The number of clusters to cut the dendrogram into. If `NULL`, the optimal number of clusters is determined automatically using the elbow method.
 #' @param h Optional. The height at which to cut the dendrogram for clustering. If both `k` and `h` are provided, `k` takes precedence.
-#' @param plotDendrogram Logical. Whether to plot the dendrogram. Defaults to `FALSE`.
-#' @param plotClustersOnDendrogram Logical. Whether to highlight clusters on the dendrogram. Defaults to `FALSE`.
-#' @param plotElbowPlot Logical. Whether to plot the elbow plot used for determining the optimal number of clusters. Defaults to `FALSE`.
+#' @param plotDendrogram Logical. If `TRUE`, plots the dendrogram. Defaults to `FALSE`.
+#' @param plotClustersOnDendrogram Logical. If `TRUE`, highlights the clusters on the dendrogram. Defaults to `FALSE`.
+#' @param plotElbowPlot Logical. If `TRUE`, plots the elbow plot used for determining the optimal number of clusters. Defaults to `FALSE`.
 #'
 #' @details
 #' The function computes a Manhattan distance matrix and performs hierarchical clustering using the Ward.D2 method.
-#' If `k` is not provided, the elbow method is applied to determine the optimal number of clusters based on within-cluster sum of squares (WSS).
+#' If `k` is not provided, the elbow method is applied to determine the optimal number of clusters based on the within-cluster sum of squares (WSS).
 #'
 #' The clusters are assigned to the Seurat object under the metadata column `cnv_clusters`.
 #'
-#' @return A Seurat object with an additional metadata column, `cnv_clusters`, containing cluster assignments.
+#' @return A Seurat object with an additional metadata column, `cnv_clusters`, containing the cluster assignments.
 #'
 #' @import proxy
 #' @import utils

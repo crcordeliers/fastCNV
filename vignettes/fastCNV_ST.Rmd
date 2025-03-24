@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-## Context
+## Context 
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
@@ -201,7 +201,7 @@ We find that tumor cells are virtually always cnv_cluster 2, 3, 4 or 5 ; meanwhi
 We can see there are 4 tumor subclusters (2, 3, 4 and 5) in STColon1, and 1 healthy subcluster (1). 
 In this part of the vignette, we will show how to plot the CNV subclonality tree. 
 
-First, we will build a metacell for each cluster, using `generateCNVClonesMatrix()`. 
+First, we will build a metacell for each cluster, using `generateCNVClonesMatrix()`.  
 
 ```{r metacell_cluster}
 cnv_matrix_clusters <- generateCNVClonesMatrix(STColon1, healthyClusters = "1")
@@ -213,7 +213,7 @@ Now, we build the tree, using `CNVtree()`, `annotateCNVtree()` and `plotCNVtree(
   - `annotateCNVtree()` will annotate each cnv gain/loss in the tree. 
   - `plotCNVtree()` will output the tree. 
 
-```{r tree_cnv, fig.width = 6, fig.height = 4}
+```{r tree_cnv, fig.width = 7, fig.height = 4}
 tree <- CNVtree(cnv_matrix_clusters)
 tree_data <- annotateCNVtree(tree, cnv_matrix_clusters, 0.13)
 plotCNVtree(tree_data)

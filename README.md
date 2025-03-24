@@ -16,7 +16,7 @@ remotes::install_github("must-bioinfo/fastCNV")
 
 `fastCNV` can plot a heatmap of inferred CNVs: 
 
-![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/run1-1.jpg)
+![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/heatmap_sc.jpg)
 
 It also calculates a `cnv_fraction`, which can be plotted with `Seurat` standard plotting functions:
 
@@ -30,11 +30,7 @@ And `cnv_fractions` can be used to obtain clonal clusters (`cnv_clusters`):
 
 <img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/plot_cnv_clusters-1.png" alt="Clonal clusters for sc data" width="50%">
 
-Additionally, the inferred CNVs can be plotted by clone cluster : 
-
-![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/hm_cnv_cl-1.jpg)
-
-And the subclonality tree can be plotted too : 
+The subclonality tree can be plotted too : 
 
 <img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/tree_cnv-1.png" alt="Subclonality tree" width="500">
 

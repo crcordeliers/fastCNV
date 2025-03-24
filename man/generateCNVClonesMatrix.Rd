@@ -2,15 +2,15 @@
 % Please edit documentation in R/generateCNVClonesMatrix.R
 \name{generateCNVClonesMatrix}
 \alias{generateCNVClonesMatrix}
-\title{Generate CNV Matrix for CNV clusters by Chromosome Arm}
+\title{Generate CNV Matrix for CNV Clusters by Chromosome Arm}
 \usage{
 generateCNVClonesMatrix(seuratObj, healthyClusters = NULL)
 }
 \arguments{
 \item{seuratObj}{A Seurat object containing CNV data and metadata.}
 
-\item{healthyClusters}{A numeric vector or NULL. If provided, clusters specified in this vector
-will be labeled as "Benign" instead of "Clone". Default is NULL.}
+\item{healthyClusters}{A numeric vector or \code{NULL}. If provided, clusters specified in this vector
+will be labeled as "Benign" instead of "Clone". Default is \code{NULL}.}
 }
 \value{
 A matrix of CNVs with row names corresponding to the clone or benign labels and columns representing

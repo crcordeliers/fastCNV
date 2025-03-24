@@ -2,8 +2,9 @@
 % Please edit documentation in R/prepareCountsForCNV.R
 \name{prepareCountsForCNVAnalysis}
 \alias{prepareCountsForCNVAnalysis}
-\title{A function to aggregate observations with the same cell types to get higher counts per observation.
-It will help to have higher counts to compute the CNV}
+\title{Aggregate Observations by Cell Type for CNV Analysis
+Aggregates observations with the same cell types to increase counts per observation,
+improving Copy Number Variation (CNV) computation.}
 \usage{
 prepareCountsForCNVAnalysis(
   seuratObj,
@@ -16,24 +17,29 @@ prepareCountsForCNVAnalysis(
 )
 }
 \arguments{
-\item{seuratObj}{Seurat object containing the data}
+\item{seuratObj}{A Seurat object containing the data.}
 
-\item{sampleName}{Name of the sample}
+\item{sampleName}{A character string specifying the sample name.}
 
-\item{referenceVar}{The variable name of the annotations in the Seurat metadata}
+\item{referenceVar}{The name of the metadata column in the Seurat object that contains reference annotations.}
 
-\item{aggregateByVar}{If a referenceVar is given, whether to use it to aggregate the observations depending on their type. Default \code{TRUE}.}
+\item{aggregateByVar}{Logical. If \code{TRUE} (default), aggregates observations based on \code{referenceVar} annotations.}
 
-\item{aggregFactor}{The number of counts per observation desired (default 30 000)}
+\item{aggregFactor}{Integer. The target number of counts per observation (default = \verb{15 000}).}
 
-\item{seuratClusterResolution}{The resolution wanted for the seurat clusters (default 0.8)}
+\item{seuratClusterResolution}{Numeric. The resolution used for Seurat clustering (default = \code{0.8}).}
 
-\item{reClusterSeurat}{If \code{TRUE}, clustering is re-done for the Seurat object.}
+\item{reClusterSeurat}{Logical. If \code{TRUE}, re-runs clustering on the Seurat object.}
 }
 \value{
-This function returns a Seurat object with the modified count matrix in a new assay called \code{AgregatedCounts} and the Seurat clusters in the metadata
+A Seurat object with:
+\itemize{
+\item A new assay called \strong{"AggregatedCounts"} containing the modified count matrix.
+\item \strong{Seurat clusters} stored in the metadata.
+}
 }
 \description{
-A function to aggregate observations with the same cell types to get higher counts per observation.
-It will help to have higher counts to compute the CNV
+Aggregate Observations by Cell Type for CNV Analysis
+Aggregates observations with the same cell types to increase counts per observation,
+improving Copy Number Variation (CNV) computation.
 }

@@ -2,7 +2,8 @@
 % Please edit documentation in R/CNVCallingList.R
 \name{CNVcallingList}
 \alias{CNVcallingList}
-\title{CNVcalling but for a list of seurat objects}
+\title{CNVcalling for a List of Seurat Objects
+Performs Copy Number Variation (CNV) analysis on a list of Seurat objects.}
 \usage{
 CNVcallingList(
   seuratList,
@@ -16,37 +17,47 @@ CNVcallingList(
   windowSize = 150,
   windowStep = 10,
   saveGenomicWindows = FALSE,
-  topNGenes = 7000
+  topNGenes = 7000,
+  regionsToForce = NULL
 )
 }
 \arguments{
-\item{seuratList}{List of seurat objects}
+\item{seuratList}{A list of Seurat objects containing the data for CNV analysis.
+Each object can be either \strong{single-cell} or \strong{spatial transcriptomics} data.}
 
-\item{assay}{Name of the assay to run the CNV on. Takes the results of \code{prepareCountsForCNVAnalysis} by default if available}
+\item{assay}{Name of the assay to run the CNV analysis on. Defaults to the results of \code{prepareCountsForCNVAnalysis} if available.}
 
-\item{referenceVar}{The variable name of the annotations in the Seurat metadata}
+\item{referenceVar}{The name of the metadata column in the Seurat object that contains reference annotations.}
 
-\item{referenceLabel}{The label given to the observations wanted as reference (can be any type of annotation)}
+\item{referenceLabel}{The label within \code{referenceVar} that specifies the reference population (can be any type of annotation).}
 
-\item{scaleOnReferenceLabel}{If you want to scale the results depending on the reference observations}
+\item{scaleOnReferenceLabel}{Logical. If \code{TRUE} (default), scales the results based on the reference population.}
 
-\item{denoise}{If the data needs to be denoised (default = \code{TRUE})}
+\item{denoise}{Logical. If \code{TRUE} (default), applies denoising to the data.}
 
-\item{thresholdPercentile}{Which quantiles to take (if 0.01 it will take 0.01-0.99). Background noise appears with higher numbers.}
+\item{thresholdPercentile}{Numeric. Specifies the quantile range to consider (e.g., \code{0.01} keeps values between the 1st and 99th percentiles). Higher values filter out more background noise.}
 
-\item{geneMetadata}{List of genes from ensembl and their metadata}
+\item{geneMetadata}{A dataframe containing gene metadata, typically from Ensembl.}
 
-\item{windowSize}{Size of the genomic windows}
+\item{windowSize}{Integer. Defines the size of genomic windows for CNV analysis.}
 
-\item{windowStep}{Step between the genomic windows}
+\item{windowStep}{Integer. Specifies the step size between genomic windows.}
 
-\item{saveGenomicWindows}{If the information of the genomic windows need to be saved in the current directory (default = \code{FALSE}).}
+\item{saveGenomicWindows}{Logical. If \code{TRUE}, saves genomic window information in the current directory (default = \code{FALSE}).}
 
-\item{topNGenes}{Number of top expressed genes}
+\item{topNGenes}{Integer. The number of top-expressed genes to retain in the analysis.}
+
+\item{regionsToForce}{A chromosome arm (e.g., \code{"8p"}, \code{"3q"}) or a list of chromosome arms (e.g., \code{c("3q", "8p", "17p")}) to force into the analysis.
+If specified, all genes within the given chromosome arm(s) will be included.}
 }
 \value{
-This function returns a list of the genomic scores per genomic window
+A list of Seurat objects, where each:
+\itemize{
+\item Contains an \strong{additional assay} with genomic scores per genomic window.
+\item Has a new \strong{CNV fraction column} added to its metadata.
+}
 }
 \description{
-CNVcalling but for a list of seurat objects
+CNVcalling for a List of Seurat Objects
+Performs Copy Number Variation (CNV) analysis on a list of Seurat objects.
 }

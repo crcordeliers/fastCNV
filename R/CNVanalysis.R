@@ -1,24 +1,35 @@
 #' CNVanalysis
-#' Runs the CNV functions given a seurat object or a list of seurat objects
+#' Runs Copy Number Variation (CNV) analysis on a Seurat object or a list of Seurat objects.
 #'
-#' @param object The Seurat object or list of seurat objects containing the data to analyze
-#' @param assay Name of the assay to run the CNV on. Takes the results of prepareCountsForCNVAnalysis by default if available
-#' @param referenceVar The variable name of the annotations in the Seurat metadata
-#' @param referenceLabel The label given to the observations wanted as reference (can be any type of annotation)
-#' @param scaleOnReferenceLabel If you want to scale the results depending on the normal observations
-#' @param denoise If the data needs to be denoised (default = `TRUE`)
-#' @param thresholdPercentile Which quantiles to take (if 0.01 it will take 0.01-0.99). Background noise appears with higher numbers.
-#' @param geneMetadata List of genes and their metadata from ensembl
-#' @param windowSize Size of the genomic windows
-#' @param windowStep Step between the genomic windows
-#' @param saveGenomicWindows If the information of the genomic windows need to be saved in the current directory (default = `FALSE`).
-#' @param topNGenes Number of top expressed genes to keep
-# @param doRecapPlot Default `TRUE`. Will output the CNV heatmaps by annotation if `TRUE`.
-#' @param pooledReference Default `TRUE`. Will build a pooled reference across all samples if `TRUE`.
+#' This function performs CNV analysis by calculating genomic scores, applying optional denoising, and optionally
+#' scaling the results based on a reference population. It processes single-cell or spatial transcriptomics data,
+#' generating an additional assay with genomic scores and adding a new metadata column for CNV fractions.
 #'
-#' @return This function returns the genomic scores per genomic window per seurat object. If given a list with more than one seurat object, and their annotations, it will output a heatmap per cell type given
+#' @param object A Seurat object or a list of Seurat objects containing the data for CNV analysis. Each object
+#' can be either **single-cell** or **spatial transcriptomics** data.
+#' @param referenceVar The name of the metadata column in the Seurat object that contains reference annotations.
+#' @param referenceLabel The label within `referenceVar` that specifies the reference population (can be any type of annotation).
+# @param doRecapPlot Logical. If `TRUE` (default), generates CNV heatmaps grouped by annotation.
+#' @param pooledReference Logical. If `TRUE` (default), builds a pooled reference across all samples.
+#' @param scaleOnReferenceLabel Logical. If `TRUE` (default), scales the results based on the reference population.
+#' @param denoise Logical. If `TRUE` (default), applies denoising to the data.
+#' @param assay Name of the assay to run the CNV analysis on. Defaults to the results of `prepareCountsForCNVAnalysis` if available.
+#' @param thresholdPercentile Numeric. Specifies the quantile range to consider (e.g., `0.01` keeps values between the 1st and 99th percentiles). Higher values filter out more background noise.
+#' @param geneMetadata A dataframe containing gene metadata, typically from Ensembl.
+#' @param windowSize Integer. Defines the size of genomic windows for CNV analysis.
+#' @param windowStep Integer. Specifies the step size between genomic windows.
+#' @param saveGenomicWindows Logical. If `TRUE`, saves genomic window information in the current directory (default = `FALSE`).
+#' @param topNGenes Integer. The number of top-expressed genes to retain in the analysis.
+#' @param regionsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
+#' If specified, all genes within the given chromosome arm(s) will be included.
+#'
+#' @return If given a **single** Seurat object, returns the same object with:
+#' - An **additional assay** containing genomic scores per genomic window.
+#' - A new **CNV fraction column** added to the object’s metadata.
+#' If given a **list** of Seurat objects, returns the modified list.
+#'
 #' @export
-#'
+
 
 CNVanalysis <- function(object,
                        referenceVar = NULL,
@@ -29,12 +40,12 @@ CNVanalysis <- function(object,
                        denoise = TRUE,
                        assay = NULL,
                        thresholdPercentile = 0.01,
-                       #mclust_thresholds = FALSE,
                        geneMetadata=getGenes(),
                        windowSize=150,
                        windowStep=10,
                        saveGenomicWindows = FALSE,
-                       topNGenes=7000) {
+                       topNGenes=7000,
+                       regionsToForce = NULL) {
 
     if (!is.list(object)) {
       object <- CNVcalling(object,

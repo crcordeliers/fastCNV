@@ -2,18 +2,18 @@
 % Please edit documentation in R/CNVPerChromosomeArm.R
 \name{CNVPerChromosomeArm}
 \alias{CNVPerChromosomeArm}
-\title{CNVPerChromosomeArm
-Computes the CNV fraction of each spot/cell per chromosome arm, then stocks the results into the metadata}
+\title{CNV Per Chromosome Arm
+Computes the CNV fraction of each spot/cell per chromosome arm, then stores the results into the metadata.}
 \usage{
 CNVPerChromosomeArm(seuratObj)
 }
 \arguments{
-\item{seuratObj}{The output of fastCNV()}
+\item{seuratObj}{A Seurat object, typically the output from the \code{fastCNV()} function, containing genomic scores for CNV analysis.}
 }
 \value{
-This function returns the same seurat object with the CNV for each chromosome arm in the metadata
+The function returns the same Seurat object with the CNV fraction for each chromosome arm added to the metadata.
 }
 \description{
-CNVPerChromosomeArm
-Computes the CNV fraction of each spot/cell per chromosome arm, then stocks the results into the metadata
+CNV Per Chromosome Arm
+Computes the CNV fraction of each spot/cell per chromosome arm, then stores the results into the metadata.
 }

@@ -2,99 +2,123 @@
 % Please edit documentation in R/fastCNV.R
 \name{fastCNV}
 \alias{fastCNV}
-\title{fastCNV calls all of the internal functions needed to compute the putative CNV on a seurat object or a list of seurat objects}
+\title{fastCNV calls all of the internal functions needed to compute the putative CNV on a Seurat object or a list of Seurat objects}
 \usage{
 fastCNV(
   seuratObj,
   sampleName,
   referenceVar = NULL,
   referenceLabel = NULL,
-  clustersVar = "cnv_clusters",
-  splitPlotOnVar = clustersVar,
-  doPlot = TRUE,
-  printPlot = FALSE,
-  prepareCounts = TRUE,
-  pooledReference = TRUE,
   assay = NULL,
-  getCNVPerChromosomeArm = TRUE,
-  getCNVClusters = TRUE,
-  savePath = ".",
-  denoise = TRUE,
-  referencePalette = as.character(paletteer::paletteer_d("pals::glasbey")),
-  clusters_palette = scales::hue_pal(),
+  prepareCounts = TRUE,
   aggregFactor = 15000,
   seuratClusterResolution = 0.8,
-  aggregateByVar = T,
-  reClusterSeurat = F,
+  aggregateByVar = TRUE,
+  reClusterSeurat = FALSE,
+  pooledReference = TRUE,
+  denoise = TRUE,
   scaleOnReferenceLabel = TRUE,
   thresholdPercentile = 0.01,
   geneMetadata = getGenes(),
   windowSize = 150,
   windowStep = 10,
   saveGenomicWindows = FALSE,
-  topNGenes = 7000
+  topNGenes = 7000,
+  regionsToForce = NULL,
+  getCNVPerChromosomeArm = TRUE,
+  getCNVClusters = TRUE,
+  k_clusters = NULL,
+  h_clusters = NULL,
+  plotDendrogram = FALSE,
+  plotClustersOnDendrogram = FALSE,
+  plotElbowPlot = FALSE,
+  doPlot = TRUE,
+  printPlot = FALSE,
+  savePath = ".",
+  outputType = "png",
+  clustersVar = "cnv_clusters",
+  splitPlotOnVar = clustersVar,
+  referencePalette = "default",
+  clusters_palette = "default"
 )
 }
 \arguments{
-\item{seuratObj}{Seurat object or list of seurat objects}
+\item{seuratObj}{Seurat object or list of Seurat objects to perform the CNV analysis on.}
 
-\item{sampleName}{Name of the sample or list of names corresponding to the samples in the \code{seuratObj}}
+\item{sampleName}{Name of the sample or a list of names corresponding to the samples in the \code{seuratObj}.}
 
-\item{referenceVar}{The variable name of the annotations in the Seurat metadata}
+\item{referenceVar}{The variable name of the annotations in the Seurat metadata to be used as reference.}
 
-\item{referenceLabel}{The label given to the observations wanted as reference (can be any type of annotation)}
+\item{referenceLabel}{The label given to the observations you want as reference (can be any type of annotation).}
 
-\item{clustersVar}{The variable name of the clusters in the Seurat object metadata}
+\item{assay}{Name of the assay to run the CNV on. Takes the results of \code{prepareCountsForCNVAnalysis} by default if available.}
 
-\item{splitPlotOnVar}{The name given to the meta.data slot to split the observations on during the \code{plotCNVResults} step, if different from \code{referenceVar}.}
+\item{prepareCounts}{If \code{FALSE}, will not run the \code{prepareCountsForCNVAnalysis} function (default = \code{TRUE}).}
 
-\item{doPlot}{If \code{TRUE} will build a heatmap for each of the samples (default = \code{TRUE})}
+\item{aggregFactor}{The number of counts per spot desired (default = 15 000). If less than 1,000, will not run the \code{prepareCountsForCNVAnalysis} function.}
 
-\item{printPlot}{If the heatmap should be printed in the console (default = \code{FALSE}, the plot will only be in a PDF).}
+\item{seuratClusterResolution}{The resolution wanted for the Seurat clusters (default = 0.8).}
 
-\item{prepareCounts}{If \code{FALSE} will not run the \code{prepareCountsForCNVAnalysis} function. Default \code{TRUE}.}
+\item{aggregateByVar}{If \code{referenceVar} is given, determines whether to use it to pool the observations (default = \code{TRUE}).}
 
-\item{pooledReference}{Default \code{TRUE}. Will build a pooled reference across all samples if \code{TRUE}.}
+\item{reClusterSeurat}{Whether to re-cluster if the Seurat object given already has a \code{seurat_clusters} slot in its metadata (default = \code{FALSE}).}
 
-\item{assay}{Name of the assay to run the CNV on. Takes the results of \code{prepareCountsForCNVAnalysis} by default if available}
+\item{pooledReference}{Default is \code{TRUE}. Will build a pooled reference across all samples if \code{TRUE}.}
 
-\item{getCNVPerChromosomeArm}{If \code{TRUE}, will save into the metadata the CNV per chromosome arm}
+\item{denoise}{If \code{TRUE}, the data will be denoised (default = \code{TRUE}).}
 
-\item{getCNVClusters}{If \code{TRUE}, will perform clustering on the CNV scores, and save them in the metadata of the seurat object as \code{cnv_clusters}.}
+\item{scaleOnReferenceLabel}{If \code{TRUE}, scales the results depending on the normal observations (default = \code{TRUE}).}
 
-\item{savePath}{Default \code{.}. If \code{NULL} the heatmap won't be saved as a pdf.}
+\item{thresholdPercentile}{Which quantiles to take (default 0.01). For example, \code{0.01} will take quantiles between 0.01-0.99. Background noise appears with higher numbers.}
 
-\item{denoise}{If the data needs to be denoised (default = \code{TRUE})}
+\item{geneMetadata}{List of genes and their metadata (default uses genes from Ensembl version 113).}
 
-\item{referencePalette}{The color palette that should be used for \code{referenceVar}}
+\item{windowSize}{Size of the genomic windows for CNV analysis (default = 150).}
 
-\item{clusters_palette}{The color palette that should be used for \code{clustersVar}}
+\item{windowStep}{Step between the genomic windows (default = 10).}
 
-\item{aggregFactor}{The number of counts per spot desired (default \verb{30 000}). If less than \code{1000}, will not run the \code{prepareCountsForCNVAnalysis} function.}
+\item{saveGenomicWindows}{If \code{TRUE}, saves the information of the genomic windows in the current directory (default = \code{FALSE}).}
 
-\item{seuratClusterResolution}{The resolution wanted for the seurat clusters (default 0.8)}
+\item{topNGenes}{Number of top expressed genes to keep (default = 7000).}
 
-\item{aggregateByVar}{If \code{referenceVar} is given, whether to use it to pool the observations}
+\item{regionsToForce}{A chromosome arm (e.g., \code{"8p"}, \code{"3q"}) or a list of chromosome arms (e.g., \code{c("3q", "8p", "17p")}) to force into the analysis.}
 
-\item{reClusterSeurat}{Whether to re-cluster if the Seurat object given already has a \code{seurat_clusters} slot in its meta.data}
+\item{getCNVPerChromosomeArm}{If \code{TRUE}, will save the CNV per chromosome arm into the metadata.}
 
-\item{scaleOnReferenceLabel}{If you want to scale the results depending on the normal observations}
+\item{getCNVClusters}{If \code{TRUE}, will perform clustering on the CNV scores and save them in the metadata of the Seurat object as \code{cnv_clusters}.}
 
-\item{thresholdPercentile}{Which quantiles to take (if 0.01 it will take 0.01-0.99). Background noise appears with higher numbers.}
+\item{k_clusters}{Optional. Number of clusters to cut the dendrogram into. If \code{NULL}, the optimal number of clusters is determined automatically using the elbow method.}
 
-\item{geneMetadata}{List of genes and their metadata (default genes from ensembl version 113)}
+\item{h_clusters}{Optional. The height at which to cut the dendrogram for clustering. If both \code{k} and \code{h} are provided, \code{k} takes precedence.}
 
-\item{windowSize}{Size of the genomic windows}
+\item{plotDendrogram}{Logical. Whether to plot the dendrogram (default = \code{FALSE}).}
 
-\item{windowStep}{Step between the genomic windows}
+\item{plotClustersOnDendrogram}{Logical. Whether to highlight clusters on the dendrogram (default = \code{FALSE}).}
 
-\item{saveGenomicWindows}{If the information of the genomic windows need to be saved in the current directory (default = \code{FALSE}).}
+\item{plotElbowPlot}{Logical. Whether to plot the elbow plot used for determining the optimal number of clusters (default = \code{FALSE}).}
 
-\item{topNGenes}{Number of top expressed genes to keep}
+\item{doPlot}{If \code{TRUE}, will build a heatmap for each of the samples (default = \code{TRUE}).}
+
+\item{printPlot}{If \code{TRUE}, the heatmap will be printed in the console (default = \code{FALSE}, the plot will only be saved in a PDF).}
+
+\item{savePath}{Path to save the heatmap plot. If \code{NULL}, the plot won't be saved (default = \code{.}).}
+
+\item{outputType}{Specifies the file format for saving the plot, either \code{"png"} or \code{"pdf"} (default = \code{"png"}).}
+
+\item{clustersVar}{The variable name of the clusters in the Seurat metadata (default = \code{"cnv_clusters"}).}
+
+\item{splitPlotOnVar}{The name of the metadata column to split the observations during the \code{plotCNVResults} step, if different from \code{referenceVar}.}
+
+\item{referencePalette}{The color palette that should be used for \code{referenceVar} (default = \code{"default"}).}
+
+\item{clusters_palette}{The color palette that should be used for \code{clustersVar} (default = \code{"default"}).}
 }
 \value{
-This function returns a list of the seurat objects after all the analysis and it creates the heatmaps of the CNVs of every object in seuratObj and saves them in a pdf in the current working directory
+A list of Seurat objects after all the analysis is complete. Heatmaps of the CNVs for every object in \code{seuratObj} are generated and saved in the specified path (default = current working directory).
 }
 \description{
-fastCNV calls all of the internal functions needed to compute the putative CNV on a seurat object or a list of seurat objects
+This function orchestrates the CNV analysis on a Seurat object (or multiple objects). It calls internal functions such as
+\code{prepareCountsForCNVAnalysis}, \code{CNVAnalysis}, \code{CNVPerChromosomeArm}, \code{CNVcluster}, and \code{PlotCNVResults} to compute the CNVs,
+perform clustering, and generate heatmaps. The results are saved in the metadata of the Seurat object(s), with options for
+generating and saving plots.
 }

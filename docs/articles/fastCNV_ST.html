@@ -8,8 +8,8 @@
 <title>Introduction to fastCNV - ST data • fastCNV</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to fastCNV - ST data">
 </head>
 <body>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,7 @@ and load the <code>fastCNVdata</code> package.</p>
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"must-bioinfo/fastCNV"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"must-bioinfo/fastCNVdata"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">fastCNV</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://must-bioinfo.github.io/fastCNV">fastCNV</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">fastCNVdata</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -122,48 +122,9 @@ type annotations are already present under the column
 <span><span class="va">STColon1</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">annotation_file</span><span class="op">$</span><span class="va">Annot</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">STColon1</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                                          annot</span></span>
-<span><span class="co">#&gt; AAACAAGTATCTCCCA-1        epithelium&amp;submucosa</span></span>
-<span><span class="co">#&gt; AAACATTTCCCGGATT-1                   submucosa</span></span>
-<span><span class="co">#&gt; AAACCCGAACGAAATC-1                       tumor</span></span>
-<span><span class="co">#&gt; AAACCTAAGCAGCCGG-1 tumor&amp;stroma_IC med to high</span></span>
-<span><span class="co">#&gt; AAAGGCTACGGACCAT-1 stroma_fibroblastic_IC high</span></span>
-<span><span class="co">#&gt; AAAGTTGACTCCCGTA-1          non neo epithelium</span></span>
-<span><span class="co">#&gt; AAATAGGGTGCTATTG-1      IC aggregate_submucosa</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">STColon2</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                                          annot</span></span>
-<span><span class="co">#&gt; AAACAAGTATCTCCCA-1 tumor&amp;stroma_IC med to high</span></span>
-<span><span class="co">#&gt; AAACAGCTTTCAGAAG-1                       tumor</span></span>
-<span><span class="co">#&gt; AAACAGGGTCTATATT-1 stroma_fibroblastic_IC high</span></span>
-<span><span class="co">#&gt; AAACCGTTCGTCCAGG-1  stroma_fibroblastic_IC med</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">STColon3</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                                                      annot</span></span>
-<span><span class="co">#&gt; AAACAGAGCGACTCCT-1                          lamina propria</span></span>
-<span><span class="co">#&gt; AAACCGGGTAGGTACC-1 connective tissue_3_fibroblastic_IC med</span></span>
-<span><span class="co">#&gt; AAACCGTTCGTCCAGG-1 connective tissue_2_fibroblastic_IC low</span></span>
-<span><span class="co">#&gt; AAACCTCATGAAGTTG-1        connective tissue_6_hemosiderin?</span></span>
-<span><span class="co">#&gt; AAACGAGACGGTTGAT-1                  IC aggregate_submucosa</span></span>
-<span><span class="co">#&gt; AAACTGCTGGCTCCAA-1               connective tissue_1_edema</span></span>
-<span><span class="co">#&gt; AAATAACCATACGGGA-1                  epithelium&amp;lam propria</span></span>
-<span><span class="co">#&gt; AAATAGGGTGCTATTG-1                     squamous epithelium</span></span>
-<span><span class="co">#&gt; AACCTTTACGACGTCT-1                      non neo epithelium</span></span>
-<span><span class="co">#&gt; AACGTGCGAAAGTCTC-1   connective tissue_4_muscularis_IC low</span></span>
-<span><span class="co">#&gt; ACAAGGGCAGGCTCTG-1                        glandular tissue</span></span>
-<span><span class="co">#&gt; ACGTTAGATTTGCCCG-1          IC aggregate connective tissue</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">STColon4</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                                                 annot</span></span>
-<span><span class="co">#&gt; AAACAATCTACTAGCA-1        stroma_fibroblastic_IC high</span></span>
-<span><span class="co">#&gt; AAACAGAGCGACTCCT-1        tumor&amp;stroma_IC med to high</span></span>
-<span><span class="co">#&gt; AAACGAAGAACATACC-1                              tumor</span></span>
-<span><span class="co">#&gt; AAAGGGCAGCTTGAAT-1         stroma desmoplastic_IC low</span></span>
-<span><span class="co">#&gt; AAAGTGTGATTTATCT-1                          submucosa</span></span>
-<span><span class="co">#&gt; AAAGTTGACTCCCGTA-1                 non neo epithelium</span></span>
-<span><span class="co">#&gt; AAATACCTATAAGCAT-1          muscularis_IC med to high</span></span>
-<span><span class="co">#&gt; AAATGTGGGTGCTCCT-1         stroma_fibroblastic_IC med</span></span>
-<span><span class="co">#&gt; AACTCTCAATAGAGCG-1               epithelium&amp;submucosa</span></span>
-<span><span class="co">#&gt; AAGACTAACCCGTTGT-1 stroma desmoplastic_IC med to high</span></span>
-<span><span class="co">#&gt; AAGCTAGATCGAGTAA-1             IC aggregate_submucosa</span></span>
-<span><span class="co">#&gt; ACCGATGGTAGCATCG-1  IC aggregate_stroma or muscularis</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">STColon4</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="run-fastcnv">Run fastCNV<a class="anchor" aria-label="anchor" href="#run-fastcnv"></a>
@@ -295,23 +256,16 @@ chromosome arm containing either “loss”, “gain” or “no_alteration”.<
 <div class="section level2">
 <h2 id="cnv-clusters">CNV clusters<a class="anchor" aria-label="anchor" href="#cnv-clusters"></a>
 </h2>
-<p>In addition to the CNV fraction, we can obtain clusters based on the
-CNV matrix by running <code><a href="../reference/CNVcluster.html">CNVcluster()</a></code>. This runs standard
-Seurat clustering pipeline on the CNV scores per observation – uses the
-first 10 PCs to building the neighborhood graph and then Louvain
-clustering to find the clusters.</p>
+<p>In addition to the CNV fraction, fastCNV also computes the CNV
+clusters and saves them in the Seurat object metadata as “cnv_clusters”.
+These can be plotted with the Seurat plotting functions.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">STColon1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVcluster.html">CNVcluster</a></span><span class="op">(</span><span class="va">STColon1</span><span class="op">)</span></span></code></pre></div>
-<p>Results of <code>CNVcluster</code> are saved in the Seurat object
-under the <code>"cnv_clusters"</code> metadata variable, which can be
-plotted with Seurat functions.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/SpatialPlot.html" class="external-link">SpatialDimPlot</a></span><span class="op">(</span><span class="va">STColon1</span>, group.by <span class="op">=</span> <span class="st">"cnv_clusters"</span>, pt.size.factor <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/SpatialPlot.html" class="external-link">SpatialDimPlot</a></span><span class="op">(</span><span class="va">STColon1</span>, group.by <span class="op">=</span> <span class="st">"cnv_clusters"</span>, pt.size.factor <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="fastCNV_ST_files/figure-html/plot_cnv_clusters-1.png" width="480"></p>
 <p>And we can retrieve this metadata and plot it directly. Here, we
 relate the <code>cnv_clusters</code> with our annotation variable
 <code>annot</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.github.io/seurat-object/" class="external-link">SeuratObject</a></span><span class="op">)</span></span>
 <span></span>
@@ -322,12 +276,6 @@ relate the <code>cnv_clusters</code> with our annotation variable
 <p>We find that tumor cells are virtually always cnv_cluster 2, 3, 4 or
 5 ; meanwhile, healthy cells tend to be cnv_cluster 1 which present very
 few or no CNV.</p>
-<p>Note that we can also use cnv_clusters to label the CNV heatmap,
-directly using the parameter <code>splitPlotOfVar</code> of the
-<code><a href="../reference/plotCNVResults.html">plotCNVResults()</a></code> function.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotCNVResults.html">plotCNVResults</a></span><span class="op">(</span><span class="va">STColon1</span>, referenceVar <span class="op">=</span> <span class="st">"annot"</span>, splitPlotOnVar <span class="op">=</span> <span class="st">"cnv_clusters"</span>, printPlot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<p><img src="fastCNV_ST_files/figure-html/hm_cnv_cl-1.png" width="768"></p>
 </div>
 <div class="section level2">
 <h2 id="cnv-tree">CNV tree<a class="anchor" aria-label="anchor" href="#cnv-tree"></a>
@@ -337,20 +285,18 @@ and 1 healthy subcluster (1). In this part of the vignette, we will show
 how to plot the CNV subclonality tree.</p>
 <p>First, we will build a metacell for each cluster, using
 <code><a href="../reference/generateCNVClonesMatrix.html">generateCNVClonesMatrix()</a></code>.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">cnv_matrix_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateCNVClonesMatrix.html">generateCNVClonesMatrix</a></span><span class="op">(</span><span class="va">STColon1</span>, healthyClusters <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cnv_matrix_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateCNVClonesMatrix.html">generateCNVClonesMatrix</a></span><span class="op">(</span><span class="va">STColon1</span>, healthyClusters <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span></span></code></pre></div>
 <p>Now, we build the tree, using <code><a href="../reference/CNVtree.html">CNVtree()</a></code>,
 <code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> and <code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code>. -
 <code><a href="../reference/CNVtree.html">CNVtree()</a></code> will build the subclonality tree. -
 <code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> will annotate each cnv gain/loss in the
 tree. - <code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code> will output the tree.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVtree.html">CNVtree</a></span><span class="op">(</span><span class="va">cnv_matrix_clusters</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVtree.html">CNVtree</a></span><span class="op">(</span><span class="va">cnv_matrix_clusters</span><span class="op">)</span></span>
 <span><span class="va">tree_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotateCNVtree.html">annotateCNVtree</a></span><span class="op">(</span><span class="va">tree</span>, <span class="va">cnv_matrix_clusters</span>, <span class="fl">0.13</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotCNVtree.html">plotCNVtree</a></span><span class="op">(</span><span class="va">tree_data</span><span class="op">)</span></span></code></pre></div>
-<p><img src="fastCNV_ST_files/figure-html/tree_cnv-1.png" width="576"></p>
+<p><img src="fastCNV_ST_files/figure-html/tree_cnv-1.png" width="672"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
