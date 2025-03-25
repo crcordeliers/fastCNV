@@ -221,9 +221,13 @@ cnv_matrix_clusters <- generateCNVClonesMatrix(scColon1, healthyClusters = "1")
 ```
 
 Now, we build the tree, using `CNVtree()`, `annotateCNVtree()` and `plotCNVtree()`.
+
   - `CNVtree()` will build the subclonality tree.
+  
   - `annotateCNVtree()` will annotate each cnv gain/loss in the tree. 
+  
   - `plotCNVtree()` will output the tree.  
+  
 ```{r tree_cnv, fig.width = 7, fig.height = 4}
 
 tree <- CNVtree(cnv_matrix_clusters)
