@@ -60,7 +60,9 @@ annotation_file <- read.csv("/path/to/your/annotations/for/scColon1.csv")
 scColon1[["annot"]] <- annotation_file$Annot
 ```
 
-```{r see_annots, eval=FALSE}
+You can take a look at which annotations are present in your objects, in order to select the labels of the cells that will be used as reference. 
+
+```{r see_annots, output=FALSE, eval=FALSE, results='hide'}
 unique(scColon1[["annot"]])
 unique(scColon2[["annot"]])
 unique(scColon3[["annot"]])
