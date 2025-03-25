@@ -62,10 +62,10 @@ Computing the CNV without a reference."))
                   referenceCells[[i]] <- Seurat::Cells(seuratObj)[which(Seurat::FetchData(seuratObj, vars = referenceVar) == i)]
         }
       }
-      numberOfReferenceCells <- sum(sapply(referenceCells, length))
-      if (numberOfReferenceCells == 0) {
-        message("Couldn't find any cells annotated as ",referenceLabel," in the ",referenceVar," metadata slot of the seurat object.
+      if (length(referenceCells) == 0) {
+        message("Couldn't find any cells annotated as the referenceLabel in the ",referenceVar," metadata slot of the seurat object.
                 Computing the CNV without a reference.")
+        referenceLabel = NULL
         scaleOnReferenceLabel = FALSE
         rm(numberOfReferenceCells,referenceCells)
       }
@@ -215,8 +215,9 @@ Computing the CNV without a reference."))
           {v[which(v >= Q01Q99[1,] & v <= Q01Q99[2,])] <- 0;v})
       } else {
         cellLines <- split(Seurat::Cells(seuratObj), Seurat::FetchData(seuratObj, vars = referenceVar))
-        high_threshold <- median(unlist(sapply(cellLines, function(z) apply (genomicScores[z,], 2, function(v) quantile(v, probs = c(0.99))))))
-        low_threshold <- median(unlist(sapply(cellLines, function(z) apply (genomicScores[z,], 2, function(v) quantile(v, probs = c(0.01))))))
+
+        high_threshold <- median(unlist(sapply(cellLines, function(z) apply (genomicScores[z, , drop = F], 2, function(v) quantile(v, probs = c(0.99))))))
+        low_threshold <- median(unlist(sapply(cellLines, function(z) apply (genomicScores[z, , drop = F], 2, function(v) quantile(v, probs = c(0.01))))))
         genomicScoresTrimmed <- t(apply(genomicScores, 2, function(z){
           z[which( z>low_threshold & z<high_threshold)] = 0; z}))
       }

@@ -40,7 +40,7 @@ library(fastCNVdata)
 
 `fastCNV` package works both on scRNAseq data or ST data, and we will demonstrate on scRNAseq here, and there is another vignette for ST data. 
 
-Here, we load scColon1, scColon2, scColon3, scColon4 (scRNAseq data from colorectal tumors from Joanito et al. work). 
+Here, we load scColon1, scColon2, scColon3, scColon4 (scRNAseq data from colorectal tumors from Pelka et al. work). 
 
 ``` {r imports}
 utils::data(scColon1)
@@ -51,10 +51,10 @@ utils::data(scColon4)
 
 ## Check annotation
 
-You can load a separate annotation file for your dataset if this information is not available in the Seurat object. In this example, cell type annotations are already present under the column `"annot"` of the metadata.
+You can load a separate annotation file for your dataset if this information is not available in the Seurat object. For the data used in this vignette, cell type annotations are already present under the column `"annot"` of the metadata.
 
 ```{r annots, eval=FALSE}
-# Import the annotation file corresponding to your sample. For 10X ST data you can annotate your spots with LoupeBrowser
+# Import the annotation file corresponding to your sample. 
 annotation_file <- read.csv("/path/to/your/annotations/for/scColon1.csv")
 
 scColon1[["annot"]] <- annotation_file$Annot
@@ -78,14 +78,18 @@ During this step, fastCNV() will use:
 
 - `CNVanalysis` : computes the CNV. If you have annotations for your Seurat object, you can add the parameters `referenceVar` and `referenceLabel`. 
 
+- `CNVPerChromosome` : to compute the CNV per chromosome arm, and store it in the metadata of the Seurat object. This part of `fastCNV()` can be skipped by turning `getCNVPerChromosome` to `FALSE`.    
+
+- `CNVcluster` : performs hierarchical clustering on a genomic score matrix extracted from a Seurat object.
+
 - `plotCNVResults` : to visualize the results (stored in the assays slot of the Seurat object). By default, the parameter `downsizePlot` is set to `FALSE`, which builds a detailed plot, but takes an important time to render. If desired, you can set the parameter to `TRUE`, which decreases the rendering time by plotting the results at the meta-cell level instead of the cell-level, thus decreasing the definition of the CNV results plotted.  
 This function will also build a PDF file for each sample containing their corresponding CNV heatmap in the current working directory, which can be changed using the `savePath` parameter.
 
-- `CNVPerChromosome` : to compute the CNV per chromosome arm, and store it in the metadata of the Seurat object. This part of `fastCNV()` can be skipped by turning `getCNVPerChromosome` to `FALSE`.    
+
 
 We are first going to run `fastCNV()` on our scColon1 object, taking as reference the cells labeled as `Bcells`, `DC6.pDC`,`EndoArteriel`, `Fibro`, `Mastocytes`, `MyeloLineage`, `NK`, `Pericytes`, `PlasmaCells`, `Schwann.Entericglial`, `SmoothMuscle` and `Tcells`.
 
-```{r run1, fig.width = 8, fig.height=6}
+```{r run1, fig.width = 7.5, fig.height=5.5}
 scColon1 <- fastCNV(seuratObj = scColon1, sampleName = "scColon1", referenceVar =
                      "annot", referenceLabel = c("Bcells", "DC6.pDC", "EndoArteriel",
                      "Fibro", "Mastocytes", "MyeloLineage", "NK", "Pericytes",
@@ -93,7 +97,7 @@ scColon1 <- fastCNV(seuratObj = scColon1, sampleName = "scColon1", referenceVar 
 
 ```
 
-Then, we are going to run the `fastCNV()` function on a list of Seurat objects. `fastCNV()` if run on a list of Seurat objects with the default parameters will build a pooled reference between all the samples, which is particularly useful for data not containing any healthy cells to build its own reference. 
+We are now going to run the `fastCNV()` function on a list of Seurat objects. When `fastCNV()` is run on a list of Seurat objects with the default parameters, it builds a pooled reference between all the samples, which is particularly useful for data not containing any healthy cells to build its own reference. 
 
 ```{r run2, fig.width = 8, fig.height=6}
 seuratList <- c(scColon2,scColon3,scColon4)
@@ -163,14 +167,12 @@ FeaturePlot(scColon1, features = "X.q_CNV") +
 
 ```
 
-Here we see for example that one part of the epithelial tumor cells have a CNV loss in the chromosome 20p, while another part of the epithelial tumor cells do not, and some have a gain of the chromosome Xp. 
+Here, we observe that a subset of the epithelial tumor cells exhibit a CNV loss in chromosome 20p, while others do not. Additionally, some cells show a gain in chromosome Xp, whereas others experience a loss.
  
 
 ## CNV classification
 
-Using the CNV per chromosome arm and `CNVclassification()` we can get the alterations per chromosome arm (gain, loss or none).
-`CNVclassification()` takes as arguments a Seurat object containing in the metadata the CNV per chromosome arm, and the thresholds for loss, gain or no alteration (default = c(-0.1, 0, 0.1).  
-Using these 3 peaks, it builds a table for each cell/spot and each chromosome arm containing either "loss", "gain" or "no_alteration".
+Using the CNV per chromosome arm and `CNVclassification()` we can get the alterations per chromosome arm (gain, loss or no alteration).
 
 ``` {r cnv_classification, fig.width=7, fig.height=3.2}
 scColon1 <- CNVclassification(scColon1)
@@ -193,7 +195,7 @@ In addition to the CNV fraction, fastCNV also computes the CNV clusters and save
 DimPlot(scColon1, group.by = "cnv_clusters") + common_theme
 ```
 
-And we can retrieve this metadata and plot it directly. Here, we relate the `cnv_clusters` with our annotation variable `annot`.
+
 
 ```{r cnv_props, fig.width = 6, fig.height = 4}
 library(SeuratObject)
@@ -212,7 +214,6 @@ As we can see, there are 4 tumor subclusters (2, 3, 4 and 5) in scColon1, and 1 
 In this part of the vignette, we will show how to plot the CNV subclonality tree. 
 
 First, we will build a metacell for each cluster, using `generateCNVClonesMatrix()`. 
-
 ```{r metacell_cluster}
 
 cnv_matrix_clusters <- generateCNVClonesMatrix(scColon1, healthyClusters = "1")
@@ -223,7 +224,6 @@ Now, we build the tree, using `CNVtree()`, `annotateCNVtree()` and `plotCNVtree(
   - `CNVtree()` will build the subclonality tree.
   - `annotateCNVtree()` will annotate each cnv gain/loss in the tree. 
   - `plotCNVtree()` will output the tree.  
-
 ```{r tree_cnv, fig.width = 7, fig.height = 4}
 
 tree <- CNVtree(cnv_matrix_clusters)
