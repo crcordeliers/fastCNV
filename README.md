@@ -1,5 +1,7 @@
-## Introduction
 <img src = "https://must-bioinfo.github.io/fastCNV/articles/logo.png" align = "right" width = "200">
+
+## Introduction
+
 `fastCNV` is a package that helps you detect, plot and analyse the putative Copy Number Variations (CNVs) in single cell (scRNA-seq) data or Spatial Transcriptomics (ST) data. Built on `SeuratObject`, it is easily integrated into scRNA-seq or ST pipelines. 
 
 *WARNING:* Project is still under construction and function usage may change.
