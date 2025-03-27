@@ -20,7 +20,7 @@
 #' @param windowStep Integer. Specifies the step size between genomic windows.
 #' @param saveGenomicWindows Logical. If `TRUE`, saves genomic window information in the current directory (default = `FALSE`).
 #' @param topNGenes Integer. The number of top-expressed genes to retain in the analysis.
-#' @param regionsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
+#' @param chrArmsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
 #' If specified, all genes within the given chromosome arm(s) will be included.
 #'
 #' @return If given a **single** Seurat object, returns the same object with:
@@ -45,7 +45,7 @@ CNVanalysis <- function(object,
                        windowStep=10,
                        saveGenomicWindows = FALSE,
                        topNGenes=7000,
-                       regionsToForce = NULL) {
+                       chrArmsToForce = NULL) {
 
     if (!is.list(object)) {
       object <- CNVcalling(object,

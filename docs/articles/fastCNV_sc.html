@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,7 +100,7 @@ and load the <code>fastCNVdata</code> package.</p>
 and we will demonstrate on scRNAseq here, and there is another vignette
 for ST data.</p>
 <p>Here, we load scColon1, scColon2, scColon3, scColon4 (scRNAseq data
-from colorectal tumors from Joanito et al. work).</p>
+from colorectal tumors from Pelka et al. work).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">scColon1</span><span class="op">)</span></span>
 <span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">scColon2</span><span class="op">)</span></span>
@@ -111,14 +111,17 @@ from colorectal tumors from Joanito et al. work).</p>
 <h2 id="check-annotation">Check annotation<a class="anchor" aria-label="anchor" href="#check-annotation"></a>
 </h2>
 <p>You can load a separate annotation file for your dataset if this
-information is not available in the Seurat object. In this example, cell
-type annotations are already present under the column
-<code>"annot"</code> of the metadata.</p>
+information is not available in the Seurat object. For the data used in
+this vignette, cell type annotations are already present under the
+column <code>"annot"</code> of the metadata.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Import the annotation file corresponding to your sample. For 10X ST data you can annotate your spots with LoupeBrowser</span></span>
+<code class="sourceCode R"><span><span class="co"># Import the annotation file corresponding to your sample. </span></span>
 <span><span class="va">annotation_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"/path/to/your/annotations/for/scColon1.csv"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">scColon1</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">annotation_file</span><span class="op">$</span><span class="va">Annot</span></span></code></pre></div>
+<p>You can take a look at which annotations are present in your objects,
+in order to select the labels of the cells that will be used as
+reference.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">scColon1</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">scColon2</span><span class="op">[[</span><span class="st">"annot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -144,6 +147,12 @@ skipped by setting <code>reClusterSeurat = FALSE</code>.</p></li>
 <li><p><code>CNVanalysis</code> : computes the CNV. If you have
 annotations for your Seurat object, you can add the parameters
 <code>referenceVar</code> and <code>referenceLabel</code>.</p></li>
+<li><p><code>CNVPerChromosome</code> : to compute the CNV per chromosome
+arm, and store it in the metadata of the Seurat object. This part of
+<code><a href="../reference/fastCNV.html">fastCNV()</a></code> can be skipped by turning
+<code>getCNVPerChromosome</code> to <code>FALSE</code>.</p></li>
+<li><p><code>CNVcluster</code> : performs hierarchical clustering on a
+genomic score matrix extracted from a Seurat object.</p></li>
 <li><p><code>plotCNVResults</code> : to visualize the results (stored in
 the assays slot of the Seurat object). By default, the parameter
 <code>downsizePlot</code> is set to <code>FALSE</code>, which builds a
@@ -155,10 +164,6 @@ plotted.<br>
 This function will also build a PDF file for each sample containing
 their corresponding CNV heatmap in the current working directory, which
 can be changed using the <code>savePath</code> parameter.</p></li>
-<li><p><code>CNVPerChromosome</code> : to compute the CNV per chromosome
-arm, and store it in the metadata of the Seurat object. This part of
-<code><a href="../reference/fastCNV.html">fastCNV()</a></code> can be skipped by turning
-<code>getCNVPerChromosome</code> to <code>FALSE</code>.</p></li>
 </ul>
 <p>We are first going to run <code><a href="../reference/fastCNV.html">fastCNV()</a></code> on our scColon1
 object, taking as reference the cells labeled as <code>Bcells</code>,
@@ -172,10 +177,10 @@ object, taking as reference the cells labeled as <code>Bcells</code>,
 <span>                     <span class="st">"annot"</span>, referenceLabel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Bcells"</span>, <span class="st">"DC6.pDC"</span>, <span class="st">"EndoArteriel"</span>,</span>
 <span>                     <span class="st">"Fibro"</span>, <span class="st">"Mastocytes"</span>, <span class="st">"MyeloLineage"</span>, <span class="st">"NK"</span>, <span class="st">"Pericytes"</span>,</span>
 <span>                     <span class="st">"PlasmaCells"</span>, <span class="st">"Schwann.Entericglial"</span>, <span class="st">"SmoothMuscle"</span>,<span class="st">"Tcells"</span><span class="op">)</span>, printPlot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<p><img src="fastCNV_sc_files/figure-html/run1-1.png" width="768"></p>
-<p>Then, we are going to run the <code><a href="../reference/fastCNV.html">fastCNV()</a></code> function on a
-list of Seurat objects. <code><a href="../reference/fastCNV.html">fastCNV()</a></code> if run on a list of
-Seurat objects with the default parameters will build a pooled reference
+<p><img src="fastCNV_sc_files/figure-html/run1-1.png" width="720"></p>
+<p>We are now going to run the <code><a href="../reference/fastCNV.html">fastCNV()</a></code> function on a list
+of Seurat objects. When <code><a href="../reference/fastCNV.html">fastCNV()</a></code> is run on a list of
+Seurat objects with the default parameters, it builds a pooled reference
 between all the samples, which is particularly useful for data not
 containing any healthy cells to build its own reference.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -239,22 +244,17 @@ functions from Seurat.</p>
 <span>                       <span class="op">}</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="va">common_theme</span></span></code></pre></div>
 <p><img src="fastCNV_sc_files/figure-html/plot_cnv_per_chromosome-1.png" width="672"></p>
-<p>Here we see for example that one part of the epithelial tumor cells
-have a CNV loss in the chromosome 20p, while another part of the
-epithelial tumor cells do not, and some have a gain of the chromosome
-Xp.</p>
+<p>Here, we observe that a subset of the epithelial tumor cells exhibit
+a CNV loss in chromosome 20p, while others do not. Additionally, some
+cells show a gain in chromosome Xp, whereas others experience a
+loss.</p>
 </div>
 <div class="section level2">
 <h2 id="cnv-classification">CNV classification<a class="anchor" aria-label="anchor" href="#cnv-classification"></a>
 </h2>
 <p>Using the CNV per chromosome arm and <code><a href="../reference/CNVclassification.html">CNVclassification()</a></code>
-we can get the alterations per chromosome arm (gain, loss or none).
-<code><a href="../reference/CNVclassification.html">CNVclassification()</a></code> takes as arguments a Seurat object
-containing in the metadata the CNV per chromosome arm, and the
-thresholds for loss, gain or no alteration (default = c(-0.1, 0,
-0.1).<br>
-Using these 3 peaks, it builds a table for each cell/spot and each
-chromosome arm containing either “loss”, “gain” or “no_alteration”.</p>
+we can get the alterations per chromosome arm (gain, loss or no
+alteration).</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scColon1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVclassification.html">CNVclassification</a></span><span class="op">(</span><span class="va">scColon1</span><span class="op">)</span></span>
 <span></span>
@@ -275,9 +275,6 @@ These can be plotted with the Seurat plotting functions.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">scColon1</span>, group.by <span class="op">=</span> <span class="st">"cnv_clusters"</span><span class="op">)</span> <span class="op">+</span> <span class="va">common_theme</span></span></code></pre></div>
 <p><img src="fastCNV_sc_files/figure-html/plot_cnv_clusters-1.png" width="384"></p>
-<p>And we can retrieve this metadata and plot it directly. Here, we
-relate the <code>cnv_clusters</code> with our annotation variable
-<code>annot</code>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.github.io/seurat-object/" class="external-link">SeuratObject</a></span><span class="op">)</span></span>
 <span></span>
@@ -301,10 +298,13 @@ will show how to plot the CNV subclonality tree.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="va">cnv_matrix_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateCNVClonesMatrix.html">generateCNVClonesMatrix</a></span><span class="op">(</span><span class="va">scColon1</span>, healthyClusters <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span></span></code></pre></div>
 <p>Now, we build the tree, using <code><a href="../reference/CNVtree.html">CNVtree()</a></code>,
-<code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> and <code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code>. -
-<code><a href="../reference/CNVtree.html">CNVtree()</a></code> will build the subclonality tree. -
-<code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> will annotate each cnv gain/loss in the
-tree. - <code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code> will output the tree.</p>
+<code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> and <code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code>.</p>
+<ul>
+<li><p><code><a href="../reference/CNVtree.html">CNVtree()</a></code> will build the subclonality tree.</p></li>
+<li><p><code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> will annotate each cnv gain/loss
+in the tree.</p></li>
+<li><p><code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code> will output the tree.</p></li>
+</ul>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVtree.html">CNVtree</a></span><span class="op">(</span><span class="va">cnv_matrix_clusters</span><span class="op">)</span></span>

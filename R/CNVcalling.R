@@ -14,7 +14,7 @@
 #' @param windowStep Integer. Specifies the step size between genomic windows.
 #' @param saveGenomicWindows Logical. If `TRUE`, saves genomic window information in the current directory (default = `FALSE`).
 #' @param topNGenes Integer. The number of top-expressed genes to retain in the analysis.
-#' @param regionsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
+#' @param chrArmsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
 #' If specified, all genes within the given chromosome arm(s) will be included.
 #'
 #' @return The same Seurat object provided in `seuratObj`, with:
@@ -39,7 +39,7 @@ CNVcalling <- function(seuratObj,
                        windowStep=10,
                        saveGenomicWindows = FALSE,
                        topNGenes=7000,
-                       regionsToForce = NULL) {
+                       chrArmsToForce = NULL) {
   if (dim(seuratObj)[1] < topNGenes) {topNGenes = dim(seuratObj)[1]}
   # getting reference cells / spots
   if (is.null(referenceVar) || is.null(referenceLabel)){
@@ -67,7 +67,7 @@ Computing the CNV without a reference."))
                 Computing the CNV without a reference.")
         referenceLabel = NULL
         scaleOnReferenceLabel = FALSE
-        rm(numberOfReferenceCells,referenceCells)
+        rm(referenceCells)
       }
     }
   }
@@ -125,15 +125,15 @@ Computing the CNV without a reference."))
     }
   }
 
-  if(!is.null(regionsToForce)){
-    if (length(regionsToForce > 1)){
-      for (chr in regionsToForce){
+  if(!is.null(chrArmsToForce)){
+    if (length(chrArmsToForce > 1)){
+      for (chr in chrArmsToForce){
         genesToAdd <- geneMetadata2$hgnc_symbol[which(paste0(geneMetadata2$chromosome_num,geneMetadata2$chr_arm) == chr)]
         genes_by_arm[[chr]] <- genesToAdd
       }
     } else {
-      genesToAdd <- geneMetadata2$hgnc_symbol[which(paste0(geneMetadata2$chromosome_num,geneMetadata2$chr_arm) == regionsToForce)]
-      genes_by_arm[[regionsToForce]] <- genesToAdd
+      genesToAdd <- geneMetadata2$hgnc_symbol[which(paste0(geneMetadata2$chromosome_num,geneMetadata2$chr_arm) == chrArmsToForce)]
+      genes_by_arm[[chrArmsToForce]] <- genesToAdd
     }
   }
 

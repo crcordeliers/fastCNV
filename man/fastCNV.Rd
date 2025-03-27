@@ -24,7 +24,7 @@ fastCNV(
   windowStep = 10,
   saveGenomicWindows = FALSE,
   topNGenes = 7000,
-  regionsToForce = NULL,
+  chrArmsToForce = NULL,
   getCNVPerChromosomeArm = TRUE,
   getCNVClusters = TRUE,
   k_clusters = NULL,
@@ -81,7 +81,7 @@ fastCNV(
 
 \item{topNGenes}{Number of top expressed genes to keep (default = 7000).}
 
-\item{regionsToForce}{A chromosome arm (e.g., \code{"8p"}, \code{"3q"}) or a list of chromosome arms (e.g., \code{c("3q", "8p", "17p")}) to force into the analysis.}
+\item{chrArmsToForce}{A chromosome arm (e.g., \code{"8p"}, \code{"3q"}) or a list of chromosome arms (e.g., \code{c("3q", "8p", "17p")}) to force into the analysis.}
 
 \item{getCNVPerChromosomeArm}{If \code{TRUE}, will save the CNV per chromosome arm into the metadata.}
 

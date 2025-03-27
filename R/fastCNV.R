@@ -20,7 +20,7 @@
 #' @param scaleOnReferenceLabel If `TRUE`, scales the results depending on the normal observations (default = `TRUE`).
 #' @param thresholdPercentile Which quantiles to take (default 0.01). For example, `0.01` will take quantiles between 0.01-0.99. Background noise appears with higher numbers.
 #' @param geneMetadata List of genes and their metadata (default uses genes from Ensembl version 113).
-#' @param regionsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
+#' @param chrArmsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
 #' @param windowSize Size of the genomic windows for CNV analysis (default = 150).
 #' @param windowStep Step between the genomic windows (default = 10).
 #' @param saveGenomicWindows If `TRUE`, saves the information of the genomic windows in the current directory (default = `FALSE`).
@@ -67,7 +67,7 @@ fastCNV <- function (seuratObj,
                      windowStep = 10,
                      saveGenomicWindows = FALSE,
                      topNGenes = 7000,
-                     regionsToForce = NULL,
+                     chrArmsToForce = NULL,
 
                      getCNVPerChromosomeArm = TRUE,
 
@@ -130,7 +130,7 @@ fastCNV <- function (seuratObj,
                               pooledReference = pooledReference,
                               scaleOnReferenceLabel = scaleOnReferenceLabel, denoise = denoise,
                               assay = assay, thresholdPercentile = thresholdPercentile, geneMetadata = geneMetadata,
-                              regionsToForce = regionsToForce, windowSize = windowSize, windowStep = windowStep,
+                              chrArmsToForce = chrArmsToForce, windowSize = windowSize, windowStep = windowStep,
                               saveGenomicWindows = saveGenomicWindows, topNGenes = topNGenes)
     invisible(gc())
     message("CNVAnalysis done!")
@@ -141,7 +141,7 @@ fastCNV <- function (seuratObj,
                          pooledReference = pooledReference, denoise = denoise,
                          scaleOnReferenceLabel = scaleOnReferenceLabel, assay = assay,
                          thresholdPercentile = thresholdPercentile, geneMetadata = geneMetadata,
-                         regionsToForce = regionsToForce, windowSize = windowSize, windowStep = windowStep,
+                         chrArmsToForce = chrArmsToForce, windowSize = windowSize, windowStep = windowStep,
                          saveGenomicWindows = saveGenomicWindows, topNGenes = topNGenes)
     invisible(gc())
     message("CNVAnalysis done!")

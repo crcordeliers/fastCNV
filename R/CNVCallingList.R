@@ -14,7 +14,7 @@
 #' @param windowStep Integer. Specifies the step size between genomic windows.
 #' @param saveGenomicWindows Logical. If `TRUE`, saves genomic window information in the current directory (default = `FALSE`).
 #' @param topNGenes Integer. The number of top-expressed genes to retain in the analysis.
-#' @param regionsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
+#' @param chrArmsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
 #' If specified, all genes within the given chromosome arm(s) will be included.
 #'
 #' @return A list of Seurat objects, where each:
@@ -40,7 +40,7 @@ CNVcallingList <- function(seuratList,
                            windowStep=10,
                            saveGenomicWindows = FALSE,
                            topNGenes=7000,
-                           regionsToForce = NULL
+                           chrArmsToForce = NULL
 ){
   LrawcountsByPatient <- lapply(seuratList, function(x) {
     if (!is.null(assay)) {
@@ -58,10 +58,10 @@ CNVcallingList <- function(seuratList,
   # getting reference items per patient
   if (is.null(referenceVar) || is.null(referenceLabel)){
     # unable to scale the results on reference data if we don't know what the reference data is
-    warning("referenceVar and/or referenceLabel parameters not found. Computing the CNV without a reference.")
+    message("referenceVar and/or referenceLabel parameters not found. Computing the CNV without a reference.")
     scaleOnReferenceLabel = FALSE
   } else if ( as.numeric(sum(sapply(lapply(Lannot, function(annot) rownames(annot)[which(annot == referenceLabel)]), function(x) length(x)))) == 0 ) {
-    warning(paste0("No observations found for annotation labels ", referenceLabel,". Computing the CNV without a reference."))
+    message("No observations found for the referenceLabel given. Computing the CNV without a reference.")
     scaleOnReferenceLabel = FALSE
   } else if (length(referenceLabel) == 1){
     LN <- lapply(Lannot, function(annot) rownames(annot)[which(annot == referenceLabel)])
@@ -98,10 +98,14 @@ CNVcallingList <- function(seuratList,
 
   commonGenes <- Reduce(intersect, c(lapply(LrawcountsByPatient, rownames), list(geneMetadata2$hgnc_symbol)))
   LrawcountsByPatient <- lapply(LrawcountsByPatient, function(x) x[commonGenes,])
+  if (exists("LN")){
+    aveExpr <- compute_average_expression(LN, LrawcountsByPatient)
+    aveExpr <- do.call(cbind,aveExpr)
+    aveExpr <- rowMeans(aveExpr, na.rm = T)
+  } else {
+    aveExpr <- rowMeans(sapply(LrawcountsByPatient, rowMeans))
+  }
 
-  aveExpr <- compute_average_expression(LN, LrawcountsByPatient)
-  aveExpr <- do.call(cbind,aveExpr)
-  aveExpr <- rowMeans(aveExpr, na.rm = T)
   if (length(aveExpr) < topNGenes) {topNGenes = length(aveExpr)}
   topExprGenes <- commonGenes[order(aveExpr, decreasing = T)[1:topNGenes]]
 
@@ -124,15 +128,15 @@ CNVcallingList <- function(seuratList,
     }
   }
 
-  if(!is.null(regionsToForce)){
-    if (length(regionsToForce > 1)){
-      for (chr in regionsToForce){
+  if(!is.null(chrArmsToForce)){
+    if (length(chrArmsToForce > 1)){
+      for (chr in chrArmsToForce){
         genesToAdd <- geneMetadata2$hgnc_symbol[which(paste0(geneMetadata2$chromosome_num,geneMetadata2$chr_arm) == chr)]
         genes_by_arm[[chr]] <- genesToAdd
       }
     } else {
-      genesToAdd <- geneMetadata2$hgnc_symbol[which(paste0(geneMetadata2$chromosome_num,geneMetadata2$chr_arm) == regionsToForce)]
-      genes_by_arm[[regionsToForce]] <- genesToAdd
+      genesToAdd <- geneMetadata2$hgnc_symbol[which(paste0(geneMetadata2$chromosome_num,geneMetadata2$chr_arm) == chrArmsToForce)]
+      genes_by_arm[[chrArmsToForce]] <- genesToAdd
     }
   }
 
@@ -147,12 +151,16 @@ CNVcallingList <- function(seuratList,
     if (length(referenceLabel) == 1) {
       SF <- rowMeans(sapply(names(LN), function(patient) rowMeans(LnormcountsByPatient[[patient]][,LN[[patient]]])))
     } else {
-      SF <- list()
-      for (i in referenceLabel) {
-        SF[[i]] <- rowMeans(sapply(names(LN[[i]]), function(patient) rowMeans(LnormcountsByPatient[[patient]][,LN[[i]][[patient]]])))
+      if (length(LN) == 1) {
+        SF <- rowMeans(sapply(names(LN[[1]]), function(patient) rowMeans(LnormcountsByPatient[[patient]][,LN[[1]][[patient]]])))
+      } else {
+        SF <- list()
+        for (i in referenceLabel) {
+          SF[[i]] <- rowMeans(sapply(names(LN[[i]]), function(patient) rowMeans(LnormcountsByPatient[[patient]][,LN[[i]][[patient]]])))
+        }
+        SF <- do.call(rbind,SF)
+        SF <- apply(SF, 2, median)
       }
-      SF <- do.call(rbind,SF)
-      SF <- apply(SF, 2, median)
     }
   }else{
     SF <- rowMeans(sapply(LnormcountsByPatient,rowMeans))

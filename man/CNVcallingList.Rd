@@ -18,7 +18,7 @@ CNVcallingList(
   windowStep = 10,
   saveGenomicWindows = FALSE,
   topNGenes = 7000,
-  regionsToForce = NULL
+  chrArmsToForce = NULL
 )
 }
 \arguments{
@@ -47,7 +47,7 @@ Each object can be either \strong{single-cell} or \strong{spatial transcriptomic
 
 \item{topNGenes}{Integer. The number of top-expressed genes to retain in the analysis.}
 
-\item{regionsToForce}{A chromosome arm (e.g., \code{"8p"}, \code{"3q"}) or a list of chromosome arms (e.g., \code{c("3q", "8p", "17p")}) to force into the analysis.
+\item{chrArmsToForce}{A chromosome arm (e.g., \code{"8p"}, \code{"3q"}) or a list of chromosome arms (e.g., \code{c("3q", "8p", "17p")}) to force into the analysis.
 If specified, all genes within the given chromosome arm(s) will be included.}
 }
 \value{
