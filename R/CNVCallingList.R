@@ -54,6 +54,7 @@ CNVcallingList <- function(seuratList,
   names(LrawcountsByPatient) <- lapply(seuratList, function(x) Seurat::Project(x))
   Lannot <- lapply(seuratList, function(x) Seurat::FetchData(x, vars = referenceVar))
   names(Lannot) <- lapply(seuratList, function(x) Seurat::Project(x))
+  invisible(gc())
 
   # getting reference items per patient
   if (is.null(referenceVar) || is.null(referenceLabel)){
@@ -98,6 +99,7 @@ CNVcallingList <- function(seuratList,
 
   commonGenes <- Reduce(intersect, c(lapply(LrawcountsByPatient, rownames), list(geneMetadata2$hgnc_symbol)))
   LrawcountsByPatient <- lapply(LrawcountsByPatient, function(x) x[commonGenes,])
+  invisible(gc())
   if (exists("LN")){
     aveExpr <- compute_average_expression(LN, LrawcountsByPatient)
     aveExpr <- do.call(cbind,aveExpr)
@@ -143,8 +145,9 @@ CNVcallingList <- function(seuratList,
   final_selected_genes <- unlist(genes_by_arm)
 
   LrawcountsByPatient <- lapply(LrawcountsByPatient, function(x) x[final_selected_genes,])
-
+  invisible(gc())
   LnormcountsByPatient <- lapply(LrawcountsByPatient, function(d) log2(1+d))
+  rm(LrawcountsByPatient) ; invisible(gc())
   LnormcountsByPatient <- lapply(LnormcountsByPatient, scale, "scale"=F)
 
   if(scaleOnReferenceLabel){
@@ -155,7 +158,7 @@ CNVcallingList <- function(seuratList,
         SF <- rowMeans(sapply(names(LN[[1]]), function(patient) rowMeans(LnormcountsByPatient[[patient]][,LN[[1]][[patient]]])))
       } else {
         SF <- list()
-        for (i in referenceLabel) {
+        for (i in names(LN)) {
           SF[[i]] <- rowMeans(sapply(names(LN[[i]]), function(patient) rowMeans(LnormcountsByPatient[[patient]][,LN[[i]][[patient]]])))
         }
         SF <- do.call(rbind,SF)
@@ -167,7 +170,9 @@ CNVcallingList <- function(seuratList,
   }
 
   LnormcountsByPatient <- lapply(LnormcountsByPatient, function(d) d-SF)
+  invisible(gc())
   LnormcountsByPatient <- lapply(LnormcountsByPatient, function(d) funTrim(d, lo=-3, up=3))
+  invisible(gc())
 
   geneMetadata2 <- geneMetadata2[which(geneMetadata2$hgnc_symbol %in% topExprGenes),]
   geneMetadata2 <- geneMetadata2[order(geneMetadata2$chromosome_num,geneMetadata2$start_position),]
@@ -198,6 +203,7 @@ CNVcallingList <- function(seuratList,
   genomicWindows <- unlist(genomicWindows,recursive=F)
 
   LgenomicScores <- lapply(LnormcountsByPatient,funGenomicScore,"GW"=genomicWindows)
+  rm(LnormcountsByPatient) ; invisible(gc())
 
   if (denoise) {
     if(scaleOnReferenceLabel){
