@@ -13,6 +13,11 @@ To install fastCNV, run in R:
 remotes::install_github("must-bioinfo/fastCNV")
 ```
 
+## Usage
+
+Extensive tutorials to run `fastCNV`on scRNA-seq and spatial transcriptomics data are available to get started [here](https://must-bioinfo.github.io/fastCNV/articles/index.html).
+
+
 ## Capabilities
 
 `fastCNV` can plot a heatmap of inferred CNVs: 
@@ -35,7 +40,3 @@ The subclonality tree can be plotted too :
 
 <img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/tree_cnv-1.png" alt="Subclonality tree" width="500">
 
-
-## Usage
-
-Extensive tutorials to run `fastCNV`on scRNA-seq and spatial transcriptomics data are available to get started [here](https://must-bioinfo.github.io/fastCNV/articles/index.html).
