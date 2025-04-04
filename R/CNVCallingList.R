@@ -51,7 +51,7 @@ CNVcallingList <- function(seuratList,
       as.matrix(Seurat::GetAssay(x, assay = Seurat::Assays(x)[1])["counts"])
     } } )
 
-  insivible(gc())
+  invisible(gc())
 
   names(LrawcountsByPatient) <- lapply(seuratList, function(x) Seurat::Project(x))
   Lannot <- lapply(seuratList, function(x) Seurat::FetchData(x, vars = referenceVar))
