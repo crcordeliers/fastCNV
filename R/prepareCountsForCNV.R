@@ -148,6 +148,7 @@ prepareCountsForCNVAnalysis <- function(seuratObj,
         seuratObj[["AggregatedCounts"]] <- aggregAssay
 
       }
+  invisible(gc())
 
    if (!is.null(sampleName)) {
     if (Seurat::Project(seuratObj) == "SeuratProject") {

@@ -51,6 +51,8 @@ CNVcallingList <- function(seuratList,
       as.matrix(Seurat::GetAssay(x, assay = Seurat::Assays(x)[1])["counts"])
     } } )
 
+  insivible(gc())
+
   names(LrawcountsByPatient) <- lapply(seuratList, function(x) Seurat::Project(x))
   Lannot <- lapply(seuratList, function(x) Seurat::FetchData(x, vars = referenceVar))
   names(Lannot) <- lapply(seuratList, function(x) Seurat::Project(x))
@@ -84,6 +86,8 @@ CNVcallingList <- function(seuratList,
   geneMetadata$chromosome_num[which(geneMetadata$chromosome_num=="X")]<- 23
   geneMetadata$chromosome_num <- as.numeric(geneMetadata$chromosome_num)
   geneMetadata2 <- unique(geneMetadata[,c("hgnc_symbol","chromosome_num","start_position", "chr_arm")])
+
+  invisible(gc())
 
   # internal functions
   funTrim <- function(normcounts,lo=-3,up=3){
@@ -168,7 +172,7 @@ CNVcallingList <- function(seuratList,
   }else{
     SF <- rowMeans(sapply(LnormcountsByPatient,rowMeans))
   }
-
+  invisible(gc())
   LnormcountsByPatient <- lapply(LnormcountsByPatient, function(d) d-SF)
   invisible(gc())
   LnormcountsByPatient <- lapply(LnormcountsByPatient, function(d) funTrim(d, lo=-3, up=3))
@@ -239,6 +243,6 @@ CNVcallingList <- function(seuratList,
     seuratList[[i]][["genomicScores"]] <- genomicAssay
     seuratList[[i]][["cnv_fraction"]] <- colMeans(abs(LgenomicScoresTrimmed[i][[1]]) > 0)
   }
-
+  invisible(gc())
   return (seuratList)
 }

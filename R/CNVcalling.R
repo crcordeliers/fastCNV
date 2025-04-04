@@ -99,6 +99,8 @@ Computing the CNV without a reference."))
   commonGenes <- intersect(rownames(rawCounts),geneMetadata2$hgnc_symbol)
   rawCounts <- rawCounts[commonGenes,]
 
+  invisible(gc())
+
   if (!is.null(referenceVar) && !is.null(referenceLabel)){
     averageExpression <- rowMeans(rawCounts[,unlist(referenceCells)])
   } else {
@@ -144,6 +146,9 @@ Computing the CNV without a reference."))
   normCounts <- log2(1+rawCounts)
   normCounts <- scale(normCounts, scale = FALSE)
 
+  rm(rawCounts)
+  invisible(gc())
+
   if (scaleOnReferenceLabel) {
     if (length(referenceLabel) == 1) {
       scaleFactor <- rowMeans(normCounts[,referenceCells])
@@ -165,6 +170,8 @@ Computing the CNV without a reference."))
 
   geneMetadata2 <- geneMetadata2[which(geneMetadata2$hgnc_symbol %in% topExprGenes),]
   geneMetadata2 <- geneMetadata2[order(geneMetadata2$chromosome_num,geneMetadata2$start_position),]
+
+  invisible(gc())
 
   # Preparation of genomic windows
   genomicWindows <- lapply(c(1:23), function(chrom) {
@@ -191,6 +198,7 @@ Computing the CNV without a reference."))
 
   genomicWindows <- unlist(genomicWindows,recursive=F)
   genomicScores <- sapply(genomicWindows, function(g) colMeans(normCounts[g,]) )
+  invisible(gc())
 
   if (denoise) {
     if (scaleOnReferenceLabel) {
@@ -233,6 +241,8 @@ Computing the CNV without a reference."))
   genomicAssay <- Seurat::CreateAssayObject(data = as.matrix(genomicScoresTrimmed))
   seuratObj[["genomicScores"]] <- genomicAssay
   seuratObj[["cnv_fraction"]] <- colMeans(abs(genomicScoresTrimmed) > 0)
+
+  invisible(gc())
 
   return (seuratObj)
 }

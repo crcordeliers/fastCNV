@@ -32,6 +32,7 @@ compute_average_expression <- function(LN, LrawcountsByPatient) {
       results[[patient_name]] <- avg_expr
     } else { results[[patient_name]] <- NA }
   }
+  invisible(gc())
   return(results)
 }
 

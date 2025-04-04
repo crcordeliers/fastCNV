@@ -60,6 +60,7 @@ CNVanalysis <- function(object,
                            windowStep=windowStep,
                            saveGenomicWindows = saveGenomicWindows,
                            topNGenes=topNGenes)
+      invisible(gc())
     } else {
       if (length(object) == 1) {
         object <- list(CNVcalling(object[1],
@@ -74,6 +75,7 @@ CNVanalysis <- function(object,
                                   windowStep=windowStep,
                                   saveGenomicWindows = saveGenomicWindows,
                                   topNGenes=topNGenes))
+        invisible(gc())
       } else {
         if (pooledReference == TRUE) {
           object <- CNVcallingList(object,
@@ -88,6 +90,7 @@ CNVanalysis <- function(object,
                              windowStep=windowStep,
                              saveGenomicWindows = saveGenomicWindows,
                              topNGenes=topNGenes)
+          invisible(gc())
         } else {
           object <- lapply(object, function(x) {
                                     CNVcalling(x,
@@ -102,6 +105,7 @@ CNVanalysis <- function(object,
                                     windowStep=windowStep,
                                     saveGenomicWindows = saveGenomicWindows,
                                     topNGenes=topNGenes) } )
+          invisible(gc())
         }
 
         # if (doRecapPlot == TRUE) {
