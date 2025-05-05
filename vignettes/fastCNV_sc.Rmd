@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 `fastCNV` is a package to detect the putative Copy Number Variations (CNVs) in single cell (scRNAseq) data or Spatial Transcriptomics (ST) data. It also plots the computed CNVs.
 
-In this vignette you will learn how to run this package on single scRNAseq seurat objects and on a list of scRNAseq Seurat objects. 
+In this vignette you will learn how to run this package on single scRNAseq seurat objects and on a list of scRNAseq Seurat objects. fastCNV runs on **Seurat5**. 
 
 ## Load packages
 
@@ -87,13 +87,12 @@ This function will also build a PDF file for each sample containing their corres
 
 
 
-We are first going to run `fastCNV()` on our scColon1 object, taking as reference the cells labeled as `Bcells`, `DC6.pDC`,`EndoArteriel`, `Fibro`, `Mastocytes`, `MyeloLineage`, `NK`, `Pericytes`, `PlasmaCells`, `Schwann.Entericglial`, `SmoothMuscle` and `Tcells`.
+We are first going to run `fastCNV()` on our scColon1 object, taking as reference the cells labeled as `TNKILC`, `Myeloid`,`B`, `Mast` and `Plasma`.
 
 ```{r run1, fig.width = 7.5, fig.height=5.5}
 scColon1 <- fastCNV(seuratObj = scColon1, sampleName = "scColon1", referenceVar =
-                     "annot", referenceLabel = c("Bcells", "DC6.pDC", "EndoArteriel",
-                     "Fibro", "Mastocytes", "MyeloLineage", "NK", "Pericytes",
-                     "PlasmaCells", "Schwann.Entericglial", "SmoothMuscle","Tcells"), printPlot = T)
+                     "annot", referenceLabel = c("TNKILC", "Myeloid", "B",
+                     "Mast", "Plasma"), printPlot = T)
 
 ```
 
@@ -103,9 +102,7 @@ We are now going to run the `fastCNV()` function on a list of Seurat objects. Wh
 seuratList <- c(scColon2,scColon3,scColon4)
 sampleNames <- c("scColon2", "scColon3", "scColon4")
 names(seuratList) <- sampleNames
-referencelabels <- c("Bcells", "DC6.pDC", "EndoArteriel",
-                     "Fibro", "Mastocytes", "MyeloLineage", "NK", "Pericytes",
-                     "PlasmaCells", "SmoothMuscle","Tcells")
+referencelabels <- c("Plasma", "TNKILC", "Myeloid", "B", "Mast")
 
 seuratList <- fastCNV(seuratList, sampleNames, referenceVar = "annot", 
                       referenceLabel = referencelabels, printPlot = T)
@@ -224,7 +221,7 @@ Now, we build the tree, using `CNVtree()`, `annotateCNVtree()` and `plotCNVtree(
 
   - `CNVtree()` will build the subclonality tree.
   
-  - `annotateCNVtree()` will annotate each cnv gain/loss in the tree. 
+  - `annotateCNVtree()` will annotate each CNV gain/loss in the tree. 
   
   - `plotCNVtree()` will output the tree.  
   

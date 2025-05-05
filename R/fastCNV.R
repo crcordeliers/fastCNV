@@ -89,14 +89,6 @@ fastCNV <- function (seuratObj,
                      clusters_palette = "default"
                      ){
 
-  if (getCNVClusters == FALSE) {
-    if (!is.null(clustersVar) && clustersVar == "cnv_clusters") {
-      if(splitPlotOnVar == clustersVar) {
-        splitPlotOnVar = referenceVar
-      }
-      clustersVar = NULL
-    }
-  }
 
   if(!length(seuratObj)==length(sampleName)) stop("error-fastCNV : seuratObj & sampleName should have the same length")
 
@@ -106,7 +98,7 @@ fastCNV <- function (seuratObj,
     seuratObj <- list(seuratObj) ; names(seuratObj) <- sampleName
   }
   if (prepareCounts == TRUE & aggregFactor>=1000) {
-    message("Aggregating counts matrix.")
+    message("Aggregating counts matrix...")
     for (i in 1:length(seuratObj)) {
       seuratObj[[i]] <- prepareCountsForCNVAnalysis(seuratObj[[i]], sampleName = sampleName[[i]],
                                                    referenceVar = referenceVar,
@@ -116,6 +108,7 @@ fastCNV <- function (seuratObj,
                                                    reClusterSeurat = reClusterSeurat  )
       invisible(gc())
     }
+    message("Done!")
   } else {
     for (i in 1:length(seuratObj)) {
       seuratObj[[i]]@project.name = sampleName[[i]]
@@ -124,7 +117,7 @@ fastCNV <- function (seuratObj,
 
 
   if (length(seuratObj) > 1) {
-    message("Running CNVAnalysis")
+    message("Running CNVAnalysis...")
     seuratObj <- CNVanalysis(seuratObj, referenceVar = referenceVar, referenceLabel = referenceLabel,
                               #doRecapPlot = doRecapPlot,
                               pooledReference = pooledReference,
@@ -133,9 +126,9 @@ fastCNV <- function (seuratObj,
                               chrArmsToForce = chrArmsToForce, windowSize = windowSize, windowStep = windowStep,
                               saveGenomicWindows = saveGenomicWindows, topNGenes = topNGenes)
     invisible(gc())
-    message("CNVAnalysis done!")
+    message("Done!")
   } else {
-    message("Running CNVAnalysis")
+    message("Running CNVAnalysis...")
     seuratObj <- CNVanalysis(seuratObj[[1]], referenceVar = referenceVar, referenceLabel = referenceLabel,
                          #doRecapPlot = doRecapPlot,
                          pooledReference = pooledReference, denoise = denoise,
@@ -144,10 +137,11 @@ fastCNV <- function (seuratObj,
                          chrArmsToForce = chrArmsToForce, windowSize = windowSize, windowStep = windowStep,
                          saveGenomicWindows = saveGenomicWindows, topNGenes = topNGenes)
     invisible(gc())
-    message("CNVAnalysis done!")
+    message("Done!")
   }
 
   if (getCNVPerChromosomeArm == TRUE) {
+    message("Computing CNV per chromosome arm...")
     if (length(seuratObj) == 1) {
           seuratObj <- CNVPerChromosomeArm(seuratObj)
     } else {
@@ -156,9 +150,11 @@ fastCNV <- function (seuratObj,
       }
     }
     invisible(gc())
+    message("Done!")
   }
 
   if (getCNVClusters == TRUE) {
+    message("Clustering CNVs...")
     if (length(seuratObj) == 1) {
       seuratObj <- CNVcluster(seuratObj, k = k_clusters, h = h_clusters, plotDendrogram = plotDendrogram,
                               plotClustersOnDendrogram = plotClustersOnDendrogram, plotElbowPlot = plotElbowPlot)
@@ -169,10 +165,11 @@ fastCNV <- function (seuratObj,
       }
     }
     invisible(gc())
+    message("Done!")
   }
 
   if (doPlot == TRUE) {
-    message("Plotting CNV results. This step may take some time.")
+    message("Plotting CNV heatmap...")
     if (length(seuratObj) > 1) {
       for (i in 1:length(seuratObj)) {
         if (Seurat::Project(seuratObj[[i]]) == "SeuratProject") {Seurat::Project(seuratObj[[i]]) = paste0("Sample",i)}
@@ -187,6 +184,7 @@ fastCNV <- function (seuratObj,
                      savePath = savePath, printPlot = printPlot, referencePalette = referencePalette, clusters_palette = clusters_palette, outputType = outputType)
       invisible(gc())
     }
+    message("Done!")
   }
 
 

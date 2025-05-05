@@ -40,7 +40,6 @@ CNVcalling <- function(seuratObj,
                        saveGenomicWindows = FALSE,
                        topNGenes=7000,
                        chrArmsToForce = NULL) {
-  if (dim(seuratObj)[1] < topNGenes) {topNGenes = dim(seuratObj)[1]}
   # getting reference cells / spots
   if (is.null(referenceVar) || is.null(referenceLabel)){
     message(paste0("referenceVar and/or referenceLabel parameters not found. Computing the CNV without a reference."))
@@ -94,6 +93,8 @@ Computing the CNV without a reference."))
       assay = Seurat::Assays(seuratObj)[1]
     }
   }
+
+  if (dim(Seurat::GetAssay(seuratObj, assay = assay))[1] < topNGenes) {topNGenes = dim(Seurat::GetAssay(seuratObj, assay = assay))[1]}
 
   rawCounts <- as.matrix(Seurat::GetAssay(seuratObj, assay = assay)["counts"])
   commonGenes <- intersect(rownames(rawCounts),geneMetadata2$hgnc_symbol)

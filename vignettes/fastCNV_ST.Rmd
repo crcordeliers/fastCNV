@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 `fastCNV` is a package to detect the putative Copy Number Variations (CNVs) in single cell (scRNAseq) data or Spatial Transcriptomics (ST) data. It also plots the computed CNVs.
 
-In this vignette you will learn how to run this package on single ST seurat objects and on a list of ST Seurat objects. 
+In this vignette you will learn how to run this package on single ST seurat objects and on a list of ST Seurat objects. fastCNV runs on **Seurat5**. 
 
 ## Load packages
 
