@@ -54,7 +54,7 @@ plotCNVResults <- function(seuratObj,
   }
 
   M <- t(as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")["data"]))
-  if (referencePalette == "default") {
+  if (any(referencePalette == "default")) {
     referencePalette = as.character(paletteer::paletteer_d("pals::glasbey"))
   }
   if (!is.null(referenceVar)) {
@@ -73,7 +73,7 @@ plotCNVResults <- function(seuratObj,
   if (!is.null(clustersVar)) {
     clusters_df <- as.data.frame(seuratObj@meta.data[[clustersVar]])
     colnames(clusters_df) <- "Clusters"
-    if (clusters_palette == "default"){
+    if (any(clusters_palette == "default")){
       clusters_palette = scales::hue_pal()(length(unique(clusters_df$Clusters)))
     }
     clusters_colors <- setNames(clusters_palette, unique(clusters_df$Clusters))
