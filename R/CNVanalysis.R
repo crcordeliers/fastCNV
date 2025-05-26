@@ -22,6 +22,8 @@
 #' @param topNGenes Integer. The number of top-expressed genes to retain in the analysis.
 #' @param chrArmsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
 #' If specified, all genes within the given chromosome arm(s) will be included.
+#' @param genesToForce A list of genes to force into the analysis (e.g. `c("FOXP3","MUC16","SAMD15")`).
+#' @param regionToForce Chromosome region to force into the analysis (vector containing chr, start, end).
 #'
 #' @return If given a **single** Seurat object, returns the same object with:
 #' - An **additional assay** containing genomic scores per genomic window.
@@ -45,7 +47,9 @@ CNVanalysis <- function(object,
                        windowStep=10,
                        saveGenomicWindows = FALSE,
                        topNGenes=7000,
-                       chrArmsToForce = NULL) {
+                       chrArmsToForce = NULL,
+                       genesToForce = NULL,
+                       regionToForce = NULL) {
 
     if (!is.list(object)) {
       object <- CNVcalling(object,

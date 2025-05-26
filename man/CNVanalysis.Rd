@@ -19,7 +19,9 @@ CNVanalysis(
   windowStep = 10,
   saveGenomicWindows = FALSE,
   topNGenes = 7000,
-  chrArmsToForce = NULL
+  chrArmsToForce = NULL,
+  genesToForce = NULL,
+  regionToForce = NULL
 )
 }
 \arguments{
@@ -52,6 +54,10 @@ can be either \strong{single-cell} or \strong{spatial transcriptomics} data.}
 
 \item{chrArmsToForce}{A chromosome arm (e.g., \code{"8p"}, \code{"3q"}) or a list of chromosome arms (e.g., \code{c("3q", "8p", "17p")}) to force into the analysis.
 If specified, all genes within the given chromosome arm(s) will be included.}
+
+\item{genesToForce}{A list of genes to force into the analysis (e.g. \code{c("FOXP3","MUC16","SAMD15")}).}
+
+\item{regionToForce}{Chromosome region to force into the analysis (vector containing chr, start, end).}
 }
 \value{
 If given a \strong{single} Seurat object, returns the same object with:

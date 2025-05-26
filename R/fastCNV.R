@@ -21,6 +21,8 @@
 #' @param thresholdPercentile Which quantiles to take (default 0.01). For example, `0.01` will take quantiles between 0.01-0.99. Background noise appears with higher numbers.
 #' @param geneMetadata List of genes and their metadata (default uses genes from Ensembl version 113).
 #' @param chrArmsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
+#' @param genesToForce A list of genes to force into the analysis (e.g. `c("FOXP3","MUC16","SAMD15")`).
+#' @param regionToForce Chromosome region to force into the analysis (vector containing chr, start, end).
 #' @param windowSize Size of the genomic windows for CNV analysis (default = 150).
 #' @param windowStep Step between the genomic windows (default = 10).
 #' @param saveGenomicWindows If `TRUE`, saves the information of the genomic windows in the current directory (default = `FALSE`).
@@ -68,6 +70,8 @@ fastCNV <- function (seuratObj,
                      saveGenomicWindows = FALSE,
                      topNGenes = 7000,
                      chrArmsToForce = NULL,
+                     genesToForce = NULL,
+                     regionToForce = NULL,
 
                      getCNVPerChromosomeArm = TRUE,
 

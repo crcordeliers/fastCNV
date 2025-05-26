@@ -16,6 +16,8 @@
 #' @param topNGenes Integer. The number of top-expressed genes to retain in the analysis.
 #' @param chrArmsToForce A chromosome arm (e.g., `"8p"`, `"3q"`) or a list of chromosome arms (e.g., `c("3q", "8p", "17p")`) to force into the analysis.
 #' If specified, all genes within the given chromosome arm(s) will be included.
+#' @param genesToForce A list of genes to force into the analysis (e.g. `c("FOXP3","MUC16","SAMD15")`).
+#' @param regionToForce Chromosome region to force into the analysis (vector containing chr, start, end).
 #'
 #' @return The same Seurat object provided in `seuratObj`, with:
 #' - An **additional assay** containing genomic scores per genomic window.
@@ -39,7 +41,9 @@ CNVcalling <- function(seuratObj,
                        windowStep=10,
                        saveGenomicWindows = FALSE,
                        topNGenes=7000,
-                       chrArmsToForce = NULL) {
+                       chrArmsToForce = NULL,
+                       genesToForce = NULL,
+                       regionToForce = NULL) {
   # getting reference cells / spots
   if (is.null(referenceVar) || is.null(referenceLabel)){
     message(paste0("referenceVar and/or referenceLabel parameters not found. Computing the CNV without a reference."))
@@ -76,7 +80,7 @@ Computing the CNV without a reference."))
   geneMetadata$chromosome_num <- geneMetadata$chromosome_name
   geneMetadata$chromosome_num[which(geneMetadata$chromosome_num=="X")]<- 23
   geneMetadata$chromosome_num <- as.numeric(geneMetadata$chromosome_num)
-  geneMetadata2 <- unique(geneMetadata[,c("hgnc_symbol","chromosome_num","start_position", "chr_arm")])
+  geneMetadata2 <- unique(geneMetadata[,c("hgnc_symbol","chromosome_num","start_position", "end_position", "chr_arm")])
 
   # internal functions
   funTrim <- function(normcounts,lo=-3,up=3){
@@ -108,6 +112,19 @@ Computing the CNV without a reference."))
     averageExpression <- rowMeans(rawCounts)
   }
   topExprGenes <- commonGenes[order(averageExpression, decreasing = T)[1:topNGenes]]
+
+  if(!is.null(genesToForce)) {
+    topExprGenes <- union(topExprGenes, intersect(commonGenes, genesToForce))
+  }
+
+  if(!is.null(regionToForce)) {
+    region_genes <- geneMetadata2 %>%
+      filter(chromosome_name == regionToForce[1], start_position >= regionToForce[2], end_position <= regionToForce[3]) %>%
+      pull(hgnc_symbol) %>%
+      unique() %>%
+      setdiff("")
+    topExprGenes <- union(topExprGenes, intersect(commonGenes, region_genes))
+  }
 
   topExprGenes_metadata <- geneMetadata2[geneMetadata2$hgnc_symbol %in% topExprGenes, ]
   topExprGenes_metadata$chr_arm_full <- paste0(topExprGenes_metadata$chromosome_num, topExprGenes_metadata$chr_arm)
