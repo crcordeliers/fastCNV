@@ -101,6 +101,7 @@ Computing the CNV without a reference."))
   if (dim(Seurat::GetAssay(seuratObj, assay = assay))[1] < topNGenes) {topNGenes = dim(Seurat::GetAssay(seuratObj, assay = assay))[1]}
 
   rawCounts <- as.matrix(Seurat::GetAssay(seuratObj, assay = assay)["counts"])
+  invisible(gc())
   commonGenes <- intersect(rownames(rawCounts),geneMetadata2$hgnc_symbol)
   rawCounts <- rawCounts[commonGenes,]
 
@@ -111,6 +112,9 @@ Computing the CNV without a reference."))
   } else {
     averageExpression <- rowMeans(rawCounts)
   }
+
+  invisible(gc())
+
   topExprGenes <- commonGenes[order(averageExpression, decreasing = T)[1:topNGenes]]
 
   if(!is.null(genesToForce)) {
@@ -119,8 +123,8 @@ Computing the CNV without a reference."))
 
   if(!is.null(regionToForce)) {
     region_genes <- geneMetadata2 %>%
-      filter(chromosome_name == regionToForce[1], start_position >= regionToForce[2], end_position <= regionToForce[3]) %>%
-      pull(hgnc_symbol) %>%
+      filter(.data$chromosome_name == regionToForce[1], .data$start_position >= regionToForce[2], .data$end_position <= regionToForce[3]) %>%
+      pull(.data$hgnc_symbol) %>%
       unique() %>%
       setdiff("")
     topExprGenes <- union(topExprGenes, intersect(commonGenes, region_genes))
@@ -161,7 +165,10 @@ Computing the CNV without a reference."))
 
   rawCounts <- rawCounts[topExprGenes,]
 
+  invisible(gc())
+
   normCounts <- log2(1+rawCounts)
+  invisible(gc())
   normCounts <- scale(normCounts, scale = FALSE)
 
   rm(rawCounts)
@@ -183,13 +190,15 @@ Computing the CNV without a reference."))
     scaleFactor <- rowMeans(normCounts)
   }
 
+  invisible(gc())
+
   normCounts <- normCounts - scaleFactor
+  invisible(gc())
   normCounts <- funTrim(normCounts, lo = -3, up = 3)
+  invisible(gc())
 
   geneMetadata2 <- geneMetadata2[which(geneMetadata2$hgnc_symbol %in% topExprGenes),]
   geneMetadata2 <- geneMetadata2[order(geneMetadata2$chromosome_num,geneMetadata2$start_position),]
-
-  invisible(gc())
 
   # Preparation of genomic windows
   genomicWindows <- lapply(c(1:23), function(chrom) {
@@ -216,6 +225,7 @@ Computing the CNV without a reference."))
 
   genomicWindows <- unlist(genomicWindows,recursive=F)
   genomicScores <- sapply(genomicWindows, function(g) colMeans(normCounts[g,]) )
+  rm(normCounts)
   invisible(gc())
 
   if (denoise) {

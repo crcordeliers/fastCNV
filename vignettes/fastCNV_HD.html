@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to fastCNV - Visium HD data</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to fastCNV - Visium HD
+data</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#context" id="toc-context">Context</a></li>
+<li><a href="#load-packages" id="toc-load-packages">Load
+packages</a></li>
+<li><a href="#load-the-data" id="toc-load-the-data">Load the
+data</a></li>
+<li><a href="#check-annotation" id="toc-check-annotation">Check
+annotation</a></li>
+<li><a href="#run-fastcnv" id="toc-run-fastcnv">Run fastCNV</a></li>
+<li><a href="#cnv-fraction" id="toc-cnv-fraction">CNV fraction</a></li>
+<li><a href="#cnv-classification" id="toc-cnv-classification">CNV
+classification</a></li>
+<li><a href="#cnv-clusters" id="toc-cnv-clusters">CNV clusters</a></li>
+<li><a href="#cnv-tree" id="toc-cnv-tree">CNV tree</a></li>
+</ul>
+</div>
+
+<div id="context" class="section level2">
+<h2>Context</h2>
+<p><code>fastCNV</code> is a package to detect the putative Copy Number
+Variations (CNVs) in single cell (scRNAseq) data or Spatial
+Transcriptomics (ST) data. It also plots the computed CNVs.</p>
+<p>In this vignette you will learn how to run this package on Visium HD
+seurat object. fastCNV runs on <strong>Seurat5</strong>.</p>
+<p><strong>Warning</strong> : Visium HD samples are very RAM demanding
+and the session may crash if not enough RAM is available. We recommend
+running this vignette in a server.</p>
+</div>
+<div id="load-packages" class="section level2">
+<h2>Load packages</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;must-bioinfo/fastCNV&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(fastCNV)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span></code></pre></div>
+</div>
+<div id="load-the-data" class="section level2">
+<h2>Load the data</h2>
+<p>Load your Visium HD data with Seurat.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>HDobj <span class="ot">&lt;-</span> <span class="fu">Load10X_Spatial</span>(<span class="at">data.dir =</span> <span class="st">&quot;/path/to/your/data/&quot;</span>, <span class="at">bin.size =</span> <span class="fu">c</span>(<span class="dv">8</span>,<span class="dv">16</span>))</span></code></pre></div>
+</div>
+<div id="check-annotation" class="section level2">
+<h2>Check annotation</h2>
+<p>You can load a separate annotation file for your dataset. It’s
+usefull to have annotated spots for the analysis.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Import the annotation file corresponding to your sample. For 10X ST data you can annotate your spots with LoupeBrowser</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>annotation_file <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/path/to/your/annotations/for/VisiumHD.csv&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>HD_obj[[<span class="st">&quot;annots&quot;</span>]] <span class="ot">&lt;-</span> annotation_file<span class="sc">$</span>Annotations</span></code></pre></div>
+<p>You can take a look at which annotations are present in your objects,
+in order to select the labels of the cells that will be used as
+reference.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">unique</span>(HD_obj[[<span class="st">&quot;annots&quot;</span>]])</span></code></pre></div>
+</div>
+<div id="run-fastcnv" class="section level2">
+<h2>Run fastCNV</h2>
+<p>During this step, fastCNV_10XHD() will use:</p>
+<ul>
+<li><p><code>CNVanalysis</code> : computes the CNV. If you have
+annotations for your Seurat object, you can add the parameters
+<code>referenceVar</code> and <code>referenceLabel</code>.</p></li>
+<li><p><code>CNVPerChromosome</code> : to compute the CNV per chromosome
+arm, and store it in the metadata of the Seurat object. This part of
+<code>fastCNV()</code> can be skipped by turning
+<code>getCNVPerChromosome</code> to <code>FALSE</code>.</p></li>
+<li><p><code>CNVcluster</code> : OPTIONAL - performs hierarchical
+clustering on a genomic score matrix extracted from a Seurat object.
+This may crash with large Visium HD samples.</p></li>
+<li><p><code>plotCNVResultsHD</code> : to visualize the results (stored
+in the assays slot of the Seurat object). This function will also build
+a PNG or PDF file for each sample containing their corresponding CNV
+heatmap in the current working directory, which can be changed using the
+<code>savePath</code> parameter.</p></li>
+</ul>
+<p>We are going to run <code>fastCNV()</code> on our Visium HD object.
+The reference should be the non-tumor spots, for example,
+<code>Epithelium</code> or <code>Muscle</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>HD_obj <span class="ot">&lt;-</span> <span class="fu">fastCNV</span>(HD_obj, <span class="at">sampleName =</span> <span class="st">&quot;HD_obj&quot;</span>, <span class="at">referenceVar =</span> <span class="st">&quot;annots&quot;</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                      <span class="at">referenceLabel =</span> <span class="fu">c</span>(<span class="st">&quot;Epithelium&quot;</span>,<span class="st">&quot;Muscle&quot;</span>))</span></code></pre></div>
+</div>
+<div id="cnv-fraction" class="section level2">
+<h2>CNV fraction</h2>
+<p>fastCNV also computes a <code>cnv_fraction</code> for each
+observation in the Seurat object. This can be directly plotted using
+Seurat spatial plotting functions, as we’ll demonstrate on STColon1:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">SpatialFeaturePlot</span>(HD_obj, <span class="st">&quot;cnv_fraction&quot;</span>) <span class="sc">|</span> <span class="fu">SpatialPlot</span>(HD_obj, <span class="at">group.by =</span> <span class="st">&quot;annots&quot;</span>)</span></code></pre></div>
+<p>Here, we see some zones with higher CNV fractions than others. We can
+directly plot and test this:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">FetchData</span>(HD_obj, <span class="at">vars =</span> <span class="fu">c</span>(<span class="st">&quot;annots&quot;</span>, <span class="st">&quot;cnv_fraction&quot;</span>)), </span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>       <span class="fu">aes</span>(annots, cnv_fraction, <span class="at">fill =</span> annots)) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>))</span></code></pre></div>
+<p>We can also plot the CNV per chromosome arm with the plotting
+functions from Seurat.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">SpatialFeaturePlot</span>(HD_obj, <span class="at">features =</span> <span class="st">&quot;11.q_CNV&quot;</span>, <span class="at">pt.size.factor =</span> <span class="dv">3</span>)  <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>), </span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>                       <span class="at">rescaler =</span> <span class="cf">function</span>(x, <span class="at">to =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">from =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>                         <span class="fu">rescale_mid</span>(x, <span class="at">to =</span> to, <span class="at">mid =</span> <span class="dv">0</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>                       }) <span class="sc">|</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="fu">SpatialFeaturePlot</span>(HD_obj, <span class="at">features =</span> <span class="st">&quot;6.q_CNV&quot;</span>, <span class="at">pt.size.factor =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>), </span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>                       <span class="at">rescaler =</span> <span class="cf">function</span>(x, <span class="at">to =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">from =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>                         <span class="fu">rescale_mid</span>(x, <span class="at">to =</span> to, <span class="at">mid =</span> <span class="dv">0</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>                       })</span></code></pre></div>
+</div>
+<div id="cnv-classification" class="section level2">
+<h2>CNV classification</h2>
+<p>Using the CNV per chromosome arm and <code>CNVclassification()</code>
+we can get the alterations per chromosome arm (gain, loss or no
+alteration).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>HD_obj <span class="ot">&lt;-</span> <span class="fu">CNVclassification</span>(HD_obj)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>common_theme <span class="ot">&lt;-</span> <span class="fu">theme</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="fu">SpatialDimPlot</span>(HD_obj, <span class="at">group.by =</span> <span class="st">&quot;11.p_CNV_classification&quot;</span>) <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="at">gain =</span> <span class="st">&quot;red&quot;</span>, <span class="at">no_alteration =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">loss =</span> <span class="st">&quot;blue&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  common_theme <span class="sc">|</span> <span class="fu">SpatialDimPlot</span>(HD_obj, <span class="at">group.by =</span> <span class="st">&quot;6.q_CNV_classification&quot;</span>) <span class="sc">+</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="at">gain =</span> <span class="st">&quot;red&quot;</span>, <span class="at">no_alteration =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">loss =</span> <span class="st">&quot;blue&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>  common_theme</span></code></pre></div>
+</div>
+<div id="cnv-clusters" class="section level2">
+<h2>CNV clusters</h2>
+<p>In addition to the CNV fraction, fastCNV can also compute the CNV
+clusters. These can be plotted with the Seurat plotting functions.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">SpatialDimPlot</span>(HD_obj, <span class="at">group.by =</span> <span class="st">&quot;cnv_clusters&quot;</span>, <span class="at">pt.size.factor =</span> <span class="dv">3</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">library</span>(SeuratObject)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">FetchData</span>(HD_obj, <span class="at">vars =</span> <span class="fu">c</span>(<span class="st">&quot;cnv_clusters&quot;</span>, <span class="st">&quot;annots&quot;</span>)), <span class="fu">aes</span>(annots, <span class="at">fill =</span> cnv_clusters)) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>))</span></code></pre></div>
+</div>
+<div id="cnv-tree" class="section level2">
+<h2>CNV tree</h2>
+<p>In this part of the vignette, we will show how to plot the CNV
+subclonality tree. CNV clusters are needed.</p>
+<p>First, we will build a metacell for each cluster, using
+<code>generateCNVClonesMatrix()</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>cnv_matrix_clusters <span class="ot">&lt;-</span> <span class="fu">generateCNVClonesMatrix</span>(HD_obj, <span class="at">healthyClusters =</span> <span class="st">&quot;1&quot;</span>)</span></code></pre></div>
+<p>Now, we build the tree, using <code>CNVtree()</code>,
+<code>annotateCNVtree()</code> and <code>plotCNVtree()</code>.</p>
+<ul>
+<li><p><code>CNVtree()</code> will build the subclonality tree.</p></li>
+<li><p><code>annotateCNVtree()</code> will annotate each cnv gain/loss
+in the tree.</p></li>
+<li><p><code>plotCNVtree()</code> will output the tree.</p></li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">CNVtree</span>(cnv_matrix_clusters)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>tree_data <span class="ot">&lt;-</span> <span class="fu">annotateCNVtree</span>(tree, cnv_matrix_clusters, <span class="fl">0.13</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">plotCNVtree</span>(tree_data)</span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -3,3 +3,5 @@
 ^devtools_history\.R$
 ^doc$
 ^Meta$
+^docs$
+^_pkgdown.yml$

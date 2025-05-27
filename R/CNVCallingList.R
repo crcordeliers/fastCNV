@@ -125,8 +125,8 @@ CNVcallingList <- function(seuratList,
 
   if(!is.null(regionToForce)) {
     region_genes <- geneMetadata2 %>%
-      filter(chromosome_name == regionToForce[1], start_position >= regionToForce[2], end_position <= regionToForce[3]) %>%
-      pull(hgnc_symbol) %>%
+      filter(.data$chromosome_name == regionToForce[1], .data$start_position >= regionToForce[2], .data$end_position <= regionToForce[3]) %>%
+      pull(.data$hgnc_symbol) %>%
       unique() %>%
       setdiff("")
     topExprGenes <- union(topExprGenes, intersect(commonGenes, region_genes))
