@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,7 +143,7 @@ heatmap in the current working directory, which can be changed using the
 The reference should be the non-tumor spots, for example,
 <code>Epithelium</code> or <code>Muscle</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">HD_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fastCNV.html">fastCNV</a></span><span class="op">(</span><span class="va">HD_obj</span>, sampleName <span class="op">=</span> <span class="st">"HD_obj"</span>, referenceVar <span class="op">=</span> <span class="st">"annots"</span>,</span>
+<code class="sourceCode R"><span><span class="va">HD_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fastCNV_10XHD.html">fastCNV_10XHD</a></span><span class="op">(</span><span class="va">HD_obj</span>, sampleName <span class="op">=</span> <span class="st">"HD_obj"</span>, referenceVar <span class="op">=</span> <span class="st">"annots"</span>,</span>
 <span>                      referenceLabel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Epithelium"</span>,<span class="st">"Muscle"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
