@@ -92,7 +92,7 @@ plotCNVResultsHD <- function(seuratObjHD,
     column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObjHD, assay = "genomicScores")["data"])), ".", fixed = TRUE), function(z) z[1])),
     column_title_gp = grid::gpar(fontsize = 8),
     column_title = c(1:22,"X"),
-    row_split = as.factor(split_df[[1]]),
+    row_split = if(is.null(split_df)){NULL}else{as.factor(split_df[[1]])},
     row_title = NULL,
     col = circlize::colorRamp2(c(-0.25, -0.1, -0.05, 0, 0.05, 0.1, 0.25), c("#0B2F7EFF", "#2A4D9EFF", "#A0A0FFFF", "white", "#E3807D", "#A4161A","#7A0A0D")),
     heatmap_legend_param = list(

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,7 +18,8 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/fastCNV_sc.html">Introduction to fastCNV - scRNAseq data</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/fastCNV_HD.html">Introduction to fastCNV - Visium HD data</a></li>
+    <li><a class="dropdown-item" href="../articles/fastCNV_sc.html">Introduction to fastCNV - scRNAseq data</a></li>
     <li><a class="dropdown-item" href="../articles/fastCNV_ST.html">Introduction to fastCNV - ST data</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -113,6 +114,12 @@
         <dd>fastCNV calls all of the internal functions needed to compute the putative CNV on a Seurat object or a list of Seurat objects</dd>
       </dl><dl><dt>
 
+          <code><a href="fastCNV_10XHD.html">fastCNV_10XHD()</a></code>
+
+        </dt>
+        <dd>fastCNV_10XHD calls all of the internal functions needed to compute the putative CNV on a Seurat Visium HD object or a list of Seurat Visium HD objects</dd>
+      </dl><dl><dt>
+
           <code><a href="geneMetadata.html">geneMetadata</a></code>
 
         </dt>
@@ -135,6 +142,12 @@
 
         </dt>
         <dd>Plot CNV Results into a Heatmap Builds a heatmap to visualize the CNV results based on genomic scores.</dd>
+      </dl><dl><dt>
+
+          <code><a href="plotCNVResultsHD.html">plotCNVResultsHD()</a></code>
+
+        </dt>
+        <dd>Plot Visium HD CNV Results into a Heatmap Builds a heatmap to visualize the Visium HD CNV results based on genomic scores.</dd>
       </dl><dl><dt>
 
           <code><a href="plotCNVtree.html">plotCNVtree()</a></code>

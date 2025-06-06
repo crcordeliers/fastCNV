@@ -82,7 +82,7 @@ This function will also build a PNG or PDF file for each sample containing their
 We are going to run `fastCNV()` on our Visium HD object. The reference should be the non-tumor spots, for example, `Epithelium` or `Muscle`. 
 
 ```{r run1, eval = FALSE}
-HD_obj <- fastCNV(HD_obj, sampleName = "HD_obj", referenceVar = "annots",
+HD_obj <- fastCNV_10XHD(HD_obj, sampleName = "HD_obj", referenceVar = "annots",
                       referenceLabel = c("Epithelium","Muscle"))
 ```
 

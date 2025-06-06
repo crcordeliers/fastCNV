@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +33,8 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/fastCNV_sc.html">Introduction to fastCNV - scRNAseq data</a></li>
+<li><a class="dropdown-item" href="../articles/fastCNV_HD.html">Introduction to fastCNV - Visium HD data</a></li>
+    <li><a class="dropdown-item" href="../articles/fastCNV_sc.html">Introduction to fastCNV - scRNAseq data</a></li>
     <li><a class="dropdown-item" href="../articles/fastCNV_ST.html">Introduction to fastCNV - ST data</a></li>
   </ul>
 </li>
@@ -79,7 +80,8 @@
 Variations (CNVs) in single cell (scRNAseq) data or Spatial
 Transcriptomics (ST) data. It also plots the computed CNVs.</p>
 <p>In this vignette you will learn how to run this package on single
-scRNAseq seurat objects and on a list of scRNAseq Seurat objects.</p>
+scRNAseq seurat objects and on a list of scRNAseq Seurat objects.
+fastCNV runs on <strong>Seurat5</strong>.</p>
 </div>
 <div class="section level2">
 <h2 id="load-packages">Load packages<a class="anchor" aria-label="anchor" href="#load-packages"></a>
@@ -166,17 +168,13 @@ their corresponding CNV heatmap in the current working directory, which
 can be changed using the <code>savePath</code> parameter.</p></li>
 </ul>
 <p>We are first going to run <code><a href="../reference/fastCNV.html">fastCNV()</a></code> on our scColon1
-object, taking as reference the cells labeled as <code>Bcells</code>,
-<code>DC6.pDC</code>,<code>EndoArteriel</code>, <code>Fibro</code>,
-<code>Mastocytes</code>, <code>MyeloLineage</code>, <code>NK</code>,
-<code>Pericytes</code>, <code>PlasmaCells</code>,
-<code>Schwann.Entericglial</code>, <code>SmoothMuscle</code> and
-<code>Tcells</code>.</p>
+object, taking as reference the cells labeled as <code>TNKILC</code>,
+<code>Myeloid</code>,<code>B</code>, <code>Mast</code> and
+<code>Plasma</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scColon1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fastCNV.html">fastCNV</a></span><span class="op">(</span>seuratObj <span class="op">=</span> <span class="va">scColon1</span>, sampleName <span class="op">=</span> <span class="st">"scColon1"</span>, referenceVar <span class="op">=</span></span>
-<span>                     <span class="st">"annot"</span>, referenceLabel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Bcells"</span>, <span class="st">"DC6.pDC"</span>, <span class="st">"EndoArteriel"</span>,</span>
-<span>                     <span class="st">"Fibro"</span>, <span class="st">"Mastocytes"</span>, <span class="st">"MyeloLineage"</span>, <span class="st">"NK"</span>, <span class="st">"Pericytes"</span>,</span>
-<span>                     <span class="st">"PlasmaCells"</span>, <span class="st">"Schwann.Entericglial"</span>, <span class="st">"SmoothMuscle"</span>,<span class="st">"Tcells"</span><span class="op">)</span>, printPlot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<span>                     <span class="st">"annot"</span>, referenceLabel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TNKILC"</span>, <span class="st">"Myeloid"</span>, <span class="st">"B"</span>,</span>
+<span>                     <span class="st">"Mast"</span>, <span class="st">"Plasma"</span><span class="op">)</span>, printPlot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fastCNV_sc_files/figure-html/run1-1.png" width="720"></p>
 <p>We are now going to run the <code><a href="../reference/fastCNV.html">fastCNV()</a></code> function on a list
 of Seurat objects. When <code><a href="../reference/fastCNV.html">fastCNV()</a></code> is run on a list of
@@ -187,9 +185,7 @@ containing any healthy cells to build its own reference.</p>
 <code class="sourceCode R"><span><span class="va">seuratList</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">scColon2</span>,<span class="va">scColon3</span>,<span class="va">scColon4</span><span class="op">)</span></span>
 <span><span class="va">sampleNames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"scColon2"</span>, <span class="st">"scColon3"</span>, <span class="st">"scColon4"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">seuratList</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sampleNames</span></span>
-<span><span class="va">referencelabels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Bcells"</span>, <span class="st">"DC6.pDC"</span>, <span class="st">"EndoArteriel"</span>,</span>
-<span>                     <span class="st">"Fibro"</span>, <span class="st">"Mastocytes"</span>, <span class="st">"MyeloLineage"</span>, <span class="st">"NK"</span>, <span class="st">"Pericytes"</span>,</span>
-<span>                     <span class="st">"PlasmaCells"</span>, <span class="st">"SmoothMuscle"</span>,<span class="st">"Tcells"</span><span class="op">)</span></span>
+<span><span class="va">referencelabels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Plasma"</span>, <span class="st">"TNKILC"</span>, <span class="st">"Myeloid"</span>, <span class="st">"B"</span>, <span class="st">"Mast"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">seuratList</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fastCNV.html">fastCNV</a></span><span class="op">(</span><span class="va">seuratList</span>, <span class="va">sampleNames</span>, referenceVar <span class="op">=</span> <span class="st">"annot"</span>, </span>
 <span>                      referenceLabel <span class="op">=</span> <span class="va">referencelabels</span>, printPlot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
@@ -221,7 +217,7 @@ Seurat plotting functions, as we’ll demonstrate on scColon1:</p>
 <p>Here, we see some clusters with much higher CNV fractions than
 others. We can directly plot and test this:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/FetchData.html" class="external-link">FetchData</a></span><span class="op">(</span><span class="va">scColon1</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"annot"</span>, <span class="st">"cnv_fraction"</span><span class="op">)</span><span class="op">)</span>, </span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/FetchData.html" class="external-link">FetchData</a></span><span class="op">(</span><span class="va">scColon1</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"annot"</span>, <span class="st">"cnv_fraction"</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">annot</span>, <span class="va">cnv_fraction</span>, fill <span class="op">=</span> <span class="va">annot</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, vjust <span class="op">=</span> <span class="fl">1</span>, hjust <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -278,7 +274,7 @@ These can be plotted with the Seurat plotting functions.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.github.io/seurat-object/" class="external-link">SeuratObject</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/FetchData.html" class="external-link">FetchData</a></span><span class="op">(</span><span class="va">scColon1</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cnv_clusters"</span>, <span class="st">"annot"</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">annot</span>, fill <span class="op">=</span> <span class="va">cnv_clusters</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/FetchData.html" class="external-link">FetchData</a></span><span class="op">(</span><span class="va">scColon1</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cnv_clusters"</span>, <span class="st">"annot"</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">annot</span>, fill <span class="op">=</span> <span class="va">cnv_clusters</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"fill"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, vjust <span class="op">=</span> <span class="fl">1</span>, hjust <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fastCNV_sc_files/figure-html/cnv_props-1.png" width="576"></p>
@@ -301,7 +297,7 @@ will show how to plot the CNV subclonality tree.</p>
 <code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> and <code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code>.</p>
 <ul>
 <li><p><code><a href="../reference/CNVtree.html">CNVtree()</a></code> will build the subclonality tree.</p></li>
-<li><p><code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> will annotate each cnv gain/loss
+<li><p><code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> will annotate each CNV gain/loss
 in the tree.</p></li>
 <li><p><code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code> will output the tree.</p></li>
 </ul>

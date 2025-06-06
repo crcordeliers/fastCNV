@@ -2,9 +2,10 @@ pandoc: '3.2'
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
+  fastCNV_HD: fastCNV_HD.html
   fastCNV_sc: fastCNV_sc.html
   fastCNV_ST: fastCNV_ST.html
-last_built: 2025-03-26T09:35Z
+last_built: 2025-05-27T11:06Z
 urls:
   reference: https://must-bioinfo.github.io/fastCNV/reference
   article: https://must-bioinfo.github.io/fastCNV/articles

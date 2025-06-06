@@ -417,7 +417,7 @@ heatmap in the current working directory, which can be changed using the
 <p>We are going to run <code>fastCNV()</code> on our Visium HD object.
 The reference should be the non-tumor spots, for example,
 <code>Epithelium</code> or <code>Muscle</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>HD_obj <span class="ot">&lt;-</span> <span class="fu">fastCNV</span>(HD_obj, <span class="at">sampleName =</span> <span class="st">&quot;HD_obj&quot;</span>, <span class="at">referenceVar =</span> <span class="st">&quot;annots&quot;</span>,</span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>HD_obj <span class="ot">&lt;-</span> <span class="fu">fastCNV_10XHD</span>(HD_obj, <span class="at">sampleName =</span> <span class="st">&quot;HD_obj&quot;</span>, <span class="at">referenceVar =</span> <span class="st">&quot;annots&quot;</span>,</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                      <span class="at">referenceLabel =</span> <span class="fu">c</span>(<span class="st">&quot;Epithelium&quot;</span>,<span class="st">&quot;Muscle&quot;</span>))</span></code></pre></div>
 </div>
 <div id="cnv-fraction" class="section level2">

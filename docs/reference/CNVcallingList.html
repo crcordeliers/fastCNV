@@ -9,7 +9,7 @@ Performs Copy Number Variation (CNV) analysis on a list of Seurat objects."></he
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,8 @@ Performs Copy Number Variation (CNV) analysis on a list of Seurat objects."></he
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/fastCNV_sc.html">Introduction to fastCNV - scRNAseq data</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/fastCNV_HD.html">Introduction to fastCNV - Visium HD data</a></li>
+    <li><a class="dropdown-item" href="../articles/fastCNV_sc.html">Introduction to fastCNV - scRNAseq data</a></li>
     <li><a class="dropdown-item" href="../articles/fastCNV_ST.html">Introduction to fastCNV - ST data</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -64,7 +65,9 @@ Performs Copy Number Variation (CNV) analysis on a list of Seurat objects.</p>
 <span>  windowStep <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  saveGenomicWindows <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  topNGenes <span class="op">=</span> <span class="fl">7000</span>,</span>
-<span>  regionsToForce <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  chrArmsToForce <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  genesToForce <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  regionToForce <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -121,9 +124,17 @@ Each object can be either <strong>single-cell</strong> or <strong>spatial transc
 <dd><p>Integer. The number of top-expressed genes to retain in the analysis.</p></dd>
 
 
-<dt id="arg-regionstoforce">regionsToForce<a class="anchor" aria-label="anchor" href="#arg-regionstoforce"></a></dt>
+<dt id="arg-chrarmstoforce">chrArmsToForce<a class="anchor" aria-label="anchor" href="#arg-chrarmstoforce"></a></dt>
 <dd><p>A chromosome arm (e.g., <code>"8p"</code>, <code>"3q"</code>) or a list of chromosome arms (e.g., <code>c("3q", "8p", "17p")</code>) to force into the analysis.
 If specified, all genes within the given chromosome arm(s) will be included.</p></dd>
+
+
+<dt id="arg-genestoforce">genesToForce<a class="anchor" aria-label="anchor" href="#arg-genestoforce"></a></dt>
+<dd><p>A list of genes to force into the analysis (e.g. <code>c("FOXP3","MUC16","SAMD15")</code>).</p></dd>
+
+
+<dt id="arg-regiontoforce">regionToForce<a class="anchor" aria-label="anchor" href="#arg-regiontoforce"></a></dt>
+<dd><p>Chromosome region to force into the analysis (vector containing chr, start, end).</p></dd>
 
 </dl></div>
     <div class="section level2">
