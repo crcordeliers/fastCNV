@@ -14,6 +14,7 @@ biocViews:
 Imports: 
     biomaRt,
     circlize,
+    crayon
     ComplexHeatmap,
     dplyr,
     ggplot2,
