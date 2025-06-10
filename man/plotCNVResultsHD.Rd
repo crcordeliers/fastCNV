@@ -6,19 +6,21 @@
 Builds a heatmap to visualize the Visium HD CNV results based on genomic scores.}
 \usage{
 plotCNVResultsHD(
-  seuratObjHD,
+  seuratObj,
   referenceVar = NULL,
-  splitPlotOnVar = referenceVar,
+  clustersVar = "cnv_clusters",
+  splitPlotOnVar = clustersVar,
   savePath = ".",
   printPlot = FALSE,
   referencePalette = "default",
+  clusters_palette = "default",
   outputType = "png"
 )
 }
 \arguments{
-\item{seuratObjHD}{A Seurat object containing the genomic scores computed previously.}
-
 \item{referenceVar}{The name of the metadata column in the Seurat object containing reference annotations.}
+
+\item{clustersVar}{The name of the metadata column containing cluster information (default = \code{"cnv_clusters"}).}
 
 \item{splitPlotOnVar}{The name of the metadata column used to split the heatmap rows (e.g., cell type or cluster) (default = \code{clustersVar}).}
 
@@ -29,7 +31,12 @@ plotCNVResultsHD(
 \item{referencePalette}{A color palette for \code{referenceVar}.
 You can provide a custom palette as a vector of color codes (e.g., \code{c("#FF0000", "#00FF00")}).}
 
+\item{clusters_palette}{A color palette for \code{clustersVar}.
+You can provide a custom palette as a vector of color codes (e.g., \code{c("#F8766D", "#A3A500", "#00BF7D")}).}
+
 \item{outputType}{Character. Specifies the file format for saving the plot, either \code{"png"} or \code{"pdf"}.}
+
+\item{seuratObjHD}{A Seurat object containing the genomic scores computed previously.}
 }
 \value{
 This function generates a heatmap and saves it as a \code{.pdf} or \code{.png} file in the specified path (default = working directory).

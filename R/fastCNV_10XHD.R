@@ -75,10 +75,26 @@ fastCNV_10XHD <- function(seuratObjHD,
                           splitPlotOnVar = referenceVar,
                           referencePalette = "default"){
 
-  if(!length(seuratObjHD)==length(sampleName)) stop("error-fastCNV : seuratObjHD & sampleName should have the same length")
+  message_success <- function(text) {
+    timestamp <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
+    message(crayon::green(paste0("[", timestamp, "] ", text)))
+  }
+
+  message_warning <- function(text) {
+    timestamp <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
+    message(crayon::yellow(paste0("[", timestamp, "] ", text)))
+  }
+
+  message_error <- function(text) {
+    timestamp <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
+    message(crayon::red(paste0("[", timestamp, "] ", text)))
+  }
+
+  if(!length(seuratObjHD)==length(sampleName)) stop(crayon::red("seuratObjHD & sampleName should have the same length"))
 
   options(future.globals.maxSize = 8000*1024^2)
 
+  message_warning("Preparing HD object...")
   if (length(seuratObjHD) == 1) {
     Seurat::DefaultAssay(seuratObjHD) <- assay
     assaysCells <- Seurat::Cells(seuratObjHD)
@@ -93,8 +109,11 @@ fastCNV_10XHD <- function(seuratObjHD,
       newHDobj[[i]]@project.name = sampleName[i]
     }
   }
+  message_success("Done!")
+  invisible(gc())
 
   ## Do CNV Analysis on the seurat / list of seurat Visium HD Objects
+  message_warning("Running CNVAnalysis...")
   newHDobj <- CNVanalysis(object = newHDobj,
                           referenceVar = referenceVar,
                           referenceLabel = referenceLabel,
@@ -111,23 +130,33 @@ fastCNV_10XHD <- function(seuratObjHD,
                           chrArmsToForce = chrArmsToForce,
                           genesToForce = genesToForce,
                           regionToForce = regionToForce)
+  invisible(gc())
+  message_success("Done!")
+
 
   if (getCNVPerChromosomeArm == TRUE){
+    message_warning("Computing CNV per chromosome arm...")
     newHDobj <- CNVPerChromosomeArm(newHDobj)
+    message_success("Done!")
+    invisible(gc())
   }
 
   if (getCNVClusters == TRUE){
-    message("This may crash with large Visium HD samples. Turn `getCNVClusters` to `FALSE` to avoid this. ")
+    message_warning("Clustering CNVs...")
+    message_warning("This may crash with large Visium HD samples. Turn `getCNVClusters` to `FALSE` to avoid this. ")
     newHDobj <- CNVcluster(seuratObj = newHDobj,
                            k = k_clusters,
                            h = h_clusters,
                            plotDendrogram = plotDendrogram,
                            plotClustersOnDendrogram = plotClustersOnDendrogram,
                            plotElbowPlot = plotElbowPlot)
+    invisible(gc())
+    message_success("Done!")
   }
 
   if (length(newHDobj) == 1) {
     if (doPlot == TRUE) {
+      message_warning("Plotting CNV heatmap...")
       plotCNVResultsHD(seuratObjHD = newHDobj,
                        printPlot = printPlot,
                        savePath = savePath,
@@ -135,17 +164,24 @@ fastCNV_10XHD <- function(seuratObjHD,
                        referenceVar = referenceVar,
                        splitPlotOnVar = splitPlotOnVar,
                        referencePalette = referencePalette)
+      invisible(gc())
+      message_success("Done!")
     }
 
   } else if (length(newHDobj) > 1) {
-    for (i in 1:length(newHDobj)) {
-      plotCNVResultsHD(seuratObjHD = newHDobj[[i]],
-                       printPlot = printPlot,
-                       savePath = savePath,
-                       outputType = outputType,
-                       referenceVar = referenceVar,
-                       splitPlotOnVar = splitPlotOnVar,
-                       referencePalette = referencePalette)
+    if (doPlot == TRUE) {
+      message_warning("Plotting CNV heatmap...")
+      for (i in 1:length(newHDobj)) {
+        plotCNVResultsHD(seuratObjHD = newHDobj[[i]],
+                         printPlot = printPlot,
+                         savePath = savePath,
+                         outputType = outputType,
+                         referenceVar = referenceVar,
+                         splitPlotOnVar = splitPlotOnVar,
+                         referencePalette = referencePalette)
+        invisible(gc())
+      }
+      message_success("Done!")
     }
   }
 
