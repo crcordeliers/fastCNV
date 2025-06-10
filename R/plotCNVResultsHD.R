@@ -30,7 +30,7 @@
 #' @export
 
 
-plotCNVResultsHD <- function(seuratObj,
+plotCNVResultsHD <- function(seuratObjHD,
                              referenceVar = NULL,
                              clustersVar = "cnv_clusters",
                              splitPlotOnVar = clustersVar,
@@ -45,7 +45,7 @@ plotCNVResultsHD <- function(seuratObj,
   }
 
   if (clustersVar == "cnv_clusters"){
-    if (!(clustersVar %in% names(seuratObj@meta.data))) {
+    if (!(clustersVar %in% names(seuratObjHD@meta.data))) {
       if(splitPlotOnVar == clustersVar){
         splitPlotOnVar = referenceVar
       }
@@ -53,16 +53,16 @@ plotCNVResultsHD <- function(seuratObj,
     }
   }
 
-  M <- t(as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")["data"]))
+  M <- t(as.matrix(Seurat::GetAssay(seuratObjHD, "genomicScores")["data"]))
   if (any(referencePalette == "default")) {
     referencePalette = as.character(paletteer::paletteer_d("pals::glasbey"))
   }
   if (!is.null(referenceVar)) {
-    annotation_df <- as.data.frame(seuratObj@meta.data[[referenceVar]])
+    annotation_df <- as.data.frame(seuratObjHD@meta.data[[referenceVar]])
     colnames(annotation_df) <- "Annotations"
     annot_colors <- setNames(referencePalette[1:length(unique(annotation_df$Annotations))], unique(annotation_df$Annotations))
     if (!is.null(splitPlotOnVar)) {
-      split_df <- as.data.frame(Seurat::FetchData(seuratObj, vars = splitPlotOnVar))
+      split_df <- as.data.frame(Seurat::FetchData(seuratObjHD, vars = splitPlotOnVar))
       colnames(split_df) <- "Split"
     } else {
       split_df <- NULL
@@ -71,7 +71,7 @@ plotCNVResultsHD <- function(seuratObj,
     split_df <- NULL
   }
   if (!is.null(clustersVar)) {
-    clusters_df <- as.data.frame(seuratObj@meta.data[[clustersVar]])
+    clusters_df <- as.data.frame(seuratObjHD@meta.data[[clustersVar]])
     colnames(clusters_df) <- "Clusters"
     if (any(clusters_palette == "default")){
       clusters_palette = scales::hue_pal()(length(unique(clusters_df$Clusters)))
@@ -149,7 +149,7 @@ plotCNVResultsHD <- function(seuratObj,
     use_raster = TRUE,
     clustering_distance_rows = "euclidean",
     clustering_method_rows = "ward.D",
-    column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")["data"])), ".", fixed = TRUE), function(z) z[1])),
+    column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObjHD, assay = "genomicScores")["data"])), ".", fixed = TRUE), function(z) z[1])),
     column_title_gp = grid::gpar(fontsize = 8),
     column_title = c(1:22,"X"),
     row_split = as.factor(split_df[[1]]),
@@ -167,7 +167,7 @@ plotCNVResultsHD <- function(seuratObj,
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"), grid::unit(1, "null")))))
     grid::pushViewport(grid::viewport(layout.pos.row = 1))
-    grid::grid.text(paste0("CNV heatmap for sample ", seuratObj@project.name), gp = grid::gpar(fontsize = 20))
+    grid::grid.text(paste0("CNV heatmap for sample ", seuratObjHD@project.name), gp = grid::gpar(fontsize = 20))
     grid::popViewport()
     grid::pushViewport(grid::viewport(layout.pos.row = 2))
     ComplexHeatmap::draw(hm, newpage = FALSE)
@@ -176,23 +176,23 @@ plotCNVResultsHD <- function(seuratObj,
 
   if(!is.null(savePath)) {
     if (outputType == "png") {
-      fname <- file.path(savePath, paste0("heatmap.fastCNV_",seuratObj@project.name,".png"))
+      fname <- file.path(savePath, paste0("heatmap.fastCNV_",seuratObjHD@project.name,".png"))
       png(width = 3500, height = 2200, filename = fname, res = 300)
     }
     if (outputType == "pdf"){
-      fname <- file.path(savePath, paste0("heatmap.fastCNV_",seuratObj@project.name,".pdf"))
+      fname <- file.path(savePath, paste0("heatmap.fastCNV_",seuratObjHD@project.name,".pdf"))
       pdf(width = 12, height = 7, file = fname)
     }
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"),grid::unit(1, "null")))))
     grid::pushViewport(grid::viewport(layout.pos.row = 1,gp = grid::gpar(fill = "white")))
-    grid::grid.text(paste0("CNV heatmap for sample ", seuratObj@project.name), gp = grid::gpar(fontsize = 20))
+    grid::grid.text(paste0("CNV heatmap for sample ", seuratObjHD@project.name), gp = grid::gpar(fontsize = 20))
     grid::popViewport()
     grid::pushViewport(grid::viewport(layout.pos.row = 2))
     ComplexHeatmap::draw(hm, newpage = FALSE)
     grid::popViewport()
     Sys.sleep(3)
     dev.off()
-    message("CNV plot for sample ",seuratObj@project.name, " saved at ", fname)
+    message("CNV plot for sample ",seuratObjHD@project.name, " saved at ", fname)
   }
 }
