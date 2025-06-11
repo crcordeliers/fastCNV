@@ -5,6 +5,8 @@
 #' and cluster visualization on the dendrogram. The resulting cluster assignments are stored in the Seurat object.
 #'
 #' @param seuratObj A Seurat object containing a "genomicScores" assay with a matrix of genomic scores for clustering.
+#' @param referenceVar The name of the metadata column in the Seurat object containing reference annotations.
+#' @param tumorLabel The label within `referenceVar` that specifies the tumor/malignant population (can be any type of annotation).
 #' @param k Optional. The number of clusters to cut the dendrogram into. If `NULL`, the optimal number of clusters is determined automatically using the elbow method.
 #' @param h Optional. The height at which to cut the dendrogram for clustering. If both `k` and `h` are provided, `k` takes precedence.
 #' @param plotDendrogram Logical. If `TRUE`, plots the dendrogram. Defaults to `FALSE`.
@@ -27,14 +29,20 @@
 
 
 CNVcluster <- function(seuratObj,
-                         k = NULL,
-                         h = NULL,
-                         plotDendrogram = F,
-                         plotClustersOnDendrogram = F,
-                         plotElbowPlot = F) {
+                       referenceVar = NULL,
+                       tumorLabel = NULL,
+                       k = NULL,
+                       h = NULL,
+                       plotDendrogram = F,
+                       plotClustersOnDendrogram = F,
+                       plotElbowPlot = F) {
 
   if (is.null(k)){kDetection = "automatic"}
   if (!is.null(k)){kDetection = "manual"}
+  if(!is.null(tumorLabel) && !is.null(referenceVar)) {
+    seuratObj_orig <- seuratObj
+    seuratObj <- subset(seuratObj_orig, cells = Cells(seuratObj_orig)[which(seuratObj_orig[[referenceVar]] == tumorLabel)])
+  }
 
   genomicMatrix <- t(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data))
 
@@ -101,6 +109,14 @@ CNVcluster <- function(seuratObj,
   if (plotClustersOnDendrogram){rect.hclust(hc, k = k, h = h, border = "red")}
 
   seuratObj$cnv_clusters = as.factor(clusters)
+
+  if(!is.null(tumorLabel) && !is.null(referenceVar)) {
+    seuratObj_orig$cnv_clusters <- 0
+    seuratObj_orig$cnv_clusters[Cells(seuratObj)] <-  as.integer(as.character(seuratObj$cnv_clusters))
+    seuratObj <- seuratObj_orig
+    rm(seuratObj_orig)
+    invisible(gc())
+  }
 
   return(seuratObj)
 }

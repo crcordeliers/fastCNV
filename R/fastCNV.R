@@ -29,6 +29,7 @@
 #' @param topNGenes Number of top expressed genes to keep (default = 7000).
 #' @param getCNVPerChromosomeArm If `TRUE`, will save the CNV per chromosome arm into the metadata.
 #' @param getCNVClusters If `TRUE`, will perform clustering on the CNV scores and save them in the metadata of the Seurat object as `cnv_clusters`.
+#' @param tumorLabel The label within `referenceVar` that specifies the tumor/malignant population (can be any type of annotation).
 #' @param k_clusters Optional. Number of clusters to cut the dendrogram into. If `NULL`, the optimal number of clusters is determined automatically using the elbow method.
 #' @param h_clusters Optional. The height at which to cut the dendrogram for clustering. If both `k` and `h` are provided, `k` takes precedence.
 #' @param plotDendrogram Logical. Whether to plot the dendrogram (default = `FALSE`).
@@ -78,6 +79,7 @@ fastCNV <- function (seuratObj,
                      getCNVPerChromosomeArm = TRUE,
 
                      getCNVClusters = TRUE,
+                     tumorLabel = NULL,
                      k_clusters = NULL,
                      h_clusters = NULL,
                      plotDendrogram = FALSE,
@@ -176,11 +178,11 @@ fastCNV <- function (seuratObj,
   if (getCNVClusters == TRUE) {
     message_warning("Clustering CNVs...")
     if (length(seuratObj) == 1) {
-      seuratObj <- CNVcluster(seuratObj, k = k_clusters, h = h_clusters, plotDendrogram = plotDendrogram,
+      seuratObj <- CNVcluster(seuratObj, referenceVar = referenceVar, tumorLabel = tumorLabel, k = k_clusters, h = h_clusters, plotDendrogram = plotDendrogram,
                               plotClustersOnDendrogram = plotClustersOnDendrogram, plotElbowPlot = plotElbowPlot)
     } else {
       for (i in 1:length(seuratObj)) {
-        seuratObj[[i]] <- CNVcluster(seuratObj[[i]], k = k_clusters, h = h_clusters, plotDendrogram = plotDendrogram,
+        seuratObj[[i]] <- CNVcluster(seuratObj[[i]], referenceVar = referenceVar, tumorLabel = tumorLabel, k = k_clusters, h = h_clusters, plotDendrogram = plotDendrogram,
                                      plotClustersOnDendrogram = plotClustersOnDendrogram, plotElbowPlot = plotElbowPlot)
       }
     }

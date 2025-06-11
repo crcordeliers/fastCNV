@@ -23,6 +23,7 @@
 #' @param topNGenes Number of top expressed genes to keep (default = 7000).
 #' @param getCNVPerChromosomeArm If `TRUE`, will save the CNV per chromosome arm into the metadata.
 #' @param getCNVClusters If `TRUE`, will perform clustering on the CNV scores and save them in the metadata of the Seurat object as `cnv_clusters`.
+#' @param tumorLabel The label within `referenceVar` that specifies the tumor/malignant population (can be any type of annotation).
 #' @param k_clusters Optional. Number of clusters to cut the dendrogram into. If `NULL`, the optimal number of clusters is determined automatically using the elbow method.
 #' @param h_clusters Optional. The height at which to cut the dendrogram for clustering. If both `k` and `h` are provided, `k` takes precedence.
 #' @param plotDendrogram Logical. Whether to plot the dendrogram (default = `FALSE`).
@@ -61,7 +62,9 @@ fastCNV_10XHD <- function(seuratObjHD,
                           regionToForce = NULL,
 
                           getCNVPerChromosomeArm = TRUE,
+
                           getCNVClusters = FALSE,
+                          tumorLabel = NULL,
                           k_clusters = NULL,
                           h_clusters = NULL,
                           plotDendrogram = FALSE,
@@ -145,6 +148,8 @@ fastCNV_10XHD <- function(seuratObjHD,
     message_warning("Clustering CNVs...")
     message_warning("This may crash with large Visium HD samples. Turn `getCNVClusters` to `FALSE` to avoid this. ")
     newHDobj <- CNVcluster(seuratObj = newHDobj,
+                           referenceVar = referenceVar,
+                           tumorLabel = tumorLabel,
                            k = k_clusters,
                            h = h_clusters,
                            plotDendrogram = plotDendrogram,
