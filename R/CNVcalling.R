@@ -26,6 +26,7 @@
 #' @import stats
 #' @import Seurat
 #' @import SeuratObject
+#' @import crayon
 #'
 #' @export
 #'
@@ -46,14 +47,14 @@ CNVcalling <- function(seuratObj,
                        regionToForce = NULL) {
   # getting reference cells / spots
   if (is.null(referenceVar) || is.null(referenceLabel)){
-    message(paste0("referenceVar and/or referenceLabel parameters not found. Computing the CNV without a reference."))
+    message(crayon::black,paste0("referenceVar and/or referenceLabel parameters not found. Computing the CNV without a reference."))
     # unable to scale the results on reference data if we don't know what the reference data is
     scaleOnReferenceLabel = FALSE
   } else {
     if (length(referenceLabel) == 1) {
       referenceCells <- Seurat::Cells(seuratObj)[which(Seurat::FetchData(seuratObj, vars = referenceVar) == referenceLabel)]
       if (length(referenceCells) == 0) {
-        message(paste0("CNVcalling : there is no annotation called ", referenceLabel," in the ", referenceVar," metadata slot of your seurat object.
+        message(crayon::black,paste0("CNVcalling : there is no annotation called ", referenceLabel," in the ", referenceVar," metadata slot of your seurat object.
 Computing the CNV without a reference."))
         scaleOnReferenceLabel = FALSE
         rm(referenceCells)
@@ -66,7 +67,7 @@ Computing the CNV without a reference."))
         }
       }
       if (length(referenceCells) == 0) {
-        message("Couldn't find any cells annotated as the referenceLabel in the ",referenceVar," metadata slot of the seurat object.
+        message(crayon::black,"Couldn't find any cells annotated as the referenceLabel in the ",referenceVar," metadata slot of the seurat object.
                 Computing the CNV without a reference.")
         referenceLabel = NULL
         scaleOnReferenceLabel = FALSE
