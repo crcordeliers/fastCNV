@@ -17,7 +17,7 @@
 
 getGenes <- function(filters=NULL, cache=TRUE){
   if(cache) {
-    message("Using genes data from ensembl version 113.")
+    message(crayon::black,"Using genes data from ensembl version 113.")
     data(geneMetadata,envir = environment())
   } else {
     message("Retrieving data from ensembl current version...")

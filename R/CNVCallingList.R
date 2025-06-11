@@ -256,8 +256,8 @@ CNVcallingList <- function(seuratList,
   }
 
   for (i in 1:length(seuratList)) {
-    genomicAssay <- suppressWarnings(Seurat::CreateAssayObject(counts = LgenomicScoresTrimmed[i][[1]]))
-    seuratList[[i]][["genomicScores"]] <- genomicAssay
+    genomicAssay <- Seurat::CreateAssayObject(counts = LgenomicScoresTrimmed[i][[1]])
+    seuratList[[i]][["genomicScores"]] <- suppressWarnings(genomicAssay)
     seuratList[[i]][["cnv_fraction"]] <- colMeans(abs(LgenomicScoresTrimmed[i][[1]]) > 0)
   }
   invisible(gc())

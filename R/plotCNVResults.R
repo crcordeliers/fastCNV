@@ -24,6 +24,7 @@
 #' @import paletteer
 #' @import magick
 #' @import scales
+#' @import crayon
 #'
 #' @return This function generates a heatmap and saves it as a `.pdf` or `.png` file in the specified path (default = working directory).
 #'
@@ -192,7 +193,7 @@ plotCNVResults <- function(seuratObj,
     grid::popViewport()
     Sys.sleep(3)
     dev.off()
-    message("CNV plot for sample ",seuratObj@project.name, " saved at ", fname)
+    message(crayon::black,"CNV plot for sample ",seuratObj@project.name, " saved at ", fname)
   }
   #return(hm)
 }
