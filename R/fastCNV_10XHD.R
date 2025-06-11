@@ -98,14 +98,14 @@ fastCNV_10XHD <- function(seuratObjHD,
   if (length(seuratObjHD) == 1) {
     Seurat::DefaultAssay(seuratObjHD) <- assay
     assaysCells <- Seurat::Cells(seuratObjHD)
-    newHDobj <- subset(seuratObjHD, cells = assaysCells)
+    newHDobj <- suppressWarnings(suppressMessages(subset(seuratObjHD, cells = assaysCells)))
     newHDobj@project.name = sampleName
   } else if (length(seuratObjHD) > 1) {
     newHDobj <- list()
     for (i in 1:length(seuratObjHD)) {
       Seurat::DefaultAssay(seuratObjHD[[i]]) <- assay
       assaysCells <- Seurat::Cells(seuratObjHD[[i]])
-      newHDobj[[i]] <- subset(seuratObjHD[[i]], cells = assaysCells)
+      newHDobj[[i]] <- suppressWarnings(suppressMessages(subset(seuratObjHD[[i]], cells = assaysCells)))
       newHDobj[[i]]@project.name = sampleName[i]
     }
   }

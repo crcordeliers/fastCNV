@@ -22,21 +22,21 @@ generateCNVClonesMatrix <- function(seuratObj, healthyClusters = NULL) {
   cnv_matrix_clusters <- matrix(nrow = 0, ncol = ncol(cnv_matrix))
 
   # Loop through all unique clusters and calculate the mean CNV for each cluster
-  for (cluster in 1:(length(unique(seuratObj[["cnv_clusters"]])[[1]]))) {
+  for (cluster in unique(seuratObj[["cnv_clusters"]])[[1]]) {
     cells <- rownames(seuratObj@meta.data)[which(seuratObj[["cnv_clusters"]] == cluster)]
     cnv_matrix_clusters <- rbind(cnv_matrix_clusters, colMeans(cnv_matrix[cells,]))
   }
 
-rownames(cnv_matrix_clusters) <- 1:(length(unique(seuratObj[["cnv_clusters"]])[[1]]))
+  rownames(cnv_matrix_clusters) <- unique(seuratObj[["cnv_clusters"]])[[1]]
 
-# Label clusters as "Clone X" or "Benign X" depending on healthyClusters
-rownames(cnv_matrix_clusters) <- paste0("Clone ", rownames(cnv_matrix_clusters))
-if (!is.null(healthyClusters)) {
-  for (hc in healthyClusters) {
-    rownames(cnv_matrix_clusters)[rownames(cnv_matrix_clusters) == paste0("Clone ",as.character(hc))] <- paste0("Benign ", hc)
+  # Label clusters as "Clone X" or "Benign X" depending on healthyClusters
+  rownames(cnv_matrix_clusters) <- paste0("Clone ", rownames(cnv_matrix_clusters))
+  if (!is.null(healthyClusters)) {
+    for (hc in healthyClusters) {
+      rownames(cnv_matrix_clusters)[rownames(cnv_matrix_clusters) == paste0("Clone ",as.character(hc))] <- paste0("Benign ", hc)
+    }
   }
-}
 
-# Return the CNV matrix
-return(cnv_matrix_clusters)
+  # Return the CNV matrix
+  return(cnv_matrix_clusters)
 }

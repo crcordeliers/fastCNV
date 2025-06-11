@@ -266,7 +266,7 @@ Computing the CNV without a reference."))
     save(genomicWindows, file = paste0("genomicWindows_size",windowSize,"_step",windowStep,".RData"))
   }
 
-  genomicAssay <- Seurat::CreateAssayObject(data = as.matrix(genomicScoresTrimmed))
+  genomicAssay <- suppressWarnings(Seurat::CreateAssayObject(data = as.matrix(genomicScoresTrimmed)))
   seuratObj[["genomicScores"]] <- genomicAssay
   seuratObj[["cnv_fraction"]] <- colMeans(abs(genomicScoresTrimmed) > 0)
 
