@@ -51,6 +51,7 @@ CNVanalysis <- function(object,
                        genesToForce = NULL,
                        regionToForce = NULL) {
 
+    message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Running CNV analysis...")))
     if (!is.list(object)) {
       object <- CNVcalling(object,
                            assay = assay,
@@ -189,5 +190,6 @@ CNVanalysis <- function(object,
 
       }
     }
+  message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
   return (object)
 }

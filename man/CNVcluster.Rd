@@ -6,6 +6,8 @@
 \usage{
 CNVcluster(
   seuratObj,
+  referenceVar = NULL,
+  tumorLabel = NULL,
   k = NULL,
   h = NULL,
   plotDendrogram = F,
@@ -15,6 +17,10 @@ CNVcluster(
 }
 \arguments{
 \item{seuratObj}{A Seurat object containing a "genomicScores" assay with a matrix of genomic scores for clustering.}
+
+\item{referenceVar}{The name of the metadata column in the Seurat object containing reference annotations.}
+
+\item{tumorLabel}{The label within \code{referenceVar} that specifies the tumor/malignant population (can be any type of annotation).}
 
 \item{k}{Optional. The number of clusters to cut the dendrogram into. If \code{NULL}, the optimal number of clusters is determined automatically using the elbow method.}
 

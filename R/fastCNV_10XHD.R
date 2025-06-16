@@ -46,7 +46,7 @@ fastCNV_10XHD <- function(seuratObjHD,
                           sampleName,
                           referenceVar = NULL,
                           referenceLabel = NULL,
-                          assay = "Spatial.008um",
+                          assay = "Spatial.016um",
 
                           pooledReference = TRUE,
                           denoise = TRUE,
@@ -78,26 +78,11 @@ fastCNV_10XHD <- function(seuratObjHD,
                           splitPlotOnVar = referenceVar,
                           referencePalette = "default"){
 
-  message_success <- function(text) {
-    timestamp <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    message(crayon::green(paste0("[", timestamp, "] ", text)))
-  }
-
-  message_warning <- function(text) {
-    timestamp <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    message(crayon::yellow(paste0("[", timestamp, "] ", text)))
-  }
-
-  message_error <- function(text) {
-    timestamp <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    message(crayon::red(paste0("[", timestamp, "] ", text)))
-  }
-
   if(!length(seuratObjHD)==length(sampleName)) stop(crayon::red("seuratObjHD & sampleName should have the same length"))
 
   options(future.globals.maxSize = 8000*1024^2)
 
-  message_warning("Preparing HD object...")
+  message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Preparing HD object...")))
   if (length(seuratObjHD) == 1) {
     Seurat::DefaultAssay(seuratObjHD) <- assay
     assaysCells <- Seurat::Cells(seuratObjHD)
@@ -112,11 +97,10 @@ fastCNV_10XHD <- function(seuratObjHD,
       newHDobj[[i]]@project.name = sampleName[i]
     }
   }
-  message_success("Done!")
+  message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
   invisible(gc())
 
   ## Do CNV Analysis on the seurat / list of seurat Visium HD Objects
-  message_warning("Running CNVAnalysis...")
   newHDobj <- CNVanalysis(object = newHDobj,
                           referenceVar = referenceVar,
                           referenceLabel = referenceLabel,
@@ -134,19 +118,15 @@ fastCNV_10XHD <- function(seuratObjHD,
                           genesToForce = genesToForce,
                           regionToForce = regionToForce)
   invisible(gc())
-  message_success("Done!")
 
 
   if (getCNVPerChromosomeArm == TRUE){
-    message_warning("Computing CNV per chromosome arm...")
     newHDobj <- CNVPerChromosomeArm(newHDobj)
-    message_success("Done!")
     invisible(gc())
   }
 
   if (getCNVClusters == TRUE){
-    message_warning("Clustering CNVs...")
-    message_warning("This may crash with large Visium HD samples. Turn `getCNVClusters` to `FALSE` to avoid this. ")
+    message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," This may crash with large Visium HD samples. Turn `getCNVClusters` to `FALSE` to avoid this crashing.")))
     newHDobj <- CNVcluster(seuratObj = newHDobj,
                            referenceVar = referenceVar,
                            tumorLabel = tumorLabel,
@@ -156,12 +136,10 @@ fastCNV_10XHD <- function(seuratObjHD,
                            plotClustersOnDendrogram = plotClustersOnDendrogram,
                            plotElbowPlot = plotElbowPlot)
     invisible(gc())
-    message_success("Done!")
   }
 
   if (length(newHDobj) == 1) {
     if (doPlot == TRUE) {
-      message_warning("Plotting CNV heatmap...")
       plotCNVResultsHD(seuratObjHD = newHDobj,
                        printPlot = printPlot,
                        savePath = savePath,
@@ -170,12 +148,10 @@ fastCNV_10XHD <- function(seuratObjHD,
                        splitPlotOnVar = splitPlotOnVar,
                        referencePalette = referencePalette)
       invisible(gc())
-      message_success("Done!")
     }
 
   } else if (length(newHDobj) > 1) {
     if (doPlot == TRUE) {
-      message_warning("Plotting CNV heatmap...")
       for (i in 1:length(newHDobj)) {
         plotCNVResultsHD(seuratObjHD = newHDobj[[i]],
                          printPlot = printPlot,
@@ -186,7 +162,6 @@ fastCNV_10XHD <- function(seuratObjHD,
                          referencePalette = referencePalette)
         invisible(gc())
       }
-      message_success("Done!")
     }
   }
 

@@ -29,6 +29,7 @@ fastCNV(
   regionToForce = NULL,
   getCNVPerChromosomeArm = TRUE,
   getCNVClusters = TRUE,
+  tumorLabel = NULL,
   k_clusters = NULL,
   h_clusters = NULL,
   plotDendrogram = FALSE,
@@ -92,6 +93,8 @@ fastCNV(
 \item{getCNVPerChromosomeArm}{If \code{TRUE}, will save the CNV per chromosome arm into the metadata.}
 
 \item{getCNVClusters}{If \code{TRUE}, will perform clustering on the CNV scores and save them in the metadata of the Seurat object as \code{cnv_clusters}.}
+
+\item{tumorLabel}{The label within \code{referenceVar} that specifies the tumor/malignant population (can be any type of annotation).}
 
 \item{k_clusters}{Optional. Number of clusters to cut the dendrogram into. If \code{NULL}, the optimal number of clusters is determined automatically using the elbow method.}
 

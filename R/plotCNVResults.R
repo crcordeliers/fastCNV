@@ -40,6 +40,7 @@ plotCNVResults <- function(seuratObj,
                            referencePalette = "default",
                            clusters_palette = "default",
                            outputType = "png"){
+  message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Plotting CNV heatmap...")))
   if (outputType != "png" && outputType != "pdf"){
     message("Warning : outputType not valid, should be 'pdf' or 'png'. Setting outputType to 'png'")
     outputType = "png"
@@ -195,5 +196,6 @@ plotCNVResults <- function(seuratObj,
     dev.off()
     message(crayon::black,"CNV plot for sample ",seuratObj@project.name, " saved at ", fname)
   }
+  message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
   #return(hm)
 }

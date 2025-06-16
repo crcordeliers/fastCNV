@@ -97,21 +97,6 @@ fastCNV <- function (seuratObj,
                      clusters_palette = "default"
                      ){
 
-  message_success <- function(text) {
-    timestamp <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    message(crayon::green(paste0("[", timestamp, "] ", text)))
-  }
-
-  message_warning <- function(text) {
-    timestamp <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    message(crayon::yellow(paste0("[", timestamp, "] ", text)))
-  }
-
-  message_error <- function(text) {
-    timestamp <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    message(crayon::red(paste0("[", timestamp, "] ", text)))
-  }
-
   if(!length(seuratObj)==length(sampleName)) stop(crayon::red("seuratObjHD & sampleName should have the same length"))
 
   options(future.globals.maxSize = 8000*1024^2)
@@ -120,7 +105,6 @@ fastCNV <- function (seuratObj,
     seuratObj <- list(seuratObj) ; names(seuratObj) <- sampleName
   }
   if (prepareCounts == TRUE & aggregFactor>=1000) {
-    message_warning("Aggregating counts matrix...")
     for (i in 1:length(seuratObj)) {
       seuratObj[[i]] <- prepareCountsForCNVAnalysis(seuratObj[[i]], sampleName = sampleName[[i]],
                                                    referenceVar = referenceVar,
@@ -130,7 +114,6 @@ fastCNV <- function (seuratObj,
                                                    reClusterSeurat = reClusterSeurat  )
       invisible(gc())
     }
-    message_success("Done!")
   } else {
     for (i in 1:length(seuratObj)) {
       seuratObj[[i]]@project.name = sampleName[[i]]
@@ -139,7 +122,6 @@ fastCNV <- function (seuratObj,
 
 
   if (length(seuratObj) > 1) {
-    message_warning("Running CNVAnalysis...")
     seuratObj <- CNVanalysis(seuratObj, referenceVar = referenceVar, referenceLabel = referenceLabel,
                               #doRecapPlot = doRecapPlot,
                               pooledReference = pooledReference,
@@ -148,9 +130,7 @@ fastCNV <- function (seuratObj,
                               chrArmsToForce = chrArmsToForce, windowSize = windowSize, windowStep = windowStep,
                               saveGenomicWindows = saveGenomicWindows, topNGenes = topNGenes)
     invisible(gc())
-    message_success("Done!")
   } else {
-    message_warning("Running CNVAnalysis...")
     seuratObj <- CNVanalysis(seuratObj[[1]], referenceVar = referenceVar, referenceLabel = referenceLabel,
                          #doRecapPlot = doRecapPlot,
                          pooledReference = pooledReference, denoise = denoise,
@@ -159,11 +139,9 @@ fastCNV <- function (seuratObj,
                          chrArmsToForce = chrArmsToForce, windowSize = windowSize, windowStep = windowStep,
                          saveGenomicWindows = saveGenomicWindows, topNGenes = topNGenes)
     invisible(gc())
-    message_success("Done!")
   }
 
   if (getCNVPerChromosomeArm == TRUE) {
-    message_warning("Computing CNV per chromosome arm...")
     if (length(seuratObj) == 1) {
           seuratObj <- CNVPerChromosomeArm(seuratObj)
     } else {
@@ -172,11 +150,9 @@ fastCNV <- function (seuratObj,
       }
     }
     invisible(gc())
-    message_success("Done!")
   }
 
   if (getCNVClusters == TRUE) {
-    message_warning("Clustering CNVs...")
     if (length(seuratObj) == 1) {
       seuratObj <- CNVcluster(seuratObj, referenceVar = referenceVar, tumorLabel = tumorLabel, k = k_clusters, h = h_clusters, plotDendrogram = plotDendrogram,
                               plotClustersOnDendrogram = plotClustersOnDendrogram, plotElbowPlot = plotElbowPlot)
@@ -187,11 +163,9 @@ fastCNV <- function (seuratObj,
       }
     }
     invisible(gc())
-    message_success("Done!")
   }
 
   if (doPlot == TRUE) {
-    message_warning("Plotting CNV heatmap...")
     if (length(seuratObj) > 1) {
       for (i in 1:length(seuratObj)) {
         if (Seurat::Project(seuratObj[[i]]) == "SeuratProject") {Seurat::Project(seuratObj[[i]]) = paste0("Sample",i)}
@@ -206,7 +180,6 @@ fastCNV <- function (seuratObj,
                      savePath = savePath, printPlot = printPlot, referencePalette = referencePalette, clusters_palette = clusters_palette, outputType = outputType)
       invisible(gc())
     }
-    message_success("Done!")
   }
 
 

@@ -40,6 +40,7 @@ plotCNVResultsHD <- function(seuratObjHD,
                              referencePalette = "default",
                              clusters_palette = "default",
                              outputType = "png"){
+  message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Plotting CNV heatmap...")))
   if (outputType != "png" && outputType != "pdf"){
     message("Warning : outputType not valid, should be 'pdf' or 'png'. Setting outputType to 'png'")
     outputType = "png"
@@ -175,13 +176,15 @@ plotCNVResultsHD <- function(seuratObjHD,
     grid::popViewport()
   }
 
+  docname = paste0("heatmap.fastCNV_",clustersVar,"_",seuratObjHD@project.name,".png")
+
   if(!is.null(savePath)) {
     if (outputType == "png") {
-      fname <- file.path(savePath, paste0("heatmap.fastCNV_",seuratObjHD@project.name,".png"))
+      fname <- file.path(savePath, docname)
       png(width = 3500, height = 2200, filename = fname, res = 300)
     }
     if (outputType == "pdf"){
-      fname <- file.path(savePath, paste0("heatmap.fastCNV_",seuratObjHD@project.name,".pdf"))
+      fname <- file.path(savePath, docname)
       pdf(width = 12, height = 7, file = fname)
     }
     grid::grid.newpage()
@@ -196,4 +199,5 @@ plotCNVResultsHD <- function(seuratObjHD,
     dev.off()
     message(crayon::black,"CNV plot for sample ",seuratObjHD@project.name, " saved at ", fname)
   }
+  message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
 }

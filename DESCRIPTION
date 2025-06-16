@@ -1,6 +1,6 @@
 Package: fastCNV
 Title: fastCNV
-Version: 0.9.9
+Version: 0.9.13
 Authors@R: 
     c(person("Gadea", "Cabrejas", , "gadea.cabrejas-saiz@u-paris.fr", role = c("aut", "cre")),
       person("Clarice", "Groeneveld", , "clarice.groeneveld@inserm.fr", role = c("aut", "ctb")))
@@ -17,6 +17,7 @@ Imports:
     crayon,
     ComplexHeatmap,
     dplyr,
+    FNN,
     ggplot2,
     ggtree,
     grDevices,
