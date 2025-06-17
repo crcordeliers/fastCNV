@@ -56,7 +56,7 @@ annotations_8um_to_16um <- function(HDobj,
 
   HDobj[[paste0("projected_",referenceVar)]] <- NA
   HDobj@meta.data[Seurat::Cells(visium16um),paste0("projected_",referenceVar)] = visium16um$projected_annotation
-  rm(coords_16um,coords_8um,kmeans,mat_16um,mat_8um,nn,annotations_8um,nearest_8um_index,nearest_8um_names,projected_annotations,visium16um,visium8um) ; invisible(gc())
+  rm(coords_16um,coords_8um,mat_16um,mat_8um,nn,annotations_8um,nearest_8um_index,nearest_8um_names,projected_annotations,visium16um,visium8um) ; invisible(gc())
 
   print(paste0("New annotation column (new referenceVar) is named : projected_",referenceVar,"."))
 

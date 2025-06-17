@@ -45,7 +45,7 @@ library(Seurat)
 Load your Visium HD data with Seurat.
 
 ``` {r imports}
-utils::data(HDBreast)
+HDBreast <- load_HDBreast()
 ```
 
 ## Check annotation

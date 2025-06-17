@@ -75,7 +75,8 @@ fastCNV_10XHD <- function(seuratObjHD,
                           printPlot = FALSE,
                           savePath = ".",
                           outputType = "png",
-                          splitPlotOnVar = referenceVar,
+                          clustersVar = clustersVar,
+                          splitPlotOnVar = clustersVar,
                           referencePalette = "default"){
 
   if(!length(seuratObjHD)==length(sampleName)) stop(crayon::red("seuratObjHD & sampleName should have the same length"))
@@ -126,7 +127,7 @@ fastCNV_10XHD <- function(seuratObjHD,
   }
 
   if (getCNVClusters == TRUE){
-    message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," This may crash with large Visium HD samples. Turn `getCNVClusters` to `FALSE` to avoid this crashing.")))
+    message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," CNV clustering may crash with large Visium HD samples. Turn `getCNVClusters` to `FALSE` to avoid this crashing.")))
     newHDobj <- CNVcluster(seuratObj = newHDobj,
                            referenceVar = referenceVar,
                            tumorLabel = tumorLabel,
@@ -145,6 +146,7 @@ fastCNV_10XHD <- function(seuratObjHD,
                        savePath = savePath,
                        outputType = outputType,
                        referenceVar = referenceVar,
+                       clustersVar = clustersVar,
                        splitPlotOnVar = splitPlotOnVar,
                        referencePalette = referencePalette)
       invisible(gc())
@@ -158,6 +160,7 @@ fastCNV_10XHD <- function(seuratObjHD,
                          savePath = savePath,
                          outputType = outputType,
                          referenceVar = referenceVar,
+                         clustersVar = clustersVar,
                          splitPlotOnVar = splitPlotOnVar,
                          referencePalette = referencePalette)
         invisible(gc())
