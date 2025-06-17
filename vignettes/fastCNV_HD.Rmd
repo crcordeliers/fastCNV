@@ -65,7 +65,7 @@ You can take a look at which annotations are present in your objects, in order t
 unique(HDBreast[["annots_8um"]])
 ```
 
-fastCNV will use by default the 16um assay, so if your annotations are done on the 8um resolution you will need to run this function.
+fastCNV will use by default the 16um assay, so if your annotations are done on the 8um resolution you will need to run this function before running fastCNV on the 16um assay.
 
 ```{r annotations_8_to_16}
 HDBreast <- annotations_8um_to_16um(HDBreast, referenceVar = "annots_8um") 

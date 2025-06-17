@@ -34,7 +34,8 @@ fastCNV_10XHD(
   printPlot = FALSE,
   savePath = ".",
   outputType = "png",
-  splitPlotOnVar = referenceVar,
+  clustersVar = "cnv_clusters",
+  splitPlotOnVar = clustersVar,
   referencePalette = "default"
 )
 }
@@ -97,9 +98,15 @@ fastCNV_10XHD(
 
 \item{outputType}{Specifies the file format for saving the plot, either \code{"png"} or \code{"pdf"} (default = \code{"png"}).}
 
+\item{clustersVar}{The name of the metadata column containing cluster information (default = \code{"cnv_clusters"}).}
+
 \item{splitPlotOnVar}{The name of the metadata column to split the observations during the \code{plotCNVResults} step, if different from \code{referenceVar}.}
 
-\item{referencePalette}{The color palette that should be used for \code{referenceVar} (default = \code{"default"}).}
+\item{referencePalette}{A color palette for \code{referenceVar}.
+You can provide a custom palette as a vector of color codes (e.g., \code{c("#FF0000", "#00FF00")}).}
+
+\item{clusters_palette}{A color palette for \code{clustersVar}.
+You can provide a custom palette as a vector of color codes (e.g., \code{c("#F8766D", "#A3A500", "#00BF7D")}).}
 }
 \value{
 A Seurat object or a list of Seurat objects after all the analysis is complete. Heatmaps of the CNVs for every object in \code{seuratObj} are generated and saved in the specified path (default = current working directory).

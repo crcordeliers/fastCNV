@@ -30,11 +30,15 @@
 #' @param plotClustersOnDendrogram Logical. Whether to highlight clusters on the dendrogram (default = `FALSE`).
 #' @param plotElbowPlot Logical. Whether to plot the elbow plot used for determining the optimal number of clusters (default = `FALSE`).
 #' @param doPlot If `TRUE`, will build a heatmap for each of the samples (default = `TRUE`).
+#' @param clustersVar The name of the metadata column containing cluster information (default = `"cnv_clusters"`).
+#' @param clusters_palette A color palette for `clustersVar`.
+#' You can provide a custom palette as a vector of color codes (e.g., `c("#F8766D", "#A3A500", "#00BF7D")`).
 #' @param printPlot If `TRUE`, the heatmap will be printed in the console (default = `FALSE`, the plot will only be saved in a PDF).
 #' @param savePath Path to save the heatmap plot. If `NULL`, the plot won't be saved (default = `.`).
 #' @param outputType Specifies the file format for saving the plot, either `"png"` or `"pdf"` (default = `"png"`).
 #' @param splitPlotOnVar The name of the metadata column to split the observations during the `plotCNVResults` step, if different from `referenceVar`.
-#' @param referencePalette The color palette that should be used for `referenceVar` (default = `"default"`).
+#' @param referencePalette A color palette for `referenceVar`.
+#' You can provide a custom palette as a vector of color codes (e.g., `c("#FF0000", "#00FF00")`).
 #'
 #' @import Seurat
 #'
@@ -75,7 +79,7 @@ fastCNV_10XHD <- function(seuratObjHD,
                           printPlot = FALSE,
                           savePath = ".",
                           outputType = "png",
-                          clustersVar = clustersVar,
+                          clustersVar = "cnv_clusters",
                           splitPlotOnVar = clustersVar,
                           referencePalette = "default"){
 
