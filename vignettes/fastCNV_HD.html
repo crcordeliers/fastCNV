@@ -399,7 +399,8 @@ reference.</p>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; s_008um_00269_00526-1    NoTumor</span></span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; s_008um_00260_00253-1      Tumor</span></span></code></pre></div>
 <p>fastCNV will use by default the 16um assay, so if your annotations
-are done on the 8um resolution you will need to run this function.</p>
+are done on the 8um resolution you will need to run this function before
+running fastCNV on the 16um assay.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>HDBreast <span class="ot">&lt;-</span> <span class="fu">annotations_8um_to_16um</span>(HDBreast, <span class="at">referenceVar =</span> <span class="st">&quot;annots_8um&quot;</span>) </span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;New annotation column (new referenceVar) is named : projected_annots_8um.&quot;</span></span></code></pre></div>
 <p>Now the 16um spots also have the annotations given to the 8um spots.

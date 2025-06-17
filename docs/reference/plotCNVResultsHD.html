@@ -9,7 +9,7 @@ Builds a heatmap to visualize the Visium HD CNV results based on genomic scores.
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.15</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,10 +55,12 @@ Builds a heatmap to visualize the Visium HD CNV results based on genomic scores.
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotCNVResultsHD</span><span class="op">(</span></span>
 <span>  <span class="va">seuratObjHD</span>,</span>
 <span>  referenceVar <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  splitPlotOnVar <span class="op">=</span> <span class="va">referenceVar</span>,</span>
+<span>  clustersVar <span class="op">=</span> <span class="st">"cnv_clusters"</span>,</span>
+<span>  splitPlotOnVar <span class="op">=</span> <span class="va">clustersVar</span>,</span>
 <span>  savePath <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>  printPlot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  referencePalette <span class="op">=</span> <span class="st">"default"</span>,</span>
+<span>  clusters_palette <span class="op">=</span> <span class="st">"default"</span>,</span>
 <span>  outputType <span class="op">=</span> <span class="st">"png"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -73,6 +75,10 @@ Builds a heatmap to visualize the Visium HD CNV results based on genomic scores.
 
 <dt id="arg-referencevar">referenceVar<a class="anchor" aria-label="anchor" href="#arg-referencevar"></a></dt>
 <dd><p>The name of the metadata column in the Seurat object containing reference annotations.</p></dd>
+
+
+<dt id="arg-clustersvar">clustersVar<a class="anchor" aria-label="anchor" href="#arg-clustersvar"></a></dt>
+<dd><p>The name of the metadata column containing cluster information (default = <code>"cnv_clusters"</code>).</p></dd>
 
 
 <dt id="arg-splitplotonvar">splitPlotOnVar<a class="anchor" aria-label="anchor" href="#arg-splitplotonvar"></a></dt>
@@ -90,6 +96,11 @@ Builds a heatmap to visualize the Visium HD CNV results based on genomic scores.
 <dt id="arg-referencepalette">referencePalette<a class="anchor" aria-label="anchor" href="#arg-referencepalette"></a></dt>
 <dd><p>A color palette for <code>referenceVar</code>.
 You can provide a custom palette as a vector of color codes (e.g., <code>c("#FF0000", "#00FF00")</code>).</p></dd>
+
+
+<dt id="arg-clusters-palette">clusters_palette<a class="anchor" aria-label="anchor" href="#arg-clusters-palette"></a></dt>
+<dd><p>A color palette for <code>clustersVar</code>.
+You can provide a custom palette as a vector of color codes (e.g., <code>c("#F8766D", "#A3A500", "#00BF7D")</code>).</p></dd>
 
 
 <dt id="arg-outputtype">outputType<a class="anchor" aria-label="anchor" href="#arg-outputtype"></a></dt>
