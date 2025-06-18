@@ -128,12 +128,12 @@ We can also plot the CNV per chromosome arm with the plotting functions from Seu
 library(scales)
 
 SpatialFeaturePlot(HDBreast, features = "11.q_CNV")  +
-  scale_fill_distiller(palette = "RdBu", direction = -1, limits = c(-1, 1), 
+  scale_fill_distiller(palette = "RdBu", direction = -1, limits = c(-0.5, 0.5), 
                        rescaler = function(x, to = c(0, 1), from = NULL) {
                          rescale_mid(x, to = to, mid = 0)
                        }) |
 SpatialFeaturePlot(HDBreast, features = "8.q_CNV") +
-  scale_fill_distiller(palette = "RdBu", direction = -1, limits = c(-1, 1), 
+  scale_fill_distiller(palette = "RdBu", direction = -1, limits = c(-0.5, 0.5), 
                        rescaler = function(x, to = c(0, 1), from = NULL) {
                          rescale_mid(x, to = to, mid = 0)
                        })
@@ -162,6 +162,7 @@ ggplot(FetchData(HDBreast, vars = c("cnv_clusters", "projected_annots_8um")), ae
   geom_bar(position = "fill") +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "black"))
 ```
+
 Once we have the clusters, we can do the CNV heatmap again to visualize the clusters in it too.
 
 ```{r cnvheatmapt_clusters, fig.width=8, fig.height=6}
