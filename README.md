@@ -18,6 +18,21 @@ remotes::install_github("must-bioinfo/fastCNV")
 Extensive tutorials to run `fastCNV`on scRNA-seq and spatial transcriptomics data are available to get started [here](https://must-bioinfo.github.io/fastCNV/articles/index.html).
 
 
+## NEW : RUN fastCNV ON YOUR VISIUM HD DATA
+
+You can now run `fastCNV` on visium HD data using `fastCNV_10XHD()`
+
+![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/cnvheatmapt_clusters-1.png)
+
+You can also see the cnv clusters on the slide : 
+
+![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/plot_cnv_clusters-1.png)
+
+And see the clonality tree : 
+
+![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/tree_cnv-1.png)
+
+
 ## Capabilities
 
 `fastCNV` can plot a heatmap of inferred CNVs: 
