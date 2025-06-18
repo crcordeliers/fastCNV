@@ -26,11 +26,11 @@ You can now run `fastCNV` on visium HD data using `fastCNV_10XHD()`
 
 You can also see the cnv clusters on the slide : 
 
-<img src=https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/plot_cnv_clusters-1.png width = 50%>
+<img src=https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/plot_cnv_clusters-1.png width = 70%>
 
 And see the clonality tree : 
 
-<img src=https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/tree_cnv-1.png width = 50%>
+<img src=https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/tree_cnv-1.png width = 70%>
 
 
 ## Capabilities
