@@ -124,15 +124,23 @@ fastCNV_10XHD <- function(seuratObjHD,
                           regionToForce = regionToForce)
   invisible(gc())
 
+  seuratObjHD[["genomicScores"]] = Seurat::GetAssay(newHDobj, assay = "genomicScores")
+  seuratObjHD$cnv_fraction = NA
+  seuratObjHD$cnv_fraction[rownames(newHDobj@meta.data)] = newHDobj$cnv_fraction
+  Seurat::DefaultAssay(seuratObjHD) = "Spatial.016um"
+  rm(newHDobj) ; invisible(gc())
 
   if (getCNVPerChromosomeArm == TRUE){
-    newHDobj <- CNVPerChromosomeArm(newHDobj)
+    message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Computing CNV per chromosome arm...")))
+    seuratObjHD <- CNVPerChromosomeArm(seuratObjHD)
     invisible(gc())
+    message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done!")))
   }
 
   if (getCNVClusters == TRUE){
     message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," CNV clustering may crash with large Visium HD samples. Turn `getCNVClusters` to `FALSE` to avoid this crashing.")))
-    newHDobj <- CNVcluster(seuratObj = newHDobj,
+    message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Running CNV clustering...")))
+    seuratObjHD <- CNVcluster(seuratObj = seuratObjHD,
                            referenceVar = referenceVar,
                            tumorLabel = tumorLabel,
                            k = k_clusters,
@@ -141,11 +149,12 @@ fastCNV_10XHD <- function(seuratObjHD,
                            plotClustersOnDendrogram = plotClustersOnDendrogram,
                            plotElbowPlot = plotElbowPlot)
     invisible(gc())
+    message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done!")))
   }
 
-  if (length(newHDobj) == 1) {
+  if (length(seuratObjHD) == 1) {
     if (doPlot == TRUE) {
-      plotCNVResultsHD(seuratObjHD = newHDobj,
+      plotCNVResultsHD(seuratObjHD = seuratObjHD,
                        printPlot = printPlot,
                        savePath = savePath,
                        outputType = outputType,
@@ -156,10 +165,10 @@ fastCNV_10XHD <- function(seuratObjHD,
       invisible(gc())
     }
 
-  } else if (length(newHDobj) > 1) {
+  } else if (length(seuratObjHD) > 1) {
     if (doPlot == TRUE) {
-      for (i in 1:length(newHDobj)) {
-        plotCNVResultsHD(seuratObjHD = newHDobj[[i]],
+      for (i in 1:length(seuratObjHD)) {
+        plotCNVResultsHD(seuratObjHD = seuratObjHD[[i]],
                          printPlot = printPlot,
                          savePath = savePath,
                          outputType = outputType,
@@ -172,5 +181,5 @@ fastCNV_10XHD <- function(seuratObjHD,
     }
   }
 
-  return(newHDobj)
+  return(seuratObjHD)
 }

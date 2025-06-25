@@ -37,12 +37,11 @@ CNVcluster <- function(seuratObj,
                        plotClustersOnDendrogram = F,
                        plotElbowPlot = F) {
 
-  message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Clustering CNVs...")))
   if (is.null(k)){kDetection = "automatic"}
   if (!is.null(k)){kDetection = "manual"}
   if(!is.null(tumorLabel) && !is.null(referenceVar)) {
     seuratObj_orig <- seuratObj
-    seuratObj <- suppressWarnings(subset(seuratObj_orig, cells = Cells(seuratObj_orig)[which(seuratObj_orig[[referenceVar]] == tumorLabel)]))
+    seuratObj <- suppressWarnings(suppressMessages(subset(seuratObj_orig, cells = Seurat::Cells(seuratObj_orig)[which(seuratObj_orig[[referenceVar]] == tumorLabel)])))
   }
 
   genomicMatrix <- t(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data))
@@ -113,12 +112,16 @@ CNVcluster <- function(seuratObj,
 
   if(!is.null(tumorLabel) && !is.null(referenceVar)) {
     seuratObj_orig$cnv_clusters <- 0
-    seuratObj_orig$cnv_clusters[Cells(seuratObj)] <-  as.factor(as.integer(as.character(seuratObj$cnv_clusters)))
+    seuratObj_orig$cnv_clusters[Seurat::Cells(seuratObj)] <-  as.factor(as.integer(as.character(seuratObj$cnv_clusters)))
     seuratObj <- seuratObj_orig
     rm(seuratObj_orig)
     invisible(gc())
   }
-  message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
+
+  if("Spatial.008um" %in% Seurat::Assays(seuratObj)) {
+    seuratObj$cnv_clusters[colnames(seuratObj@assays$Spatial.008um)] = NA
+  }
+
   return(seuratObj)
 }
 

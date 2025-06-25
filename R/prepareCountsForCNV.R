@@ -26,7 +26,6 @@ prepareCountsForCNVAnalysis <- function(seuratObj,
                                         aggregFactor=15000,
                                         seuratClusterResolution = 0.8,
                                         reClusterSeurat = F ){
-  message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Aggregating counts matrix...")))
 
     assay <- Seurat::Assays(seuratObj)[1]
       if (is.null(referenceVar) || aggregateByVar == F) {
@@ -155,6 +154,5 @@ prepareCountsForCNVAnalysis <- function(seuratObj,
     if (Seurat::Project(seuratObj) == "SeuratProject") {
        Seurat::Project(seuratObj) <- sampleName
     }}
-  message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
   return(seuratObj)
 }

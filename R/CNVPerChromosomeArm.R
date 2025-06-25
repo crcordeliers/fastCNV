@@ -9,7 +9,6 @@
 
 
 CNVPerChromosomeArm <- function(seuratObj) {
-  message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Computing CNV per chromosome arm...")))
   genomicScores <- as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")["data"])
   window_names <- rownames(genomicScores)
 
@@ -54,6 +53,5 @@ CNVPerChromosomeArm <- function(seuratObj) {
     column_name <- paste0(chrom_arm, "_CNV")
     seuratObj[[column_name]] <- arm_averages_df$value[arm_averages_df$chrom_arm == chrom_arm]
   }
-  message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
   return(seuratObj)
 }

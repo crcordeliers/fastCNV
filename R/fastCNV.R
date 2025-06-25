@@ -105,6 +105,7 @@ fastCNV <- function (seuratObj,
     seuratObj <- list(seuratObj) ; names(seuratObj) <- sampleName
   }
   if (prepareCounts == TRUE & aggregFactor>=1000) {
+    message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Aggregating counts matrix...")))
     for (i in 1:length(seuratObj)) {
       seuratObj[[i]] <- prepareCountsForCNVAnalysis(seuratObj[[i]], sampleName = sampleName[[i]],
                                                    referenceVar = referenceVar,
@@ -114,6 +115,7 @@ fastCNV <- function (seuratObj,
                                                    reClusterSeurat = reClusterSeurat  )
       invisible(gc())
     }
+    message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
   } else {
     for (i in 1:length(seuratObj)) {
       seuratObj[[i]]@project.name = sampleName[[i]]
@@ -142,6 +144,7 @@ fastCNV <- function (seuratObj,
   }
 
   if (getCNVPerChromosomeArm == TRUE) {
+    message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Computing CNV per chromosome arm...")))
     if (length(seuratObj) == 1) {
           seuratObj <- CNVPerChromosomeArm(seuratObj)
     } else {
@@ -150,9 +153,11 @@ fastCNV <- function (seuratObj,
       }
     }
     invisible(gc())
+    message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
   }
 
   if (getCNVClusters == TRUE) {
+    message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Clustering CNVs...")))
     if (length(seuratObj) == 1) {
       seuratObj <- CNVcluster(seuratObj, referenceVar = referenceVar, tumorLabel = tumorLabel, k = k_clusters, h = h_clusters, plotDendrogram = plotDendrogram,
                               plotClustersOnDendrogram = plotClustersOnDendrogram, plotElbowPlot = plotElbowPlot)
@@ -163,9 +168,11 @@ fastCNV <- function (seuratObj,
       }
     }
     invisible(gc())
+    message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
   }
 
   if (doPlot == TRUE) {
+    message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Plotting CNV heatmap...")))
     if (length(seuratObj) > 1) {
       for (i in 1:length(seuratObj)) {
         if (Seurat::Project(seuratObj[[i]]) == "SeuratProject") {Seurat::Project(seuratObj[[i]]) = paste0("Sample",i)}
@@ -180,6 +187,7 @@ fastCNV <- function (seuratObj,
                      savePath = savePath, printPlot = printPlot, referencePalette = referencePalette, clusters_palette = clusters_palette, outputType = outputType)
       invisible(gc())
     }
+    message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
   }
 
 
