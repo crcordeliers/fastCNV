@@ -36,6 +36,9 @@ CNVcluster <- function(seuratObj,
                        plotDendrogram = F,
                        plotClustersOnDendrogram = F,
                        plotElbowPlot = F) {
+  if ("Spatial.016um" %in% Seurat::Assays(seuratObj)) {
+    Seurat::DefaultAssay(seuratObj) = "Spatial.016um"
+  }
 
   if (is.null(k)){kDetection = "automatic"}
   if (!is.null(k)){kDetection = "manual"}
