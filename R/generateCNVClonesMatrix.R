@@ -13,7 +13,6 @@
 #'
 #' @export
 
-
 generateCNVClonesMatrix <- function(seuratObj, healthyClusters = NULL) {
   # Extract CNV matrix based on chromosome arms
   cnv_matrix <- as.matrix(seuratObj[[which(names(seuratObj@meta.data) == "1.p_CNV") : which(names(seuratObj@meta.data) == "X.q_CNV")]])
@@ -21,19 +20,23 @@ generateCNVClonesMatrix <- function(seuratObj, healthyClusters = NULL) {
   # Initialize the cnv_matrix_clusters
   cnv_matrix_clusters <- matrix(nrow = 0, ncol = ncol(cnv_matrix))
 
-  # Loop through all unique clusters and calculate the mean CNV for each cluster
-  for (cluster in unique(seuratObj[["cnv_clusters"]])[[1]]) {
+  # Get unique clusters, excluding NA
+  unique_clusters <- unique(seuratObj[["cnv_clusters"]][[1]])
+  unique_clusters <- unique_clusters[!is.na(unique_clusters)]
+
+  # Loop through valid clusters only
+  for (cluster in unique_clusters) {
     cells <- rownames(seuratObj@meta.data)[which(seuratObj[["cnv_clusters"]] == cluster)]
-    cnv_matrix_clusters <- rbind(cnv_matrix_clusters, colMeans(cnv_matrix[cells,]))
+    cnv_matrix_clusters <- rbind(cnv_matrix_clusters, colMeans(cnv_matrix[cells, , drop = FALSE]))
   }
 
-  rownames(cnv_matrix_clusters) <- unique(seuratObj[["cnv_clusters"]])[[1]]
+  rownames(cnv_matrix_clusters) <- unique_clusters
 
-  # Label clusters as "Clone X" or "Benign X" depending on healthyClusters
+  # Label clusters as "Clone X" or "Benign X"
   rownames(cnv_matrix_clusters) <- paste0("Clone ", rownames(cnv_matrix_clusters))
   if (!is.null(healthyClusters)) {
     for (hc in healthyClusters) {
-      rownames(cnv_matrix_clusters)[rownames(cnv_matrix_clusters) == paste0("Clone ",as.character(hc))] <- paste0("Benign ", hc)
+      rownames(cnv_matrix_clusters)[rownames(cnv_matrix_clusters) == paste0("Clone ", as.character(hc))] <- paste0("Benign ", hc)
     }
   }
 
