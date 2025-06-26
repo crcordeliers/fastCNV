@@ -16,6 +16,7 @@
 generateCNVClonesMatrix <- function(seuratObj, healthyClusters = NULL) {
   # Extract CNV matrix based on chromosome arms
   cnv_matrix <- as.matrix(seuratObj[[which(names(seuratObj@meta.data) == "1.p_CNV") : which(names(seuratObj@meta.data) == "X.q_CNV")]])
+  cnv_matrix <- cnv_matrix[Seurat::Cells(seuratObj),]
 
   # Initialize the cnv_matrix_clusters
   cnv_matrix_clusters <- matrix(nrow = 0, ncol = ncol(cnv_matrix))
