@@ -140,6 +140,7 @@ fastCNV_10XHD <- function(seuratObjHD,
   if (getCNVClusters == TRUE){
     message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," CNV clustering may crash with large Visium HD samples. Turn `getCNVClusters` to `FALSE` to avoid this crashing.")))
     message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Running CNV clustering...")))
+    Seurat::DefaultAssay(seuratObjHD) = assay
     seuratObjHD <- CNVcluster(seuratObj = seuratObjHD,
                            referenceVar = referenceVar,
                            tumorLabel = tumorLabel,
