@@ -44,7 +44,7 @@ CNVcluster <- function(seuratObj,
   if (!is.null(k)){kDetection = "manual"}
   if(!is.null(tumorLabel) && !is.null(referenceVar)) {
     seuratObj_orig <- seuratObj
-    seuratObj <- suppressWarnings(suppressMessages(subset(seuratObj_orig, cells = Seurat::Cells(seuratObj_orig)[which(seuratObj_orig[[referenceVar]] == tumorLabel)])))
+    seuratObj <- suppressWarnings(suppressMessages(subset(seuratObj_orig, cells = intersect(Seurat::Cells(seuratObj_orig), rownames(seuratObj@meta.data)[which(seuratObj_orig[[referenceVar]] == tumorLabel)]))))
   }
 
   genomicMatrix <- t(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data))
