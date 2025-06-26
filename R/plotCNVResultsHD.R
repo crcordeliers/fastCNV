@@ -63,11 +63,11 @@ plotCNVResultsHD <- function(seuratObjHD,
     referencePalette = as.character(paletteer::paletteer_d("pals::glasbey"))
   }
   if (!is.null(referenceVar)) {
-    annotation_df <- as.data.frame(seuratObjHD@meta.data[[referenceVar]])
+    annotation_df <- as.data.frame(seuratObjHD@meta.data[[referenceVar]][which(!is.na(seuratObjHD@meta.data[[referenceVar]]))])
     colnames(annotation_df) <- "Annotations"
     annot_colors <- setNames(referencePalette[1:length(unique(annotation_df$Annotations))], unique(annotation_df$Annotations))
     if (!is.null(splitPlotOnVar)) {
-      split_df <- as.data.frame(Seurat::FetchData(seuratObjHD, vars = splitPlotOnVar))
+      split_df <- as.data.frame(Seurat::FetchData(seuratObjHD, vars = splitPlotOnVar)[which(!is.na(Seurat::FetchData(seuratObjHD, vars = splitPlotOnVar)))])
       colnames(split_df) <- "Split"
     } else {
       split_df <- NULL
@@ -76,7 +76,7 @@ plotCNVResultsHD <- function(seuratObjHD,
     split_df <- NULL
   }
   if (!is.null(clustersVar)) {
-    clusters_df <- as.data.frame(seuratObjHD@meta.data[[clustersVar]])
+    clusters_df <- as.data.frame(seuratObjHD@meta.data[[clustersVar]][which(!is.na(seuratObjHD@meta.data[[clustersVar]]))])
     colnames(clusters_df) <- "Clusters"
     if (any(clusters_palette == "default")){
       clusters_palette = scales::hue_pal()(length(unique(clusters_df$Clusters)))
