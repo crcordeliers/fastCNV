@@ -49,9 +49,20 @@ CNVPerChromosomeArm <- function(seuratObj) {
     )
   }))
 
+
+  meta <- seuratObj@meta.data
+  meta$barcode <- rownames(meta)
+
   for (chrom_arm in unique(arm_averages_df$chrom_arm)) {
-    column_name <- paste0(chrom_arm, "_CNV")
-    seuratObj[[column_name]] <- arm_averages_df$value[arm_averages_df$chrom_arm == chrom_arm]
+    arm_df <- arm_averages_df[arm_averages_df$chrom_arm == chrom_arm, ]
+    lookup <- setNames(arm_df$value, arm_df$barcode)
+    new_col <- paste0(chrom_arm, "_CNV")
+    meta[[new_col]] <- NA
+    idx <- meta$barcode %in% arm_df$barcode
+    meta[[new_col]][idx] <- lookup[meta$barcode[idx]]
   }
+
+  meta$barcode <- NULL
+  seuratObj@meta.data <- meta
   return(seuratObj)
 }
