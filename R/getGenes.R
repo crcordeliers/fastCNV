@@ -11,7 +11,7 @@
 #' @return A list containing gene information retrieved from Ensembl, with each element representing
 #' data for a specific gene (e.g., gene IDs, descriptions, associated attributes).
 #'
-#' @import biomaRt
+#' @importFrom biomaRt useMart useDataset getBM
 #' @importFrom utils data
 #' @export
 

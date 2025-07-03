@@ -7,13 +7,16 @@
 #' @param seuratObj A Seurat object containing CNV data and metadata.
 #' @param healthyClusters A numeric vector or `NULL`. If provided, clusters specified in this vector
 #' will be labeled as "Benign" instead of "Clone". Default is `NULL`.
+#' @param values one of 'scores' or 'calls'. 'scores' returns the mean CNV score per cluster,
+#' while 'calls' uses `cnv_thresh` to establish a cut-off for gains and losses, returning a matrix
+#' of CNV calls (0=none, 1=gain, -1=loss).
 #'
 #' @return A matrix of CNVs with row names corresponding to the clone or benign labels and columns representing
-#' the chromosome arms.
+#' the chromosome arms, with values corresponding to CNV scores or CNV calls.
 #'
 #' @export
 
-generateCNVClonesMatrix <- function(seuratObj, healthyClusters = NULL) {
+generateCNVClonesMatrix <- function(seuratObj,  healthyClusters = NULL, values = "scores", cnv_thresh = 0.15) {
   # Extract CNV matrix based on chromosome arms
   cnv_matrix <- as.matrix(seuratObj[[which(names(seuratObj@meta.data) == "1.p_CNV") : which(names(seuratObj@meta.data) == "X.q_CNV")]])
   cnv_matrix <- cnv_matrix[Seurat::Cells(seuratObj),]
@@ -41,6 +44,17 @@ generateCNVClonesMatrix <- function(seuratObj, healthyClusters = NULL) {
     }
   }
 
-  # Return the CNV matrix
-  return(cnv_matrix_clusters)
+  if(values == "scores") {
+    # Return the CNV matrix
+    return(cnv_matrix_clusters)
+  } else if (values == "calls") {
+    alt_matrix <- matrix(0, nrow = nrow(cnv_matrix_clusters), ncol = ncol(cnv_matrix_clusters),
+                         dimnames = dimnames(cnv_matrix_clusters))
+    alt_matrix[cnv_matrix_clusters >= cnv_thresh] <- 1
+    alt_matrix[cnv_matrix_clusters <= -cnv_thresh] <- -1
+    return(alt_matrix)
+  } else {
+    stop("Non supported `values` value. Must be one of: 'scores', 'calls'")
+  }
+
 }

@@ -17,7 +17,7 @@
 #' tree <- CNVtree(cnv_matrix)
 #' tree_data <- annotateCNVtree(tree, cnv_matrix)
 #'
-#' @importFrom dplyr left_join full_join
+#' @importFrom dplyr left_join full_join pull
 #' @importFrom ggplot2 fortify
 #' @import stringr
 #' @import dplyr
@@ -37,12 +37,12 @@ annotateCNVtree <- function(tree, cnv_mat, cnv_thresh = 0.15) {
   if(nrow(clone_events) < 1) {
     return(tree_data)
   }
-  if(nrow(node_events) > 1) {
-    event_data <- full_join(clone_events, node_events)
+  if(nrow(node_events) > 0) {
+    event_data <- full_join(clone_events, node_events, by = c("label", "node", "all_events"))
   } else {
     event_data <- clone_events
   }
-  tree_data <- left_join(tree_data, event_data)
+  tree_data <- left_join(tree_data, event_data, by = c("node", "label"))
   tree_data$events <- sapply(1:nrow(tree_data), .remove_parent_events, tree_data)
   tree_data$events <- sapply(tree_data$events, .aggregate_events)
   tree_data$events[tree_data$events == ""] <- NA_character_
@@ -55,8 +55,9 @@ get_majorEvents <- function(cnv_mat, thresh) {
   losses <- .get_losses(cnv_mat, thresh)
   major_events <- lapply(1:length(gains), function(i){
     events <- c(gains[[i]], losses[[i]])
-    str_subset(events, "\\d|X")
+    str_subset(events, "\\d|X") |> str_remove("\\.")
   })
+  major_events <- .order_events(major_events)
   names(major_events) <- rownames(cnv_mat)
   return(major_events)
 }
@@ -84,7 +85,14 @@ get_majorEvents <- function(cnv_mat, thresh) {
   return(clone_losses)
 }
 
-
+.order_events <- function(all_events) {
+  ordered_events <- lapply(all_events, function(events) {
+    chrs <- str_extract(events, "[0-9]+|X") |> str_replace("X", "23") |> as.numeric()
+    events[order(chrs)]
+  })
+  names(all_events) <- names(all_events)
+  return(ordered_events)
+}
 
 get_cloneEvents <- function(major_events) {
   clone_events <- sapply(major_events, paste0, collapse = " ")
@@ -100,7 +108,8 @@ get_cloneEvents <- function(major_events) {
   child_events <- str_split(tree_data$all_events[i], " ")[[1]]
   parent <- tree_data$parent[i]
   parent_events <-  str_split(tree_data$all_events[parent], " ")[[1]]
-  remaining_events <- paste0(setdiff(child_events, parent_events), collapse = " ")
+  remaining_events <- setdiff(child_events, parent_events)
+  remaining_events <- paste0(remaining_events, collapse = " ")
   return(remaining_events)
 }
 .aggregate_events <- function(events) {
@@ -108,7 +117,9 @@ get_cloneEvents <- function(major_events) {
   chr_chrs <- str_remove(events, "p|q")
   chr_events <- chr_chrs[duplicated(chr_chrs)]
   arm_events <- events[ave(chr_chrs, chr_chrs, FUN = length) == 1]
-  agg_events <- paste0(c(chr_events, arm_events), collapse = " ")
+  all_events <- c(chr_events, arm_events)
+  all_events <- .order_events(list(all_events))[[1]]
+  agg_events <- paste0(all_events, collapse = " ")
   return(agg_events)
 }
 
@@ -140,5 +151,10 @@ get_ancestralEvents <- function(tree, cnv_mat, major_events) {
            label = NA) |>
     distinct() |>
     ungroup()
+
+  cnv_parent_events$all_events <- sapply(
+    str_split(cnv_parent_events$all_events, " "), function(events) {
+      .order_events(events) |> paste(collapse = " ")})
+
   return(cnv_parent_events)
 }
