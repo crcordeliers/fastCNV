@@ -13,8 +13,8 @@
 #' It assigns the annotation from the closest 8µm spot to each 16µm spot. The new annotation column is added to the metadata of \code{HDobj}.
 #'
 #' @import Seurat
-#' @import FNN
-#' @import crayon
+#' @importFrom FNN get.knnx
+#' @importFrom stats setNames
 #'
 #'
 #' @export

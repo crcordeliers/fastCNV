@@ -11,7 +11,7 @@ annotateCNVtree(tree, cnv_mat, cnv_thresh = 0.15)
 
 \item{cnv_mat}{A matrix of copy number variation (CNV) values, with samples as rows and regions as columns.}
 
-\item{cnv_thresh}{A numeric threshold to filter significant CNV events. Default is 0.2.}
+\item{cnv_thresh}{A numeric threshold to filter significant CNV events. Default is 0.15.}
 }
 \value{
 A data frame with the tree data, including annotations for CNV events.

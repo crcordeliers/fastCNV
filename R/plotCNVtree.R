@@ -9,7 +9,7 @@
 #' @param clone_cols a color palette to color the clones. If NULL, points are
 #' not colored. If TRUE, clones are colored using default color palette. If a
 #' palette is given, clones are colored following the palette, with
-#' values passed to [`scale_color_manual`](ggplot::scale_color_manual).
+#' values passed to `scale_color_manual`.
 #'
 #' @return A `ggplot` object representing the annotated phylogenetic tree.
 #'
@@ -28,7 +28,7 @@
 plotCNVtree <- function(tree_data, clone_cols = NULL) {
   tree_plot <- ggtree(tree_data) +
     geom_tiplab(hjust = -0.2) +
-    geom_label(aes(label = .data$events), size = 3, vjust = -1, hjust = 1, na.rm = TRUE) +
+    geom_label(aes(label = .data$events), size = 4, vjust = -1, hjust = 1, na.rm = TRUE) +
     scale_x_continuous(expand = c(0, 0.2)) +
     guides(color = "none") +
     theme_tree()
@@ -37,7 +37,7 @@ plotCNVtree <- function(tree_data, clone_cols = NULL) {
       geom_tippoint()
   } else {
     tree_plot <- tree_plot +
-      geom_tippoint(aes(color = label), , size = 3)
+      geom_tippoint(aes(color = label), , size = 4)
     if(length(clone_cols) == sum(tree_data$isTip)) {
       tree_plot <- tree_plot +
         scale_color_manual(values = clone_cols)

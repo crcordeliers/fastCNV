@@ -13,7 +13,7 @@ typically produced by \code{annotateCNVtree}.}
 \item{clone_cols}{a color palette to color the clones. If NULL, points are
 not colored. If TRUE, clones are colored using default color palette. If a
 palette is given, clones are colored following the palette, with
-values passed to \href{ggplot::scale_color_manual}{\code{scale_color_manual}}.}
+values passed to \code{scale_color_manual}.}
 }
 \value{
 A \code{ggplot} object representing the annotated phylogenetic tree.

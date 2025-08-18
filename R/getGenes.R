@@ -13,6 +13,7 @@
 #'
 #' @importFrom biomaRt useMart useDataset getBM
 #' @importFrom utils data
+#'
 #' @export
 
 getGenes <- function(filters=NULL, cache=TRUE){

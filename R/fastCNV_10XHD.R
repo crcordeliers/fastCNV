@@ -41,6 +41,7 @@
 #' You can provide a custom palette as a vector of color codes (e.g., `c("#FF0000", "#00FF00")`).
 #'
 #' @import Seurat
+#' @importFrom crayon red yellow green black
 #'
 #' @return A Seurat object or a list of Seurat objects after all the analysis is complete. Heatmaps of the CNVs for every object in `seuratObj` are generated and saved in the specified path (default = current working directory).
 #'
@@ -80,6 +81,7 @@ fastCNV_10XHD <- function(seuratObjHD,
                           savePath = ".",
                           outputType = "png",
                           clustersVar = "cnv_clusters",
+                          clusters_palette = "default",
                           splitPlotOnVar = clustersVar,
                           referencePalette = "default"){
 
@@ -161,6 +163,7 @@ fastCNV_10XHD <- function(seuratObjHD,
                        outputType = outputType,
                        referenceVar = referenceVar,
                        clustersVar = clustersVar,
+                       clusters_palette = clusters_palette,
                        splitPlotOnVar = splitPlotOnVar,
                        referencePalette = referencePalette)
       invisible(gc())
@@ -175,6 +178,7 @@ fastCNV_10XHD <- function(seuratObjHD,
                          outputType = outputType,
                          referenceVar = referenceVar,
                          clustersVar = clustersVar,
+                         clusters_palette = clusters_palette,
                          splitPlotOnVar = splitPlotOnVar,
                          referencePalette = referencePalette)
         invisible(gc())

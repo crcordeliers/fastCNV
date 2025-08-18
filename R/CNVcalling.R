@@ -23,10 +23,10 @@
 #' - An **additional assay** containing genomic scores per genomic window.
 #' - A new **CNV fraction column** added to the object’s metadata.
 #'
-#' @import stats
+#' @importFrom stats na.omit median
 #' @import Seurat
 #' @import SeuratObject
-#' @import crayon
+#' @importFrom crayon black
 #'
 #' @export
 #'

@@ -1,6 +1,6 @@
 Package: fastCNV
 Title: fastCNV
-Version: 0.9.26
+Version: 0.9.28
 Authors@R: 
     c(person("Gadea", "Cabrejas", , "gadea.cabrejas-saiz@u-paris.fr", role = c("aut", "cre")),
       person("Clarice", "Groeneveld", , "clarice.groeneveld@inserm.fr", role = c("aut", "ctb")))
@@ -22,18 +22,13 @@ Imports:
     ggtree,
     grDevices,
     grid,
-    hdf5r,
-    magick,
     paletteer,
-    patchwork,
     purrr,
-    qpdf,
     scales,
     Seurat,
     SeuratObject,
     stats,
     stringr,
-    tidyverse,
     ape,
     phangorn,
     utils,

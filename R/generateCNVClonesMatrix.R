@@ -10,6 +10,7 @@
 #' @param values one of 'scores' or 'calls'. 'scores' returns the mean CNV score per cluster,
 #' while 'calls' uses `cnv_thresh` to establish a cut-off for gains and losses, returning a matrix
 #' of CNV calls (0=none, 1=gain, -1=loss).
+#' @param cnv_thresh A numeric threshold to filter significant CNV events. Default is 0.15.
 #'
 #' @return A matrix of CNVs with row names corresponding to the clone or benign labels and columns representing
 #' the chromosome arms, with values corresponding to CNV scores or CNV calls.

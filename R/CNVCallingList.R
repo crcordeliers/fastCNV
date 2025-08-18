@@ -23,8 +23,9 @@
 #' - Contains an **additional assay** with genomic scores per genomic window.
 #' - Has a new **CNV fraction column** added to its metadata.
 #'
-#' @import stats
+#' @importFrom stats median
 #' @import Seurat
+#' @importFrom crayon black
 #'
 #' @export
 #'
@@ -65,10 +66,10 @@ CNVcallingList <- function(seuratList,
   # getting reference items per patient
   if (is.null(referenceVar) || is.null(referenceLabel)){
     # unable to scale the results on reference data if we don't know what the reference data is
-    message("referenceVar and/or referenceLabel parameters not found. Computing the CNV without a reference.")
+    message(crayon::black("referenceVar and/or referenceLabel parameters not found. Computing the CNV without a reference."))
     scaleOnReferenceLabel = FALSE
   } else if ( as.numeric(sum(sapply(lapply(Lannot, function(annot) rownames(annot)[which(annot == referenceLabel)]), function(x) length(x)))) == 0 ) {
-    message("No observations found for the referenceLabel given. Computing the CNV without a reference.")
+    message(crayon::black("No observations found for the referenceLabel given. Computing the CNV without a reference."))
     scaleOnReferenceLabel = FALSE
   } else if (length(referenceLabel) == 1){
     LN <- lapply(Lannot, function(annot) rownames(annot)[which(annot == referenceLabel)])

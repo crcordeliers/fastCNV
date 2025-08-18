@@ -21,13 +21,16 @@
 #'
 #' @importFrom ape nj root drop.tip
 #' @importFrom phangorn wpgma upgma Ancestors
+#'
 #' @export
-CNVtree <- function(cnv_matrix, tree_function = nj) {
+
+
+CNVtree <- function(cnv_matrix, tree_function = nj, dist_method = "euclidean") {
   normal_root <- matrix(rep(0, ncol(cnv_matrix)), nrow = 1,
                         dimnames = list("Normal", colnames(cnv_matrix)))
   cnv_mat <- rbind(cnv_matrix, normal_root)
 
-  cnv_dist <- dist(cnv_mat, method = "euclidean")
+  cnv_dist <- dist(cnv_mat, method = dist_method)
   tree <- tree_function(cnv_dist)
   tree <- root(tree, "Normal", resolve.root = TRUE)
   tree <- drop.tip(tree, "Normal")

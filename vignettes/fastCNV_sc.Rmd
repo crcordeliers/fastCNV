@@ -212,9 +212,7 @@ In this part of the vignette, we will show how to plot the CNV subclonality tree
 
 First, we will build a metacell for each cluster, using `generateCNVClonesMatrix()`. 
 ```{r metacell_cluster}
-
-cnv_matrix_clusters <- generateCNVClonesMatrix(scColon1, healthyClusters = "1")
-
+cnv_matrix_clusters <- generateCNVClonesMatrix(scColon1, values = "calls", cnv_thresh = 0.09, healthyClusters = "1")
 ```
 
 Now, we build the tree, using `CNVtree()`, `annotateCNVtree()` and `plotCNVtree()`.
@@ -228,7 +226,7 @@ Now, we build the tree, using `CNVtree()`, `annotateCNVtree()` and `plotCNVtree(
 ```{r tree_cnv, fig.width = 7, fig.height = 4}
 
 tree <- CNVtree(cnv_matrix_clusters)
-tree_data <- annotateCNVtree(tree, cnv_matrix_clusters, 0.13)
-plotCNVtree(tree_data)
+tree_data <- annotateCNVtree(tree, cnv_matrix_clusters)
+plotCNVtree(tree_data, clone_cols = TRUE)
 
 ```

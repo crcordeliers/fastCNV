@@ -21,9 +21,10 @@
 #'
 #' @return A Seurat object with an additional metadata column, `cnv_clusters`, containing the cluster assignments.
 #'
-#' @import proxy
-#' @import utils
-#' @import graphics
+#' @importFrom proxy dist as.dist
+#' @importFrom utils tail
+#' @importFrom graphics abline text
+#' @importFrom stats hclust cutree rect.hclust
 #'
 #' @export
 
@@ -44,7 +45,10 @@ CNVcluster <- function(seuratObj,
   if (!is.null(k)){kDetection = "manual"}
   if(!is.null(tumorLabel) && !is.null(referenceVar)) {
     seuratObj_orig <- seuratObj
-    seuratObj <- suppressWarnings(suppressMessages(subset(seuratObj_orig, cells = intersect(Seurat::Cells(seuratObj_orig), rownames(seuratObj@meta.data)[which(seuratObj_orig[[referenceVar]] == tumorLabel)]))))
+    seuratObj <- suppressWarnings(suppressMessages(subset(
+      seuratObj_orig,
+      subset = !!sym(referenceVar) %in% tumorLabel
+    )))
   }
 
   genomicMatrix <- t(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")$data))
@@ -52,7 +56,7 @@ CNVcluster <- function(seuratObj,
   dist_cos <- proxy::dist(genomicMatrix, method = "Manhattan")
 
   dist_matrix <- proxy::as.dist(dist_cos)
-  hc <- hclust(dist_matrix, method = "ward.D2")
+  hc <- stats::hclust(dist_matrix, method = "ward.D2")
 
 
   if (plotDendrogram){plot(hc, main = "Dendrogram",
@@ -127,6 +131,7 @@ CNVcluster <- function(seuratObj,
 
   return(seuratObj)
 }
+
 
 
 

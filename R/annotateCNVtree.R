@@ -6,7 +6,7 @@
 #'
 #' @param tree A phylogenetic tree (of class \code{phylo}) that will be annotated.
 #' @param cnv_mat A matrix of copy number variation (CNV) values, with samples as rows and regions as columns.
-#' @param cnv_thresh A numeric threshold to filter significant CNV events. Default is 0.2.
+#' @param cnv_thresh A numeric threshold to filter significant CNV events. Default is 0.15.
 #'
 #' @return A data frame with the tree data, including annotations for CNV events.
 #'
@@ -21,9 +21,8 @@
 #' @importFrom ggplot2 fortify
 #' @import stringr
 #' @import dplyr
-#' @import tidyverse
 #' @importFrom utils combn
-#' @import purrr
+#' @importFrom purrr map2
 #'
 #' @export
 #'
@@ -69,7 +68,7 @@ get_majorEvents <- function(cnv_mat, thresh) {
   }
   clone_gains <- lapply(gain_events, function(events) {
     arms <- str_remove(names(events), "_CNV")
-    paste0(arms, "+")
+    paste0("+",arms)
   })
   return(clone_gains)
 }
@@ -80,7 +79,7 @@ get_majorEvents <- function(cnv_mat, thresh) {
   }
   clone_losses <- lapply(loss_events, function(events) {
     arms <- str_remove(names(events), "_CNV")
-    paste0(arms, "-")
+    paste0("-",arms)
   })
   return(clone_losses)
 }

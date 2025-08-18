@@ -13,18 +13,15 @@
 #' You can provide a custom palette as a vector of color codes (e.g., `c("#F8766D", "#A3A500", "#00BF7D")`).
 #' @param outputType Character. Specifies the file format for saving the plot, either `"png"` or `"pdf"`.
 #'
-#' @import ComplexHeatmap
-#' @import Seurat
-#' @import circlize
-#' @import qpdf
+#' @importFrom Seurat GetAssay FetchData
+#' @importFrom ComplexHeatmap Heatmap rowAnnotation draw
+#' @importFrom circlize colorRamp2
+#' @importFrom grid gpar unit grid.newpage pushViewport viewport grid.layout grid.text popViewport
+#' @importFrom paletteer paletteer_d
+#' @importFrom scales hue_pal
+#' @importFrom crayon yellow black green
+#' @import stats
 #' @import grDevices
-#' @import ggplot2
-#' @import patchwork
-#' @import grid
-#' @import paletteer
-#' @import magick
-#' @import scales
-#' @import crayon
 #'
 #' @return This function generates a heatmap and saves it as a `.pdf` or `.png` file in the specified path (default = working directory).
 #'

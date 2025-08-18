@@ -10,7 +10,6 @@
 #' @return The same Seurat object with an additional classification for each observation and chromosome arm in the metadata.
 #'   The classification can be one of `"loss"`, `"gain"`, or `"no_alteration"`.
 #'
-#' @import scales
 #'
 #' @export
 

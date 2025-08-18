@@ -13,18 +13,15 @@
 #' You can provide a custom palette as a vector of color codes (e.g., `c("#F8766D", "#A3A500", "#00BF7D")`).
 #' @param outputType Character. Specifies the file format for saving the plot, either `"png"` or `"pdf"`.
 #'
-#' @import ComplexHeatmap
-#' @import Seurat
-#' @import circlize
-#' @import qpdf
+#' @importFrom Seurat GetAssay FetchData
+#' @importFrom ComplexHeatmap Heatmap rowAnnotation draw
+#' @importFrom circlize colorRamp2
+#' @importFrom grid gpar unit grid.newpage pushViewport viewport grid.layout grid.text popViewport
+#' @importFrom paletteer paletteer_d
+#' @importFrom scales hue_pal
+#' @importFrom crayon black
+#' @import stats
 #' @import grDevices
-#' @import ggplot2
-#' @import patchwork
-#' @import grid
-#' @import paletteer
-#' @import magick
-#' @import scales
-#' @import crayon
 #'
 #' @return This function generates a heatmap and saves it as a `.pdf` or `.png` file in the specified path (default = working directory).
 #'
@@ -102,7 +99,7 @@ plotCNVResults <- function(seuratObj,
   if (is.null(referenceVar) && !is.null(clustersVar)) {
     annotation_heatmap <- ComplexHeatmap::rowAnnotation(
       Clusters = clusters_df$Clusters,
-      col = clusters_colors,
+      col = list(Clusters = clusters_colors),
       annotation_legend_param = list(
         title = "Clusters",
         title_gp = grid::gpar(fontsize = 11),
@@ -113,6 +110,12 @@ plotCNVResults <- function(seuratObj,
         grid_width = grid::unit(0.6, "cm")
       )
     )
+    if (!is.null(splitPlotOnVar)) {
+      split_df <- as.data.frame(Seurat::FetchData(seuratObj, vars = splitPlotOnVar))
+      colnames(split_df) <- "Split"
+    } else {
+      split_df <- NULL
+    }
   }
 
   if (is.null(referenceVar) && is.null(clustersVar)) {

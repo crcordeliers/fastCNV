@@ -47,7 +47,7 @@
 #'
 #' @return A list of Seurat objects after all the analysis is complete. Heatmaps of the CNVs for every object in `seuratObj` are generated and saved in the specified path (default = current working directory).
 #'
-#' @import crayon
+#' @importFrom crayon red yellow green black
 #'
 #' @export
 

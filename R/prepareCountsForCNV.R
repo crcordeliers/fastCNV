@@ -15,7 +15,7 @@
 #' - **Seurat clusters** stored in the metadata.
 #'
 #' @import Seurat
-#' @import hdf5r
+#' @importFrom crayon black
 #'
 #' @export
 #'

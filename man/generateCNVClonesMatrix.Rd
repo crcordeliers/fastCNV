@@ -20,6 +20,8 @@ will be labeled as "Benign" instead of "Clone". Default is \code{NULL}.}
 \item{values}{one of 'scores' or 'calls'. 'scores' returns the mean CNV score per cluster,
 while 'calls' uses \code{cnv_thresh} to establish a cut-off for gains and losses, returning a matrix
 of CNV calls (0=none, 1=gain, -1=loss).}
+
+\item{cnv_thresh}{A numeric threshold to filter significant CNV events. Default is 0.15.}
 }
 \value{
 A matrix of CNVs with row names corresponding to the clone or benign labels and columns representing
