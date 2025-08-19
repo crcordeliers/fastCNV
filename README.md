@@ -25,7 +25,7 @@ You can now run `fastCNV` on visium HD data using `fastCNV_10XHD()`
 ![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/cnvheatmapt_clusters-1.png)
 
 
-<img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/plot_cnv_clusters-1.png" width="45%"> <img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/tree_cnv-1.png" width="55%">
+<img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/plot_cnv_clusters-1.png" width="45%"> <img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/tree_cnv-1.png" width="53%">
 
 
 ## Capabilities
