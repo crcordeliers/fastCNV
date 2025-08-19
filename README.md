@@ -95,6 +95,8 @@ Heatmaps are produced using **ComplexHeatmap**.
 By default, fastCNV uses the **16 µm bin size**. You can increase the resolution, but note that higher resolution requires more computational resources.  
 Apart from binning and clustering, the pipeline works the same way as for other supported data types.  
 
+---
+
 
 
 ## Capabilities
