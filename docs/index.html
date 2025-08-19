@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.28</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@
   <main id="main" class="col-md-9"><div class="section level2">
 <h2 id="introduction-">Introduction <img src="https://must-bioinfo.github.io/fastCNV/articles/logo.png" align="right" width="200"><a class="anchor" aria-label="anchor" href="#introduction-"></a>
 </h2>
-<p><code>fastCNV</code> is a package that helps you detect, plot and analyse the putative Copy Number Variations (CNVs) in single cell (scRNA-seq) data or Spatial Transcriptomics (ST) data. Built on <code>SeuratObject</code>, it is easily integrated into scRNA-seq or ST pipelines.</p>
+<p><code>fastCNV</code> is an R package that helps you detect, plot and analyse the putative Copy Number Variations (CNVs) in single cell (scRNA-seq) data or Spatial Transcriptomics (ST) data, including Visium HD. Built on <code>SeuratObject</code>, it is easily integrated into scRNA-seq or ST pipelines.</p>
 <p><em>WARNING:</em> Project is still under construction and function usage may change.</p>
 </div>
 <div class="section level2">
@@ -75,17 +75,91 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>Extensive tutorials to run <code>fastCNV</code>on scRNA-seq and spatial transcriptomics data are available to get started <a href="https://must-bioinfo.github.io/fastCNV/articles/index.html">here</a>.</p>
+<p>Extensive tutorials to run <code>fastCNV</code>on scRNA-seq and Spatial Transcriptomics data are available to get started <a href="https://must-bioinfo.github.io/fastCNV/articles/index.html">here</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="new--run-fastcnv-on-your-visium-hd-data">NEW : RUN fastCNV ON YOUR VISIUM HD DATA<a class="anchor" aria-label="anchor" href="#new--run-fastcnv-on-your-visium-hd-data"></a>
 </h2>
-<p>You can now run <code>fastCNV</code> on visium HD data using <code><a href="reference/fastCNV_10XHD.html">fastCNV_10XHD()</a></code></p>
-<p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/cnvheatmapt_clusters-1.png"></p>
-<p>You can also see the cnv clusters on the slide :</p>
-<p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/plot_cnv_clusters-1.png" width="70%"></p>
-<p>And see the clonality tree :</p>
-<p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/tree_cnv-1.png" width="70%"></p>
+<p>You can now run <code>fastCNV</code> on visium HD data using <code><a href="reference/fastCNV_10XHD.html">fastCNV_10XHD()</a></code> <img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/cnvheatmapt_clusters-1.png"></p>
+<p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/plot_cnv_clusters-1.png" width="45%"><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/tree_cnv-1.png" width="53%"></p>
+</div>
+<div class="section level2">
+<h2 id="faq">FAQ<a class="anchor" aria-label="anchor" href="#faq"></a>
+</h2>
+<div class="section level3">
+<h3 id="id_1-what-kind-of-data-does-fastcnv-work-on">1. What kind of data does fastCNV work on?<a class="anchor" aria-label="anchor" href="#id_1-what-kind-of-data-does-fastcnv-work-on"></a>
+</h3>
+<p>Currently, fastCNV can be used on <strong>scRNA-seq</strong>, <strong>Visium</strong>, and <strong>Visium HD</strong> data.</p>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_2-does-it-work-on-mouse-data">2. Does it work on mouse data?<a class="anchor" aria-label="anchor" href="#id_2-does-it-work-on-mouse-data"></a>
+</h3>
+<p>Not yet — fastCNV currently only works on <strong>human data</strong>. Support for mouse data is in development.</p>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_3-how-long-does-it-take-to-run">3. How long does it take to run?<a class="anchor" aria-label="anchor" href="#id_3-how-long-does-it-take-to-run"></a>
+</h3>
+<p>It depends on the dataset size and computational resources:<br>
+- ~ <strong>1 minute</strong> for small scRNA-seq datasets (~4,000 cells)<br>
+- ~ <strong>40 minutes</strong> for a Visium HD slide at 16 µm resolution (~150,000 spots)</p>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_4-i-have-multiple-samples-whats-the-fastest-way-to-run-fastcnv">4. I have multiple samples. What’s the fastest way to run fastCNV?<a class="anchor" aria-label="anchor" href="#id_4-i-have-multiple-samples-whats-the-fastest-way-to-run-fastcnv"></a>
+</h3>
+<p>You can process all your samples together by providing <code><a href="reference/fastCNV.html">fastCNV()</a></code> with a list of samples, e.g.:</p>
+<pre><code><span><span class="fu"><a href="reference/fastCNV.html">fastCNV</a></span><span class="op">(</span>seuratObj <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sample1</span>, <span class="va">sample2</span>, <span class="va">sample3</span>, <span class="va">...</span><span class="op">)</span>,</span>
+<span>        sampleName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample1"</span>, <span class="st">"sample2"</span>, <span class="st">"sample3"</span>, <span class="va">...</span><span class="op">)</span>,</span>
+<span>        referenceVar <span class="op">=</span> <span class="st">"Annotations"</span>,</span>
+<span>        referenceLabel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Healthy1"</span>, <span class="st">"Healthy2"</span>, <span class="st">"Healthy3"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_5-i-have-4-visium-samples-but-only-one-contains-healthy-tissue-can-i-still-run-them-all">5. I have 4 Visium samples, but only one contains healthy tissue. Can I still run them all?<a class="anchor" aria-label="anchor" href="#id_5-i-have-4-visium-samples-but-only-one-contains-healthy-tissue-can-i-still-run-them-all"></a>
+</h3>
+<p>Yes. When you provide a list of samples, fastCNV will <strong>pool a reference across all of them</strong>, so the healthy tissue from one slide will be used as a reference for all 4 samples.</p>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_6-can-i-run-fastcnv-without-annotated-samples">6. Can I run fastCNV without annotated samples?<a class="anchor" aria-label="anchor" href="#id_6-can-i-run-fastcnv-without-annotated-samples"></a>
+</h3>
+<p>Yes, fastCNV can run <strong>without a reference</strong>.<br>
+However, we <strong>highly recommend</strong> using a healthy reference. If you don’t have one, you can download a healthy sample from a database (same organ, same technology) and use it as reference.</p>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_7-what-computational-resources-are-required-for-visium-hd-data">7. What computational resources are required for Visium HD data?<a class="anchor" aria-label="anchor" href="#id_7-what-computational-resources-are-required-for-visium-hd-data"></a>
+</h3>
+<p>It depends on the bin size:<br>
+- <strong>16 µm bin size</strong> → ~64 GB RAM is enough<br>
+- <strong>8 µm bin size</strong> → up to ~200 GB RAM may be required</p>
+<p>We are working on reducing the resource requirements.</p>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_8-what-does-the-preparecounts-function-do">8. What does the <code>prepareCounts()</code> function do?<a class="anchor" aria-label="anchor" href="#id_8-what-does-the-preparecounts-function-do"></a>
+</h3>
+<p>This function is designed for <strong>Visium samples with low read counts</strong>.<br>
+It aggregates nearby spots until a threshold is reached (typically 3–4 spots).</p>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_9-how-is-the-heatmap-generated">9. How is the heatmap generated?<a class="anchor" aria-label="anchor" href="#id_9-how-is-the-heatmap-generated"></a>
+</h3>
+<p>Heatmaps are produced using <strong>ComplexHeatmap</strong>.<br>
+- You can customize annotation colors with <code>referencePalette</code> or <code>clusterPalette</code>.<br>
+- You can also choose which annotations to display and how to split the data.</p>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_10-how-does-fastcnv-run-on-visium-hd-data">10. How does fastCNV run on Visium HD data?<a class="anchor" aria-label="anchor" href="#id_10-how-does-fastcnv-run-on-visium-hd-data"></a>
+</h3>
+<p>By default, fastCNV uses the <strong>16 µm bin size</strong>. You can increase the resolution, but note that higher resolution requires more computational resources.<br>
+Apart from binning and clustering, the pipeline works the same way as for other supported data types.</p>
+<hr>
+</div>
 </div>
 <div class="section level2">
 <h2 id="capabilities">Capabilities<a class="anchor" aria-label="anchor" href="#capabilities"></a>
@@ -98,7 +172,7 @@
 <p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_ST_files/figure-html/plot_cnv_fraction-1.png"></p>
 <p>And <code>cnv_fractions</code> can be used to obtain clonal clusters (<code>cnv_clusters</code>):</p>
 <p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/plot_cnv_clusters-1.png" alt="Clonal clusters for sc data" width="50%"></p>
-<p>The subclonality tree can be plotted too :</p>
+<p>It also builds a subclonality tree based on the CNV clusters:</p>
 <p><img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_sc_files/figure-html/tree_cnv-1.png" alt="Subclonality tree" width="500"></p>
 </div>
 

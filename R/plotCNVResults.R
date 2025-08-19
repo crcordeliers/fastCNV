@@ -201,5 +201,5 @@ plotCNVResults <- function(seuratObj,
     dev.off()
     message(crayon::black,"CNV plot for sample ",seuratObj@project.name, " saved at ", fname)
   }
-  #return(hm)
+  return(hm)
 }

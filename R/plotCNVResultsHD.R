@@ -200,4 +200,7 @@ plotCNVResultsHD <- function(seuratObjHD,
     message(crayon::black,"CNV plot for sample ",seuratObjHD@project.name, " saved at ", fname)
   }
   message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
+
+  return(hm)
+
 }
