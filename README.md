@@ -1,7 +1,7 @@
 
 ## Introduction <img src = "https://must-bioinfo.github.io/fastCNV/articles/logo.png" align = "right" width = "200">
 
-`fastCNV` is a package that helps you detect, plot and analyse the putative Copy Number Variations (CNVs) in single cell (scRNA-seq) data or Spatial Transcriptomics (ST) data, including Visium HD. Built on `SeuratObject`, it is easily integrated into scRNA-seq or ST pipelines. 
+`fastCNV` is an R package that helps you detect, plot and analyse the putative Copy Number Variations (CNVs) in single cell (scRNA-seq) data or Spatial Transcriptomics (ST) data, including Visium HD. Built on `SeuratObject`, it is easily integrated into scRNA-seq or ST pipelines. 
 
 *WARNING:* Project is still under construction and function usage may change.
 
@@ -25,7 +25,7 @@ You can now run `fastCNV` on visium HD data using `fastCNV_10XHD()`
 ![](https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/cnvheatmapt_clusters-1.png)
 
 
-<img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/plot_cnv_clusters-1.png" width="50%"> <img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/tree_cnv-1.png" width="60%">
+<img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/plot_cnv_clusters-1.png" width="45%"> <img src="https://must-bioinfo.github.io/fastCNV/articles/fastCNV_HD_files/figure-html/tree_cnv-1.png" width="55%">
 
 
 ## Capabilities
