@@ -11,7 +11,7 @@ updates the tree with this information."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.28</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@ updates the tree with this information.</p>
 
 
 <dt id="arg-cnv-thresh">cnv_thresh<a class="anchor" aria-label="anchor" href="#arg-cnv-thresh"></a></dt>
-<dd><p>A numeric threshold to filter significant CNV events. Default is 0.2.</p></dd>
+<dd><p>A numeric threshold to filter significant CNV events. Default is 0.15.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -86,7 +86,6 @@ updates the tree with this information.</p>
 <span class="r-in"><span>                                                          <span class="st">"Region 2"</span>, <span class="st">"Region 3"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="CNVtree.html">CNVtree</a></span><span class="op">(</span><span class="va">cnv_matrix</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tree_data</span> <span class="op">&lt;-</span> <span class="fu">annotateCNVtree</span><span class="op">(</span><span class="va">tree</span>, <span class="va">cnv_matrix</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(node, label)`</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
