@@ -5,6 +5,7 @@
 #' @param referenceVar The name of the metadata column in the Seurat object containing reference annotations.
 #' @param clustersVar The name of the metadata column containing cluster information (default = `"cnv_clusters"`).
 #' @param splitPlotOnVar The name of the metadata column used to split the heatmap rows (e.g., cell type or cluster) (default = `clustersVar`).
+#' @param denoise If `TRUE`, the denoised data will be used in the heatmap (default = `TRUE`).
 #' @param savePath The path where the heatmap will be saved. If `NULL`, the plot will not be saved (default = `"."`).
 #' @param printPlot Logical. If `TRUE`, prints the heatmap to the console.
 #' @param referencePalette A color palette for `referenceVar`.
@@ -32,6 +33,7 @@ plotCNVResults <- function(seuratObj,
                            referenceVar = NULL,
                            clustersVar = "cnv_clusters",
                            splitPlotOnVar = clustersVar,
+                           denoise = TRUE,
                            savePath = ".",
                            printPlot = FALSE,
                            referencePalette = "default",
@@ -53,8 +55,11 @@ plotCNVResults <- function(seuratObj,
     }
   }
 
-
-  M <- t(as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")["data"]))
+  if (denoise == TRUE) {
+    M <- t(as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")["data"]))
+  } else {
+    M <- t(as.matrix(Seurat::GetAssay(seuratObj, "rawGenomicScores")["data"]))
+  }
   if (any(referencePalette == "default")) {
     referencePalette = as.character(paletteer::paletteer_d("pals::glasbey"))
   }

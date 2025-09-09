@@ -20,7 +20,7 @@
 #' @export
 
 
-annotations_8um_to_16um <- function(HDobj,
+annotations8umTo16um <- function(HDobj,
                                     referenceVar){
 
   Seurat::DefaultAssay(HDobj) = "Spatial.008um"

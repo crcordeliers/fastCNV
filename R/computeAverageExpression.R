@@ -9,16 +9,26 @@
 #'
 #' @return A named vector containing the average expression for each patient.
 #'
-compute_average_expression <- function(LN, LrawcountsByPatient) {
+computeAverageExpression <- function(LN, LrawcountsByPatient) {
 
-  patients = names(LrawcountsByPatient)
+  get_patient_names <- function(LN) {
+    if (all(sapply(LN, is.list)) == FALSE) {
+      return(names(LN))
+    }
+    unique(unlist(lapply(LN, names)))
+  }
+  patients = get_patient_names(LN)
   results <- list()
 
   get_patient_data <- function(patient_name, LN) {
-    for (type_cellulaire in names(LN)) {
-      if (patient_name %in% names(LN[[type_cellulaire]])) {
-        return(LN[[type_cellulaire]][[patient_name]])
+    if (length(LN)>1) {
+      for (type_cellulaire in names(LN)) {
+        if (patient_name %in% names(LN[[type_cellulaire]])) {
+          return(LN[[type_cellulaire]][[patient_name]])
+        }
       }
+    } else if (length(LN) == 1){
+      return(LN)
     }
     return(NULL)
   }

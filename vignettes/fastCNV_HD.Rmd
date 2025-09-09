@@ -68,7 +68,7 @@ unique(HDBreast[["annots_8um"]])
 fastCNV will use by default the 16um assay, so if your annotations are done on the 8um resolution you will need to run this function before running fastCNV on the 16um assay.
 
 ```{r annotations_8_to_16}
-HDBreast <- annotations_8um_to_16um(HDBreast, referenceVar = "annots_8um") 
+HDBreast <- annotations8umTo16um(HDBreast, referenceVar = "annots_8um") 
 ```
 
 Now the 16um spots also have the annotations given to the 8um spots. The projected annotations are in the meta data "projected_annots_8um". This will be the referenceVar we will use from now on. 
@@ -82,11 +82,11 @@ SpatialDimPlot(HDBreast, group.by = "projected_annots_8um")
 
 During this step, fastCNV_10XHD() will use: 
 
-- `CNVanalysis` : computes the CNV. If you have annotations for your Seurat object, you can add the parameters `referenceVar` and `referenceLabel`. 
+- `CNVAnalysis` : computes the CNV. If you have annotations for your Seurat object, you can add the parameters `referenceVar` and `referenceLabel`. 
 
 - `CNVPerChromosome` : to compute the CNV per chromosome arm, and store it in the metadata of the Seurat object. This part of `fastCNV()` can be skipped by turning `getCNVPerChromosome` to `FALSE`.    
 
-- `CNVcluster` : OPTIONAL - performs hierarchical clustering on a genomic score matrix extracted from a Seurat object. This may crash with large Visium HD samples. This function can be run later on.
+- `CNVCluster` : OPTIONAL - performs hierarchical clustering on a genomic score matrix extracted from a Seurat object. This may crash with large Visium HD samples. This function can be run later on.
 
 - `plotCNVResultsHD` : to visualize the results (stored in the assays slot of the Seurat object).
 This function will also build a PNG or PDF file for each sample containing their corresponding CNV heatmap in the current working directory, which can be changed using the `savePath` parameter.
@@ -147,7 +147,7 @@ In addition to the CNV fraction, fastCNV can also compute the CNV clusters. Thes
 CNVCluster can be quite long with  Visium HD data. We recommend using `tumorLabel` to only cluster the malignant spots instead of all the spots to speed up the analysis. If your data has mostly tumor cells, it might be usefull to split you object into smaller objects to do the clustering.  
 
 ```{r plot_cnv_clusters, fig.width=5, fig.height=4}
-HDBreast <- CNVcluster(HDBreast, referenceVar = "projected_annots_8um", tumorLabel = "Tumor")
+HDBreast <- CNVCluster(HDBreast, referenceVar = "projected_annots_8um", tumorLabel = "Tumor")
 
 SpatialDimPlot(HDBreast, group.by = "cnv_clusters") 
 ```
@@ -173,23 +173,18 @@ plotCNVResultsHD(HDBreast, referenceVar = "projected_annots_8um", printPlot = TR
 
 In this part of the vignette, we will show how to plot the CNV subclonality tree. CNV clusters are needed. 
 
-First, we will build a metacell for each cluster, using `generateCNVClonesMatrix()`.  
+We build the tree, using `CNVTree()`. It contains the following functions : 
 
-```{r metacell_cluster}
-cnv_matrix_clusters <- generateCNVClonesMatrix(HDBreast, values = "calls", cnv_thresh = 0.09, healthyClusters = "0")
-```
+  - `generateCNVClonesMatrix` will summarize `fastCNV()`'s results into a cluster/chromosome arm CNV matrix.
 
-Now, we build the tree, using `CNVtree()`, `annotateCNVtree()` and `plotCNVtree()`.
-
-  - `CNVtree()` will build the subclonality tree.
+  - `buildCNVTree()` will build the subclonality tree.
   
-  - `annotateCNVtree()` will annotate each cnv gain/loss in the tree. 
+  - `annotateCNVTree()` will annotate each cnv gain/loss in the tree. 
   
-  - `plotCNVtree()` will output the tree. 
+  - `plotCNVTree()` will output the tree. 
 
 ```{r tree_cnv, fig.width=7, fig.height=5}
-tree <- CNVtree(cnv_matrix_clusters)
-tree_data <- annotateCNVtree(tree, cnv_matrix_clusters)
-plotCNVtree(tree_data, clone_cols = TRUE)
+tree_data <- CNVTree(HDBreast, values ="calls", cnv_thresh = 0.09, healthyClusters = "0")
+
 
 ```

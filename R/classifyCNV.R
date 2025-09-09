@@ -15,7 +15,7 @@
 #'
 #' @export
 
-classify_cnv <- function(cnv_vector, peaks) {
+classifyCNV <- function(cnv_vector, peaks) {
   cnv_classification <- c()  # Initialize a vector to store the classification
 
   for (cnv in cnv_vector){

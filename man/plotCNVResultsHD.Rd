@@ -10,6 +10,7 @@ plotCNVResultsHD(
   referenceVar = NULL,
   clustersVar = "cnv_clusters",
   splitPlotOnVar = clustersVar,
+  denoise = TRUE,
   savePath = ".",
   printPlot = FALSE,
   referencePalette = "default",
@@ -25,6 +26,8 @@ plotCNVResultsHD(
 \item{clustersVar}{The name of the metadata column containing cluster information (default = \code{"cnv_clusters"}).}
 
 \item{splitPlotOnVar}{The name of the metadata column used to split the heatmap rows (e.g., cell type or cluster) (default = \code{clustersVar}).}
+
+\item{denoise}{If \code{TRUE}, the denoised data will be used in the heatmap (default = \code{TRUE}).}
 
 \item{savePath}{The path where the heatmap will be saved. If \code{NULL}, the plot will not be saved (default = \code{"."}).}
 

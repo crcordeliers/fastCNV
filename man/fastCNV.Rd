@@ -16,7 +16,6 @@ fastCNV(
   aggregateByVar = TRUE,
   reClusterSeurat = FALSE,
   pooledReference = TRUE,
-  denoise = TRUE,
   scaleOnReferenceLabel = TRUE,
   thresholdPercentile = 0.01,
   geneMetadata = getGenes(),
@@ -36,6 +35,7 @@ fastCNV(
   plotClustersOnDendrogram = FALSE,
   plotElbowPlot = FALSE,
   doPlot = TRUE,
+  denoise = TRUE,
   printPlot = FALSE,
   savePath = ".",
   outputType = "png",
@@ -67,8 +67,6 @@ fastCNV(
 \item{reClusterSeurat}{Whether to re-cluster if the Seurat object given already has a \code{seurat_clusters} slot in its metadata (default = \code{FALSE}).}
 
 \item{pooledReference}{Default is \code{TRUE}. Will build a pooled reference across all samples if \code{TRUE}.}
-
-\item{denoise}{If \code{TRUE}, the data will be denoised (default = \code{TRUE}).}
 
 \item{scaleOnReferenceLabel}{If \code{TRUE}, scales the results depending on the normal observations (default = \code{TRUE}).}
 
@@ -107,6 +105,8 @@ fastCNV(
 \item{plotElbowPlot}{Logical. Whether to plot the elbow plot used for determining the optimal number of clusters (default = \code{FALSE}).}
 
 \item{doPlot}{If \code{TRUE}, will build a heatmap for each of the samples (default = \code{TRUE}).}
+
+\item{denoise}{If \code{TRUE}, the denoised data will be used in the heatmap (default = \code{TRUE}).}
 
 \item{printPlot}{If \code{TRUE}, the heatmap will be printed in the console (default = \code{FALSE}, the plot will only be saved in a PDF).}
 

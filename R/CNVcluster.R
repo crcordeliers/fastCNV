@@ -29,7 +29,7 @@
 #' @export
 
 
-CNVcluster <- function(seuratObj,
+CNVCluster <- function(seuratObj,
                        referenceVar = NULL,
                        tumorLabel = NULL,
                        k = NULL,

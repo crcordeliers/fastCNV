@@ -1,4 +1,4 @@
-#' CNVcalling
+#' CNVCalling
 #' Performs Copy Number Variation (CNV) analysis on a Seurat object.
 #'
 #' @param seuratObj A Seurat object containing the data for CNV analysis.
@@ -7,7 +7,6 @@
 #' @param referenceVar The name of the metadata column in the Seurat object that contains reference annotations.
 #' @param referenceLabel The label within `referenceVar` that specifies the reference population (can be any type of annotation).
 #' @param scaleOnReferenceLabel Logical. If `TRUE` (default), scales the results based on the reference population.
-#' @param denoise Logical. If `TRUE` (default), applies denoising to the data.
 #' @param thresholdPercentile Numeric. Specifies the quantile range to consider (e.g., `0.01` keeps values between the 1st and 99th percentiles). Higher values filter out more background noise.
 #' @param geneMetadata A dataframe containing gene metadata, typically from Ensembl.
 #' @param windowSize Integer. Defines the size of genomic windows for CNV analysis.
@@ -30,12 +29,11 @@
 #'
 #' @export
 #'
-CNVcalling <- function(seuratObj,
+CNVCalling <- function(seuratObj,
                        assay = NULL,
                        referenceVar = NULL,
                        referenceLabel = NULL,
                        scaleOnReferenceLabel = TRUE,
-                       denoise = TRUE,
                        thresholdPercentile = 0.01,
                        geneMetadata=getGenes(),
                        windowSize=150,
@@ -99,7 +97,7 @@ Computing the CNV without a reference."))
     }
   }
 
-  if (dim(Seurat::GetAssay(seuratObj, assay = assay))[1] < topNGenes) {topNGenes = dim(Seurat::GetAssay(seuratObj, assay = assay))[1]}
+  if (dim(Seurat::GetAssay(seuratObj, assay = assay))[1] < topNGenes) {topNGenes = as.numeric(dim(Seurat::GetAssay(seuratObj, assay = assay))[1])}
 
   rawCounts <- as.matrix(Seurat::GetAssay(seuratObj, assay = assay)["counts"])
   invisible(gc())
@@ -164,7 +162,7 @@ Computing the CNV without a reference."))
 
   final_selected_genes <- unlist(genes_by_arm)
 
-  rawCounts <- rawCounts[topExprGenes,]
+  rawCounts <- rawCounts[final_selected_genes,]
 
   invisible(gc())
 
@@ -225,48 +223,52 @@ Computing the CNV without a reference."))
   })
 
   genomicWindows <- unlist(genomicWindows,recursive=F)
-  genomicScores <- sapply(genomicWindows, function(g) colMeans(normCounts[g,]) )
+  genomicScores <- sapply(genomicWindows, function(g) {
+    if (length(g) == 1) {
+      normCounts[g, ]
+    } else {
+      colMeans(normCounts[g, ])
+    }
+  })
   rm(normCounts)
   invisible(gc())
 
-  if (denoise) {
-    if (scaleOnReferenceLabel) {
-      if (length(referenceLabel) == 1) {
-        genomicScoresReferenceLabel<- genomicScores[referenceCells,]
-      } else {
-        genomicScoresReferenceLabel <- list()
-        for (i in referenceLabel){
-          genomicScoresReferenceLabel[[i]] <- genomicScores[referenceCells[[i]],]
-        }
-        genomicScoresReferenceLabel <- do.call(rbind, genomicScoresReferenceLabel)
+  if (scaleOnReferenceLabel) {
+    if (length(referenceLabel) == 1) {
+      genomicScoresReferenceLabel<- genomicScores[referenceCells,]
+    } else {
+      genomicScoresReferenceLabel <- list()
+      for (i in referenceLabel){
+        genomicScoresReferenceLabel[[i]] <- genomicScores[referenceCells[[i]],]
       }
+      genomicScoresReferenceLabel <- do.call(rbind, genomicScoresReferenceLabel)
+    }
 
     Q01Q99 <- apply(genomicScoresReferenceLabel, 2, stats::quantile, "probs"=c(0+thresholdPercentile,1-thresholdPercentile))
     genomicScoresTrimmed <- apply(genomicScores, 1,function(v)
-      {v[which(v >= Q01Q99[1,] & v <= Q01Q99[2,])] <- 0 ; v })
+    {v[which(v >= Q01Q99[1,] & v <= Q01Q99[2,])] <- 0 ; v })
 
-    } else {
-      if (is.null(referenceVar)) {
-        Q01Q99 <- apply(genomicScores,2,stats::quantile,"probs"=c(0+thresholdPercentile,1-thresholdPercentile))
-        genomicScoresTrimmed <- apply(genomicScores,1,function(v)
-          {v[which(v >= Q01Q99[1,] & v <= Q01Q99[2,])] <- 0;v})
-      } else {
-        cellLines <- split(Seurat::Cells(seuratObj), Seurat::FetchData(seuratObj, vars = referenceVar))
-
-        high_threshold <- median(unlist(sapply(cellLines, function(z) apply (genomicScores[z, , drop = F], 2, function(v) quantile(v, probs = c(0.99))))))
-        low_threshold <- median(unlist(sapply(cellLines, function(z) apply (genomicScores[z, , drop = F], 2, function(v) quantile(v, probs = c(0.01))))))
-        genomicScoresTrimmed <- t(apply(genomicScores, 2, function(z){
-          z[which( z>low_threshold & z<high_threshold)] = 0; z}))
-      }
-    }
   } else {
-    genomicScoresTrimmed <- t(genomicScores)
+    if (is.null(referenceVar)) {
+      Q01Q99 <- apply(genomicScores,2,stats::quantile,"probs"=c(0+thresholdPercentile,1-thresholdPercentile))
+      genomicScoresTrimmed <- apply(genomicScores,1,function(v)
+      {v[which(v >= Q01Q99[1,] & v <= Q01Q99[2,])] <- 0;v})
+    } else {
+      cellLines <- split(Seurat::Cells(seuratObj), Seurat::FetchData(seuratObj, vars = referenceVar))
+
+      high_threshold <- median(unlist(sapply(cellLines, function(z) apply (genomicScores[z, , drop = F], 2, function(v) quantile(v, probs = c(1-thresholdPercentile))))))
+      low_threshold <- median(unlist(sapply(cellLines, function(z) apply (genomicScores[z, , drop = F], 2, function(v) quantile(v, probs = c(0+thresholdPercentile))))))
+      genomicScoresTrimmed <- t(apply(genomicScores, 2, function(z){
+        z[which( z>low_threshold & z<high_threshold)] = 0; z}))
+    }
   }
 
   if (saveGenomicWindows){
     save(genomicWindows, file = paste0("genomicWindows_size",windowSize,"_step",windowStep,".RData"))
   }
 
+  rawGenomicAssay <- Seurat::CreateAssayObject(data = t(as.matrix(genomicScores)))
+  suppressWarnings({seuratObj[["rawGenomicScores"]] <- rawGenomicAssay})
   genomicAssay <- Seurat::CreateAssayObject(data = as.matrix(genomicScoresTrimmed))
   suppressWarnings({seuratObj[["genomicScores"]] <- genomicAssay})
   seuratObj[["cnv_fraction"]] <- colMeans(abs(genomicScoresTrimmed) > 0)

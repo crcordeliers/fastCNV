@@ -1,38 +1,52 @@
-#' Construct a Phylogenetic Tree from a Copy Number Variation (CNV) Matrix
+#' Build, annotate and plot a Phylogenetic Tree from a seurat Object containing the CNV results from `fastCNV()`
 #'
-#' This function constructs a phylogenetic tree based on a given copy number variation (CNV) matrix.
-#' It adds a baseline "Normal" profile only to root the tree, which is not shown in final output.
-#' First, it computes pairwise distances between profiles using Euclidean distance, and then applies a specified tree-building function
-#' (e.g., Neighbor-Joining) to construct the tree.
-#'
-#' @param cnv_matrix A matrix representing copy number variation, where rows correspond to samples
-#' and columns correspond to genomic regions. Each value represents the CNV at a given region in a sample.
+#' @param seuratObj A Seurat object containing CNV data and metadata.
+#' @param healthyClusters A numeric vector or `NULL`. If provided, clusters specified in this vector
+#' will be labeled as "Benign" instead of "Clone". Default is `NULL`.
+#' @param values one of 'scores' or 'calls'. 'scores' returns the mean CNV score per cluster,
+#' while 'calls' uses `cnv_thresh` to establish a cut-off for gains and losses, returning a matrix
+#' of CNV calls (0=none, 1=gain, -1=loss).
+#' @param cnv_thresh A numeric threshold to filter significant CNV events. Default is 0.15.
 #' @param tree_function A function to construct the phylogenetic tree from a distance matrix. The default is
 #' `nj` (Neighbor-Joining). Other functions (e.g., `upgma`, `wpgma`) can also be used.
-#'
-#' @return A rooted phylogenetic tree (of class \code{phylo})
-#'
-#' @examples
-#' # Example usage with Neighbor-Joining (default)
-# cnv_matrix <- matrix(c(2, 3, 2, 4, 3, 5), nrow = 2, byrow = TRUE,
-#                      dimnames = list(c("Clone1", "Clone2"), c("Region1", "Region2", "Region3")))
-# tree <- CNVtree(cnv_matrix)
-# plot(tree)
-#'
-#' @importFrom ape nj root drop.tip
-#' @importFrom phangorn wpgma upgma Ancestors
+#' @param dist_method The distance method to be used.
+#' @param clone_cols a color palette to color the clones. If NULL, points are
+#' not colored. If TRUE, clones are colored using default color palette. If a
+#' palette is given, clones are colored following the palette, with
+#' values passed to `scale_color_manual`.
 #'
 #' @export
 
 
-CNVtree <- function(cnv_matrix, tree_function = nj, dist_method = "euclidean") {
-  normal_root <- matrix(rep(0, ncol(cnv_matrix)), nrow = 1,
-                        dimnames = list("Normal", colnames(cnv_matrix)))
-  cnv_mat <- rbind(cnv_matrix, normal_root)
+CNVTree <- function(seuratObj,
+                    healthyClusters = NULL,
+                    values = "scores",
+                    cnv_thresh = 0.15,
+                    tree_function = nj,
+                    dist_method = "euclidean",
+                    clone_cols = TRUE){
 
-  cnv_dist <- dist(cnv_mat, method = dist_method)
-  tree <- tree_function(cnv_dist)
-  tree <- root(tree, "Normal", resolve.root = TRUE)
-  tree <- drop.tip(tree, "Normal")
-  return(tree)
+  #Get a unique CNV score per cluster and per chromosomic arm
+  cnv_matrix_clusters <- generateCNVClonesMatrix(seuratObj = seuratObj,
+                                                 healthyClusters = healthyClusters,
+                                                 values = values,
+                                                 cnv_thresh = cnv_thresh)
+
+  #Build the CNV tree
+  tree <- buildCNVTree(cnv_matrix_clusters,
+                       tree_function = tree_function,
+                       dist_method = dist_method)
+
+  #Annotate the CNV tree
+  tree_data <- annotateCNVTree(tree,
+                               cnv_matrix_clusters,
+                               cnv_thresh = cnv_thresh)
+
+  #Plot the CNV tree
+  plotCNVTree(tree_data,
+              clone_cols = clone_cols)
+
+  #Return the annotated CNV tree
+  return(tree_data)
+
 }

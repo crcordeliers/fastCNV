@@ -17,15 +17,15 @@
 #' cnv_matrix <- structure(c(0.2, 0.4, 0, 0, 0.1, 0, 0.1, 0.2, 0.2), dim = c(3L,
 #' 3L), dimnames = list(c("Clone 1", "Clone 2", "Clone 3"), c("Region 1",
 #'                                                           "Region 2", "Region 3")))
-#' tree <- CNVtree(cnv_matrix)
-#' tree_data <- annotateCNVtree(tree, cnv_matrix)
-#' plotCNVtree(tree_data)
+#' tree <- buildCNVTree(cnv_matrix)
+#' tree_data <- annotateCNVTree(tree, cnv_matrix)
+#' plotCNVTree(tree_data)
 #'
 #' @importFrom ggtree ggtree geom_tiplab geom_tippoint theme_tree
 #' @importFrom ggplot2 aes geom_label scale_x_continuous scale_color_manual guides
 #' @export
 
-plotCNVtree <- function(tree_data, clone_cols = NULL) {
+plotCNVTree <- function(tree_data, clone_cols = NULL) {
   tree_plot <- ggtree(tree_data) +
     geom_tiplab(hjust = -0.2) +
     geom_label(aes(label = .data$events), size = 4, vjust = -1, hjust = 1, na.rm = TRUE) +
@@ -37,7 +37,7 @@ plotCNVtree <- function(tree_data, clone_cols = NULL) {
       geom_tippoint()
   } else {
     tree_plot <- tree_plot +
-      geom_tippoint(aes(color = label), , size = 4)
+      geom_tippoint(aes(color = .data$label), , size = 4)
     if(length(clone_cols) == sum(tree_data$isTip)) {
       tree_plot <- tree_plot +
         scale_color_manual(values = clone_cols)

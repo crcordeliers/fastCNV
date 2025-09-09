@@ -13,7 +13,7 @@
 #'
 #' @export
 
-CNVclassification <- function(seuratObj, peaks = c(-0.1,0,0.1)) {
+CNVClassification <- function(seuratObj, peaks = c(-0.1,0,0.1)) {
   chromosomes <- c(paste0(1:22, ".p_CNV"), paste0(1:22, ".q_CNV"))
   chromosomes <- c(chromosomes, "X.p_CNV", "X.q_CNV")
 
@@ -22,7 +22,7 @@ CNVclassification <- function(seuratObj, peaks = c(-0.1,0,0.1)) {
 
   for (chrom in chromosomes) {
     cnvVector <- metadata[[chrom]]
-    classification <- classify_cnv(cnvVector, peaks)
+    classification <- classifyCNV(cnvVector, peaks)
     metadata[[paste0(chrom, "_classification")]] <- classification
   }
 

@@ -77,11 +77,11 @@ During this step, fastCNV() will use:
 
 - `prepareCountsForCNVAnalysis` : runs the Seurat standard clustering algorithm and then aggregates the observations (cells or spots) to into metaspots with up to the number of counts defined by `aggregFactor` (default 15,000). In addition, the observations can be aggregated on their seurat cluster AND their cell type combined by leaving default `aggregateByVar = TRUE` and specifying parameter `referenceVar`.  If the Seurat object has previously been clustered, the clustering will be re-done on sctransformed (SCT) data using 10 PCs with default parameters to `FindNeighbors` and `FindClusters`. This can be skipped by setting `reClusterSeurat = FALSE`.
 
-- `CNVanalysis` : computes the CNV. If you have annotations for your Seurat object, you can add the parameters `referenceVar` and `referenceLabel`. 
+- `CNVAnalysis` : computes the CNV. If you have annotations for your Seurat object, you can add the parameters `referenceVar` and `referenceLabel`. 
 
-- `CNVPerChromosome` : to compute the CNV per chromosome arm, and store it in the metadata of the Seurat object. This part of `fastCNV()` can be skipped by turning `getCNVPerChromosome` to `FALSE`.    
+- `CNVPerChromosomeArm` : to compute the CNV per chromosome arm, and store it in the metadata of the Seurat object. This part of `fastCNV()` can be skipped by turning `getCNVPerChromosome` to `FALSE`.    
 
-- `CNVcluster` : performs hierarchical clustering on a genomic score matrix extracted from a Seurat object.
+- `CNVCluster` : performs hierarchical clustering on a genomic score matrix extracted from a Seurat object.
 
 - `plotCNVResults` : to visualize the results (stored in the assays slot of the Seurat object). By default, the parameter `downsizePlot` is set to `FALSE`, which builds a detailed plot, but takes an important time to render. If desired, you can set the parameter to `TRUE`, which decreases the rendering time by plotting the results at the meta-cell level instead of the cell-level, thus decreasing the definition of the CNV results plotted.  
 This function will also build a PDF file for each sample containing their corresponding CNV heatmap in the current working directory, which can be changed using the `savePath` parameter.
@@ -158,7 +158,7 @@ Using the CNV per chromosome arm and `CNVclassification()` we can get the altera
 
 
 ``` {r cnv_classification, fig.width=7, fig.height=3}
-STColon1 <- CNVclassification(STColon1)
+STColon1 <- CNVClassification(STColon1)
 
 common_theme <- theme(
   plot.title = element_text(size = 10),
@@ -202,26 +202,22 @@ We find that tumor cells are virtually always cnv_cluster 2, 3, 4 or 5 ; meanwhi
 ## CNV tree
 
 We can see there are 4 tumor subclusters (2, 3, 4 and 5) in STColon1, and 1 healthy subcluster (1). 
-In this part of the vignette, we will show how to plot the CNV subclonality tree. 
 
-First, we will build a metacell for each cluster, using `generateCNVClonesMatrix()`.  
+In this part of the vignette, we will show how to plot the CNV subclonality tree. CNV clusters are needed. 
 
-```{r metacell_cluster}
-cnv_matrix_clusters <- generateCNVClonesMatrix(STColon1, values = "calls", cnv_thresh = 0.09, healthyClusters = "1")
+We build the tree, using `CNVTree()`. It contains the following functions : 
 
-```
+  - `generateCNVClonesMatrix` will summarize `fastCNV()`'s results into a cluster/chromosome arm CNV matrix.
 
-Now, we build the tree, using `CNVtree()`, `annotateCNVtree()` and `plotCNVtree()`.
-
-  - `CNVtree()` will build the subclonality tree.
+  - `buildCNVTree()` will build the subclonality tree.
   
-  - `annotateCNVtree()` will annotate each cnv gain/loss in the tree. 
+  - `annotateCNVTree()` will annotate each cnv gain/loss in the tree. 
   
-  - `plotCNVtree()` will output the tree. 
+  - `plotCNVTree()` will output the tree. 
 
-```{r tree_cnv, fig.width = 6, fig.height = 3}
-tree <- CNVtree(cnv_matrix_clusters)
-tree_data <- annotateCNVtree(tree, cnv_matrix_clusters)
-plotCNVtree(tree_data, clone_cols = TRUE)
+```{r tree_cnv, fig.width = 7, fig.height = 4}
+
+tree_data <- CNVTree(STColon1, values = "calls", cnv_thresh = 0.09, healthyClusters = "1")
+
 
 ```

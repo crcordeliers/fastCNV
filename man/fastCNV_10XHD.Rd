@@ -11,7 +11,6 @@ fastCNV_10XHD(
   referenceLabel = NULL,
   assay = "Spatial.016um",
   pooledReference = TRUE,
-  denoise = TRUE,
   scaleOnReferenceLabel = TRUE,
   thresholdPercentile = 0.01,
   geneMetadata = getGenes(),
@@ -31,6 +30,7 @@ fastCNV_10XHD(
   plotClustersOnDendrogram = FALSE,
   plotElbowPlot = FALSE,
   doPlot = TRUE,
+  denoise = TRUE,
   printPlot = FALSE,
   savePath = ".",
   outputType = "png",
@@ -52,8 +52,6 @@ fastCNV_10XHD(
 \item{assay}{Name of the assay to run the CNV on. Takes the results of \code{prepareCountsForCNVAnalysis} by default if available.}
 
 \item{pooledReference}{Default is \code{TRUE}. Will build a pooled reference across all samples if \code{TRUE}.}
-
-\item{denoise}{If \code{TRUE}, the data will be denoised (default = \code{TRUE}).}
 
 \item{scaleOnReferenceLabel}{If \code{TRUE}, scales the results depending on the normal observations (default = \code{TRUE}).}
 
@@ -92,6 +90,8 @@ fastCNV_10XHD(
 \item{plotElbowPlot}{Logical. Whether to plot the elbow plot used for determining the optimal number of clusters (default = \code{FALSE}).}
 
 \item{doPlot}{If \code{TRUE}, will build a heatmap for each of the samples (default = \code{TRUE}).}
+
+\item{denoise}{If \code{TRUE}, the denoised data will be used in the heatmap (default = \code{TRUE}).}
 
 \item{printPlot}{If \code{TRUE}, the heatmap will be printed in the console (default = \code{FALSE}, the plot will only be saved in a PDF).}
 

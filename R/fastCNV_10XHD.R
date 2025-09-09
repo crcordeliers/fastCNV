@@ -10,7 +10,7 @@
 #' @param referenceLabel The label given to the observations you want as reference (can be any type of annotation).
 #' @param assay Name of the assay to run the CNV on. Takes the results of `prepareCountsForCNVAnalysis` by default if available.
 #' @param pooledReference Default is `TRUE`. Will build a pooled reference across all samples if `TRUE`.
-#' @param denoise If `TRUE`, the data will be denoised (default = `TRUE`).
+#' @param denoise If `TRUE`, the denoised data will be used in the heatmap (default = `TRUE`).
 #' @param scaleOnReferenceLabel If `TRUE`, scales the results depending on the normal observations (default = `TRUE`).
 #' @param thresholdPercentile Which quantiles to take (default 0.01). For example, `0.01` will take quantiles between 0.01-0.99. Background noise appears with higher numbers.
 #' @param geneMetadata List of genes and their metadata (default uses genes from Ensembl version 113).
@@ -54,7 +54,6 @@ fastCNV_10XHD <- function(seuratObjHD,
                           assay = "Spatial.016um",
 
                           pooledReference = TRUE,
-                          denoise = TRUE,
                           scaleOnReferenceLabel = TRUE,
                           thresholdPercentile = 0.01,
                           geneMetadata = getGenes(),
@@ -77,6 +76,7 @@ fastCNV_10XHD <- function(seuratObjHD,
                           plotElbowPlot = FALSE,
 
                           doPlot = TRUE,
+                          denoise = TRUE,
                           printPlot = FALSE,
                           savePath = ".",
                           outputType = "png",
@@ -108,12 +108,11 @@ fastCNV_10XHD <- function(seuratObjHD,
   invisible(gc())
 
   ## Do CNV Analysis on the seurat / list of seurat Visium HD Objects
-  newHDobj <- CNVanalysis(object = newHDobj,
+  newHDobj <- CNVAnalysis(object = newHDobj,
                           referenceVar = referenceVar,
                           referenceLabel = referenceLabel,
                           assay = assay,
                           pooledReference = pooledReference,
-                          denoise = denoise,
                           scaleOnReferenceLabel = scaleOnReferenceLabel,
                           thresholdPercentile = thresholdPercentile,
                           geneMetadata = geneMetadata,
@@ -130,6 +129,7 @@ fastCNV_10XHD <- function(seuratObjHD,
   seuratObjHD$cnv_fraction = NA
   seuratObjHD$cnv_fraction[rownames(newHDobj@meta.data)] = newHDobj$cnv_fraction
   Seurat::DefaultAssay(seuratObjHD) = "Spatial.016um"
+  seuratObjHD@project.name = sampleName
   rm(newHDobj) ; invisible(gc())
 
   if (getCNVPerChromosomeArm == TRUE){
@@ -143,7 +143,7 @@ fastCNV_10XHD <- function(seuratObjHD,
     message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," CNV clustering may crash with large Visium HD samples. Turn `getCNVClusters` to `FALSE` to avoid this crashing.")))
     message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Running CNV clustering...")))
     Seurat::DefaultAssay(seuratObjHD) = assay
-    seuratObjHD <- CNVcluster(seuratObj = seuratObjHD,
+    seuratObjHD <- CNVCluster(seuratObj = seuratObjHD,
                            referenceVar = referenceVar,
                            tumorLabel = tumorLabel,
                            k = k_clusters,
@@ -158,6 +158,7 @@ fastCNV_10XHD <- function(seuratObjHD,
   if (length(seuratObjHD) == 1) {
     if (doPlot == TRUE) {
       plotCNVResultsHD(seuratObjHD = seuratObjHD,
+                       denoise = denoise,
                        printPlot = printPlot,
                        savePath = savePath,
                        outputType = outputType,
@@ -173,6 +174,7 @@ fastCNV_10XHD <- function(seuratObjHD,
     if (doPlot == TRUE) {
       for (i in 1:length(seuratObjHD)) {
         plotCNVResultsHD(seuratObjHD = seuratObjHD[[i]],
+                         denoise = denoise,
                          printPlot = printPlot,
                          savePath = savePath,
                          outputType = outputType,

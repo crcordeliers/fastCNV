@@ -1,4 +1,4 @@
-#' CNVanalysis
+#' CNVAnalysis
 #' Runs Copy Number Variation (CNV) analysis on a Seurat object or a list of Seurat objects.
 #'
 #' This function performs CNV analysis by calculating genomic scores, applying optional denoising, and optionally
@@ -9,10 +9,8 @@
 #' can be either **single-cell** or **spatial transcriptomics** data.
 #' @param referenceVar The name of the metadata column in the Seurat object that contains reference annotations.
 #' @param referenceLabel The label within `referenceVar` that specifies the reference population (can be any type of annotation).
-# @param doRecapPlot Logical. If `TRUE` (default), generates CNV heatmaps grouped by annotation.
 #' @param pooledReference Logical. If `TRUE` (default), builds a pooled reference across all samples.
 #' @param scaleOnReferenceLabel Logical. If `TRUE` (default), scales the results based on the reference population.
-#' @param denoise Logical. If `TRUE` (default), applies denoising to the data.
 #' @param assay Name of the assay to run the CNV analysis on. Defaults to the results of `prepareCountsForCNVAnalysis` if available.
 #' @param thresholdPercentile Numeric. Specifies the quantile range to consider (e.g., `0.01` keeps values between the 1st and 99th percentiles). Higher values filter out more background noise.
 #' @param geneMetadata A dataframe containing gene metadata, typically from Ensembl.
@@ -33,13 +31,11 @@
 #' @export
 
 
-CNVanalysis <- function(object,
+CNVAnalysis <- function(object,
                        referenceVar = NULL,
                        referenceLabel = NULL,
-                       #doRecapPlot = TRUE,
                        pooledReference = TRUE,
                        scaleOnReferenceLabel = TRUE,
-                       denoise = TRUE,
                        assay = NULL,
                        thresholdPercentile = 0.01,
                        geneMetadata=getGenes(),
@@ -53,12 +49,11 @@ CNVanalysis <- function(object,
 
     message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Running CNV analysis...")))
     if (!is.list(object)) {
-      object <- CNVcalling(object,
+      object <- CNVCalling(object,
                            assay = assay,
                            referenceVar = referenceVar,
                            referenceLabel = referenceLabel,
                            scaleOnReferenceLabel = scaleOnReferenceLabel,
-                           denoise = denoise,
                            thresholdPercentile = thresholdPercentile,
                            geneMetadata=geneMetadata,
                            windowSize=windowSize,
@@ -68,12 +63,11 @@ CNVanalysis <- function(object,
       invisible(gc())
     } else {
       if (length(object) == 1) {
-        object <- list(CNVcalling(object[1],
+        object <- list(CNVCalling(object[1],
                                   assay = assay,
                                   referenceVar = referenceVar,
                                   referenceLabel = referenceLabel,
                                   scaleOnReferenceLabel = scaleOnReferenceLabel,
-                                  denoise = denoise,
                                   thresholdPercentile = thresholdPercentile,
                                   geneMetadata=geneMetadata,
                                   windowSize=windowSize,
@@ -83,12 +77,11 @@ CNVanalysis <- function(object,
         invisible(gc())
       } else {
         if (pooledReference == TRUE) {
-          object <- CNVcallingList(object,
+          object <- CNVCallingList(object,
                              assay = assay,
                              referenceVar = referenceVar,
                              referenceLabel = referenceLabel,
                              scaleOnReferenceLabel = scaleOnReferenceLabel,
-                             denoise = denoise,
                              thresholdPercentile = thresholdPercentile,
                              geneMetadata=geneMetadata,
                              windowSize=windowSize,
@@ -98,12 +91,11 @@ CNVanalysis <- function(object,
           invisible(gc())
         } else {
           object <- lapply(object, function(x) {
-                                    CNVcalling(x,
+                                    CNVCalling(x,
                                     assay = assay,
                                     referenceVar = referenceVar,
                                     referenceLabel = referenceLabel,
                                     scaleOnReferenceLabel = scaleOnReferenceLabel,
-                                    denoise = denoise,
                                     thresholdPercentile = thresholdPercentile,
                                     geneMetadata=geneMetadata,
                                     windowSize=windowSize,

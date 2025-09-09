@@ -16,7 +16,7 @@
 #' @param aggregateByVar If `referenceVar` is given, determines whether to use it to pool the observations (default = `TRUE`).
 #' @param reClusterSeurat Whether to re-cluster if the Seurat object given already has a `seurat_clusters` slot in its metadata (default = `FALSE`).
 #' @param pooledReference Default is `TRUE`. Will build a pooled reference across all samples if `TRUE`.
-#' @param denoise If `TRUE`, the data will be denoised (default = `TRUE`).
+#' @param denoise If `TRUE`, the denoised data will be used in the heatmap (default = `TRUE`).
 #' @param scaleOnReferenceLabel If `TRUE`, scales the results depending on the normal observations (default = `TRUE`).
 #' @param thresholdPercentile Which quantiles to take (default 0.01). For example, `0.01` will take quantiles between 0.01-0.99. Background noise appears with higher numbers.
 #' @param geneMetadata List of genes and their metadata (default uses genes from Ensembl version 113).
@@ -64,7 +64,6 @@ fastCNV <- function (seuratObj,
                      reClusterSeurat = FALSE,
 
                      pooledReference = TRUE,
-                     denoise = TRUE,
                      scaleOnReferenceLabel = TRUE,
                      thresholdPercentile = 0.01,
                      geneMetadata = getGenes(),
@@ -86,8 +85,8 @@ fastCNV <- function (seuratObj,
                      plotClustersOnDendrogram = FALSE,
                      plotElbowPlot = FALSE,
 
-                     #doRecapPlot = TRUE,
                      doPlot = TRUE,
+                     denoise = TRUE,
                      printPlot = FALSE,
                      savePath = ".",
                      outputType = "png",
@@ -104,6 +103,11 @@ fastCNV <- function (seuratObj,
   if(length(seuratObj) == 1){
     seuratObj <- list(seuratObj) ; names(seuratObj) <- sampleName
   }
+
+  for (i in length(seuratObj)){
+    seuratObj[[i]]@project.name = sampleName[[i]]
+  }
+
   if (prepareCounts == TRUE & aggregFactor>=1000) {
     message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Aggregating counts matrix...")))
     for (i in 1:length(seuratObj)) {
@@ -124,18 +128,17 @@ fastCNV <- function (seuratObj,
 
 
   if (length(seuratObj) > 1) {
-    seuratObj <- CNVanalysis(seuratObj, referenceVar = referenceVar, referenceLabel = referenceLabel,
-                              #doRecapPlot = doRecapPlot,
+    seuratObj <- CNVAnalysis(seuratObj, referenceVar = referenceVar, referenceLabel = referenceLabel,
                               pooledReference = pooledReference,
-                              scaleOnReferenceLabel = scaleOnReferenceLabel, denoise = denoise,
+                              scaleOnReferenceLabel = scaleOnReferenceLabel,
                               assay = assay, thresholdPercentile = thresholdPercentile, geneMetadata = geneMetadata,
                               chrArmsToForce = chrArmsToForce, windowSize = windowSize, windowStep = windowStep,
                               saveGenomicWindows = saveGenomicWindows, topNGenes = topNGenes)
     invisible(gc())
   } else {
-    seuratObj <- CNVanalysis(seuratObj[[1]], referenceVar = referenceVar, referenceLabel = referenceLabel,
+    seuratObj <- CNVAnalysis(seuratObj[[1]], referenceVar = referenceVar, referenceLabel = referenceLabel,
                          #doRecapPlot = doRecapPlot,
-                         pooledReference = pooledReference, denoise = denoise,
+                         pooledReference = pooledReference,
                          scaleOnReferenceLabel = scaleOnReferenceLabel, assay = assay,
                          thresholdPercentile = thresholdPercentile, geneMetadata = geneMetadata,
                          chrArmsToForce = chrArmsToForce, windowSize = windowSize, windowStep = windowStep,
@@ -159,11 +162,11 @@ fastCNV <- function (seuratObj,
   if (getCNVClusters == TRUE) {
     message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Clustering CNVs...")))
     if (length(seuratObj) == 1) {
-      seuratObj <- CNVcluster(seuratObj, referenceVar = referenceVar, tumorLabel = tumorLabel, k = k_clusters, h = h_clusters, plotDendrogram = plotDendrogram,
+      seuratObj <- CNVCluster(seuratObj, referenceVar = referenceVar, tumorLabel = tumorLabel, k = k_clusters, h = h_clusters, plotDendrogram = plotDendrogram,
                               plotClustersOnDendrogram = plotClustersOnDendrogram, plotElbowPlot = plotElbowPlot)
     } else {
       for (i in 1:length(seuratObj)) {
-        seuratObj[[i]] <- CNVcluster(seuratObj[[i]], referenceVar = referenceVar, tumorLabel = tumorLabel, k = k_clusters, h = h_clusters, plotDendrogram = plotDendrogram,
+        seuratObj[[i]] <- CNVCluster(seuratObj[[i]], referenceVar = referenceVar, tumorLabel = tumorLabel, k = k_clusters, h = h_clusters, plotDendrogram = plotDendrogram,
                                      plotClustersOnDendrogram = plotClustersOnDendrogram, plotElbowPlot = plotElbowPlot)
       }
     }
@@ -178,13 +181,15 @@ fastCNV <- function (seuratObj,
         if (Seurat::Project(seuratObj[[i]]) == "SeuratProject") {Seurat::Project(seuratObj[[i]]) = paste0("Sample",i)}
         if ("cnv_clusters" %in% names(seuratObj[[i]]@meta.data)) {splitPlotOnVar = "cnv_clusters"}
         plotCNVResults(seuratObj[[i]], referenceVar = referenceVar, splitPlotOnVar = splitPlotOnVar,
-                       savePath = savePath, printPlot = printPlot, referencePalette = referencePalette, clusters_palette = clusters_palette, outputType = outputType)
+                       savePath = savePath, printPlot = printPlot, referencePalette = referencePalette,
+                       clusters_palette = clusters_palette, outputType = outputType, denoise = denoise)
         invisible(gc())
       }
     } else {
       if ("cnv_clusters" %in% names(seuratObj@meta.data)) {splitPlotOnVar = "cnv_clusters"}
-      plotCNVResults(seuratObj = seuratObj, referenceVar = referenceVar, splitPlotOnVar = splitPlotOnVar, clustersVar = clustersVar,
-                     savePath = savePath, printPlot = printPlot, referencePalette = referencePalette, clusters_palette = clusters_palette, outputType = outputType)
+      plotCNVResults(seuratObj = seuratObj, referenceVar = referenceVar, splitPlotOnVar = splitPlotOnVar,
+                     clustersVar = clustersVar, denoise = denoise, savePath = savePath, printPlot = printPlot,
+                     referencePalette = referencePalette, clusters_palette = clusters_palette, outputType = outputType)
       invisible(gc())
     }
     message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))

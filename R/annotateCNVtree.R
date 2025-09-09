@@ -14,8 +14,8 @@
 #' cnv_matrix <- structure(c(0.2, 0.4, 0, 0, 0.1, 0, 0.1, 0.2, 0.2), dim = c(3L,
 #' 3L), dimnames = list(c("Clone 1", "Clone 2", "Clone 3"), c("Region 1",
 #'                                                           "Region 2", "Region 3")))
-#' tree <- CNVtree(cnv_matrix)
-#' tree_data <- annotateCNVtree(tree, cnv_matrix)
+#' tree <- buildCNVTree(cnv_matrix)
+#' tree_data <- annotateCNVTree(tree, cnv_matrix)
 #'
 #' @importFrom dplyr left_join full_join pull
 #' @importFrom ggplot2 fortify
@@ -26,7 +26,7 @@
 #'
 #' @export
 #'
-annotateCNVtree <- function(tree, cnv_mat, cnv_thresh = 0.15) {
+annotateCNVTree <- function(tree, cnv_mat, cnv_thresh = 0.15) {
   tree_data <- fortify(tree)
   # Get events
   major_events <- get_majorEvents(cnv_mat, cnv_thresh)

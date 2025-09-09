@@ -1,4 +1,4 @@
-#' CNVcalling for a List of Seurat Objects
+#' CNVCalling for a List of Seurat Objects
 #' Performs Copy Number Variation (CNV) analysis on a list of Seurat objects.
 #'
 #' @param seuratList A list of Seurat objects containing the data for CNV analysis.
@@ -7,7 +7,6 @@
 #' @param referenceVar The name of the metadata column in the Seurat object that contains reference annotations.
 #' @param referenceLabel The label within `referenceVar` that specifies the reference population (can be any type of annotation).
 #' @param scaleOnReferenceLabel Logical. If `TRUE` (default), scales the results based on the reference population.
-#' @param denoise Logical. If `TRUE` (default), applies denoising to the data.
 #' @param thresholdPercentile Numeric. Specifies the quantile range to consider (e.g., `0.01` keeps values between the 1st and 99th percentiles). Higher values filter out more background noise.
 #' @param geneMetadata A dataframe containing gene metadata, typically from Ensembl.
 #' @param windowSize Integer. Defines the size of genomic windows for CNV analysis.
@@ -31,12 +30,11 @@
 #'
 
 
-CNVcallingList <- function(seuratList,
+CNVCallingList <- function(seuratList,
                            assay = NULL,
                            referenceVar = NULL,
                            referenceLabel = NULL,
                            scaleOnReferenceLabel= TRUE,
-                           denoise = TRUE,
                            thresholdPercentile = 0.01,
                            geneMetadata=getGenes(),
                            windowSize=150,
@@ -110,7 +108,7 @@ CNVcallingList <- function(seuratList,
   LrawcountsByPatient <- lapply(LrawcountsByPatient, function(x) x[commonGenes,])
   invisible(gc())
   if (exists("LN")){
-    aveExpr <- compute_average_expression(LN, LrawcountsByPatient)
+    aveExpr <- computeAverageExpression(LN, LrawcountsByPatient)
     aveExpr <- do.call(cbind,aveExpr)
     aveExpr <- rowMeans(aveExpr, na.rm = T)
   } else {
@@ -227,36 +225,38 @@ CNVcallingList <- function(seuratList,
   LgenomicScores <- lapply(LnormcountsByPatient,funGenomicScore,"GW"=genomicWindows)
   rm(LnormcountsByPatient) ; invisible(gc())
 
-  if (denoise) {
-    if(scaleOnReferenceLabel){
-      if (length(referenceLabel) == 1){
-        genomicScoresReferenceLabel <- do.call(rbind, lapply(names(LN), function(patient) LgenomicScores[[patient]][LN[[patient]],]))
-      } else {
-        genomicScoresReferenceLabel <- list()
-        for (i in referenceLabel){
-          genomicScoresReferenceLabel[[i]] <- do.call(rbind, lapply(names(LN[[i]]), function(patient) LgenomicScores[[patient]][LN[[i]][[patient]],]))
-        }
-        genomicScoresReferenceLabel <- do.call(rbind, genomicScoresReferenceLabel)
-      }
-      Q01Q99 <- apply(genomicScoresReferenceLabel, 2, stats::quantile, "probs"=c(0+thresholdPercentile,1-thresholdPercentile))
-      LgenomicScoresTrimmed <- lapply(LgenomicScores, function(gs){
-        apply(gs, 1, function(v) { v[which(v >= Q01Q99[1,] & v <= Q01Q99[2,])] <- 0 ; v }) })
 
+  if(scaleOnReferenceLabel){
+    if (length(referenceLabel) == 1){
+      genomicScoresReferenceLabel <- do.call(rbind, lapply(names(LN), function(patient) LgenomicScores[[patient]][LN[[patient]],]))
     } else {
-      genomicScoresAll <- do.call(rbind, lapply(names(LgenomicScores), function(patient) LgenomicScores[[patient]]))
-      Q01Q99 <- apply(genomicScoresAll,2,quantile,"probs"=c(0+thresholdPercentile,1-thresholdPercentile))
-      LgenomicScoresTrimmed <- lapply(LgenomicScores,function(gs){
-        apply(gs,1,function(v) { v[which(v >= Q01Q99[1,] & v <= Q01Q99[2,])] <- 0 ; v }) })
+      genomicScoresReferenceLabel <- list()
+      for (i in referenceLabel){
+        genomicScoresReferenceLabel[[i]] <- do.call(rbind, lapply(names(LN[[i]]), function(patient) LgenomicScores[[patient]][LN[[i]][[patient]],]))
+      }
+      genomicScoresReferenceLabel <- do.call(rbind, genomicScoresReferenceLabel)
     }
+    Q01Q99 <- apply(genomicScoresReferenceLabel, 2, stats::quantile, "probs"=c(0+thresholdPercentile,1-thresholdPercentile))
+    LgenomicScoresTrimmed <- lapply(LgenomicScores, function(gs){
+      apply(gs, 1, function(v) { v[which(v >= Q01Q99[1,] & v <= Q01Q99[2,])] <- 0 ; v }) })
+
   } else {
-    LgenomicScoresTrimmed <- lapply(LgenomicScores, function(x) t(x))
+    genomicScoresAll <- do.call(rbind, lapply(names(LgenomicScores), function(patient) LgenomicScores[[patient]]))
+    Q01Q99 <- apply(genomicScoresAll,2,quantile,"probs"=c(0+thresholdPercentile,1-thresholdPercentile))
+    LgenomicScoresTrimmed <- lapply(LgenomicScores,function(gs){
+      apply(gs,1,function(v) { v[which(v >= Q01Q99[1,] & v <= Q01Q99[2,])] <- 0 ; v }) })
   }
+
+  LgenomicScores <- lapply(LgenomicScores, function(x) t(x))
+
 
   if (saveGenomicWindows){
     save(genomicWindows, file = paste0("genomicWindows_size",windowSize,"_step",windowStep,".RData"))
   }
 
   for (i in 1:length(seuratList)) {
+    rawGenomicAssay <- Seurat::CreateAssayObject(counts = LgenomicScores[i][[1]])
+    suppressWarnings({seuratList[[i]][["rawGenomicScores"]] <- rawGenomicAssay})
     genomicAssay <- Seurat::CreateAssayObject(counts = LgenomicScoresTrimmed[i][[1]])
     suppressWarnings({seuratList[[i]][["genomicScores"]] <- genomicAssay})
     seuratList[[i]][["cnv_fraction"]] <- colMeans(abs(LgenomicScoresTrimmed[i][[1]]) > 0)
