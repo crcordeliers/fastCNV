@@ -11,7 +11,7 @@ generating and saving plots."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.28</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,6 @@ generating and saving plots.</p>
 <span>  referenceLabel <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  assay <span class="op">=</span> <span class="st">"Spatial.016um"</span>,</span>
 <span>  pooledReference <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  denoise <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  scaleOnReferenceLabel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  thresholdPercentile <span class="op">=</span> <span class="fl">0.01</span>,</span>
 <span>  geneMetadata <span class="op">=</span> <span class="fu"><a href="getGenes.html">getGenes</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -82,6 +81,7 @@ generating and saving plots.</p>
 <span>  plotClustersOnDendrogram <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  plotElbowPlot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  doPlot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  denoise <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  printPlot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  savePath <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>  outputType <span class="op">=</span> <span class="st">"png"</span>,</span>
@@ -118,10 +118,6 @@ generating and saving plots.</p>
 
 <dt id="arg-pooledreference">pooledReference<a class="anchor" aria-label="anchor" href="#arg-pooledreference"></a></dt>
 <dd><p>Default is <code>TRUE</code>. Will build a pooled reference across all samples if <code>TRUE</code>.</p></dd>
-
-
-<dt id="arg-denoise">denoise<a class="anchor" aria-label="anchor" href="#arg-denoise"></a></dt>
-<dd><p>If <code>TRUE</code>, the data will be denoised (default = <code>TRUE</code>).</p></dd>
 
 
 <dt id="arg-scaleonreferencelabel">scaleOnReferenceLabel<a class="anchor" aria-label="anchor" href="#arg-scaleonreferencelabel"></a></dt>
@@ -198,6 +194,10 @@ generating and saving plots.</p>
 
 <dt id="arg-doplot">doPlot<a class="anchor" aria-label="anchor" href="#arg-doplot"></a></dt>
 <dd><p>If <code>TRUE</code>, will build a heatmap for each of the samples (default = <code>TRUE</code>).</p></dd>
+
+
+<dt id="arg-denoise">denoise<a class="anchor" aria-label="anchor" href="#arg-denoise"></a></dt>
+<dd><p>If <code>TRUE</code>, the denoised data will be used in the heatmap (default = <code>TRUE</code>).</p></dd>
 
 
 <dt id="arg-printplot">printPlot<a class="anchor" aria-label="anchor" href="#arg-printplot"></a></dt>

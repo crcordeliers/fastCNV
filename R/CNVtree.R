@@ -43,8 +43,8 @@ CNVTree <- function(seuratObj,
                                cnv_thresh = cnv_thresh)
 
   #Plot the CNV tree
-  plotCNVTree(tree_data,
-              clone_cols = clone_cols)
+  plot(plotCNVTree(tree_data,
+              clone_cols = clone_cols))
 
   #Return the annotated CNV tree
   return(tree_data)

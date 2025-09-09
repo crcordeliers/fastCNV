@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.28</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,14 +128,14 @@ reference.</p>
 are done on the 8um resolution you will need to run this function before
 running fastCNV on the 16um assay.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">HDBreast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotations_8um_to_16um.html">annotations_8um_to_16um</a></span><span class="op">(</span><span class="va">HDBreast</span>, referenceVar <span class="op">=</span> <span class="st">"annots_8um"</span><span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="va">HDBreast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotations8umTo16um.html">annotations8umTo16um</a></span><span class="op">(</span><span class="va">HDBreast</span>, referenceVar <span class="op">=</span> <span class="st">"annots_8um"</span><span class="op">)</span> </span>
 <span><span class="co">#&gt; [1] "New annotation column (new referenceVar) is named : projected_annots_8um."</span></span></code></pre></div>
 <p>Now the 16um spots also have the annotations given to the 8um spots.
 The projected annotations are in the meta data “projected_annots_8um”.
 This will be the referenceVar we will use from now on.</p>
 <p>You can check if the projected annotations are correct by doing</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/SpatialPlot.html" class="external-link">SpatialDimPlot</a></span><span class="op">(</span><span class="va">HDBreast</span>, group.by <span class="op">=</span> <span class="st">"projected_annots_8um"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/SpatialPlot.html" class="external-link">SpatialDimPlot</a></span><span class="op">(</span><span class="va">HDBreast</span>, group.by <span class="op">=</span> <span class="st">"projected_annots_8um"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fastCNV_HD_files/figure-html/spatialdimplot_annotations-1.png" width="768"></p>
 </div>
 <div class="section level2">
@@ -143,14 +143,14 @@ This will be the referenceVar we will use from now on.</p>
 </h2>
 <p>During this step, fastCNV_10XHD() will use:</p>
 <ul>
-<li><p><code>CNVanalysis</code> : computes the CNV. If you have
+<li><p><code>CNVAnalysis</code> : computes the CNV. If you have
 annotations for your Seurat object, you can add the parameters
 <code>referenceVar</code> and <code>referenceLabel</code>.</p></li>
 <li><p><code>CNVPerChromosome</code> : to compute the CNV per chromosome
 arm, and store it in the metadata of the Seurat object. This part of
 <code><a href="../reference/fastCNV.html">fastCNV()</a></code> can be skipped by turning
 <code>getCNVPerChromosome</code> to <code>FALSE</code>.</p></li>
-<li><p><code>CNVcluster</code> : OPTIONAL - performs hierarchical
+<li><p><code>CNVCluster</code> : OPTIONAL - performs hierarchical
 clustering on a genomic score matrix extracted from a Seurat object.
 This may crash with large Visium HD samples. This function can be run
 later on.</p></li>
@@ -175,16 +175,16 @@ observation in the Seurat object. This can be directly plotted using
 Seurat spatial plotting functions, as we’ll demonstrate on STColon1:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/SpatialPlot.html" class="external-link">SpatialFeaturePlot</a></span><span class="op">(</span><span class="va">HDBreast</span>, <span class="st">"cnv_fraction"</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/SpatialPlot.html" class="external-link">SpatialPlot</a></span><span class="op">(</span><span class="va">HDBreast</span>, group.by <span class="op">=</span> <span class="st">"projected_annots_8um"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/SpatialPlot.html" class="external-link">SpatialFeaturePlot</a></span><span class="op">(</span><span class="va">HDBreast</span>, <span class="st">"cnv_fraction"</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SpatialPlot.html" class="external-link">SpatialPlot</a></span><span class="op">(</span><span class="va">HDBreast</span>, group.by <span class="op">=</span> <span class="st">"projected_annots_8um"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fastCNV_HD_files/figure-html/plot_cnv_fraction-1.png" width="768"></p>
 <p>Here, we see some zones with higher CNV fractions than others. We can
 directly plot and test this:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/FetchData.html" class="external-link">FetchData</a></span><span class="op">(</span><span class="va">HDBreast</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"projected_annots_8um"</span>, <span class="st">"cnv_fraction"</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>       <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">projected_annots_8um</span>, <span class="va">cnv_fraction</span>, fill <span class="op">=</span> <span class="va">projected_annots_8um</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, vjust <span class="op">=</span> <span class="fl">1</span>, hjust <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/FetchData.html" class="external-link">FetchData</a></span><span class="op">(</span><span class="va">HDBreast</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"projected_annots_8um"</span>, <span class="st">"cnv_fraction"</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">projected_annots_8um</span>, <span class="va">cnv_fraction</span>, fill <span class="op">=</span> <span class="va">projected_annots_8um</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, vjust <span class="op">=</span> <span class="fl">1</span>, hjust <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fastCNV_HD_files/figure-html/plot_cnv_fraction2-1.png" width="576"></p>
 <p>The tumor zone has a higher CNV fraction, which is coherent.</p>
 <p>We can also plot the CNV per chromosome arm with the plotting
@@ -192,15 +192,15 @@ functions from Seurat.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/SpatialPlot.html" class="external-link">SpatialFeaturePlot</a></span><span class="op">(</span><span class="va">HDBreast</span>, features <span class="op">=</span> <span class="st">"11.q_CNV"</span><span class="op">)</span>  <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/scale_brewer.html" class="external-link">scale_fill_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"RdBu"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>, </span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/SpatialPlot.html" class="external-link">SpatialFeaturePlot</a></span><span class="op">(</span><span class="va">HDBreast</span>, features <span class="op">=</span> <span class="st">"11.q_CNV"</span><span class="op">)</span>  <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"RdBu"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>, </span>
 <span>                       rescaler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">to</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="va">from</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span>
-<span>                         <span class="fu"><a href="https://rdrr.io/pkg/scales/man/rescale_mid.html" class="external-link">rescale_mid</a></span><span class="op">(</span><span class="va">x</span>, to <span class="op">=</span> <span class="va">to</span>, mid <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>                         <span class="fu"><a href="https://scales.r-lib.org/reference/rescale_mid.html" class="external-link">rescale_mid</a></span><span class="op">(</span><span class="va">x</span>, to <span class="op">=</span> <span class="va">to</span>, mid <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span>                       <span class="op">}</span><span class="op">)</span> <span class="op">|</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/SpatialPlot.html" class="external-link">SpatialFeaturePlot</a></span><span class="op">(</span><span class="va">HDBreast</span>, features <span class="op">=</span> <span class="st">"8.q_CNV"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/scale_brewer.html" class="external-link">scale_fill_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"RdBu"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>, </span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/SpatialPlot.html" class="external-link">SpatialFeaturePlot</a></span><span class="op">(</span><span class="va">HDBreast</span>, features <span class="op">=</span> <span class="st">"8.q_CNV"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"RdBu"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>, </span>
 <span>                       rescaler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">to</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="va">from</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span>
-<span>                         <span class="fu"><a href="https://rdrr.io/pkg/scales/man/rescale_mid.html" class="external-link">rescale_mid</a></span><span class="op">(</span><span class="va">x</span>, to <span class="op">=</span> <span class="va">to</span>, mid <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>                         <span class="fu"><a href="https://scales.r-lib.org/reference/rescale_mid.html" class="external-link">rescale_mid</a></span><span class="op">(</span><span class="va">x</span>, to <span class="op">=</span> <span class="va">to</span>, mid <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span>                       <span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fastCNV_HD_files/figure-html/plot_cnv_per_chromosome-1.png" width="672"></p>
 </div>
@@ -215,18 +215,18 @@ all the spots to speed up the analysis. If your data has mostly tumor
 cells, it might be usefull to split you object into smaller objects to
 do the clustering.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">HDBreast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVcluster.html">CNVcluster</a></span><span class="op">(</span><span class="va">HDBreast</span>, referenceVar <span class="op">=</span> <span class="st">"projected_annots_8um"</span>, tumorLabel <span class="op">=</span> <span class="st">"Tumor"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">HDBreast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVCluster.html">CNVCluster</a></span><span class="op">(</span><span class="va">HDBreast</span>, referenceVar <span class="op">=</span> <span class="st">"projected_annots_8um"</span>, tumorLabel <span class="op">=</span> <span class="st">"Tumor"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/Seurat/man/SpatialPlot.html" class="external-link">SpatialDimPlot</a></span><span class="op">(</span><span class="va">HDBreast</span>, group.by <span class="op">=</span> <span class="st">"cnv_clusters"</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/SpatialPlot.html" class="external-link">SpatialDimPlot</a></span><span class="op">(</span><span class="va">HDBreast</span>, group.by <span class="op">=</span> <span class="st">"cnv_clusters"</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="fastCNV_HD_files/figure-html/plot_cnv_clusters-1.png" width="480"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.github.io/seurat-object/" class="external-link">SeuratObject</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">HDBreast</span><span class="op">$</span><span class="va">cnv_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">HDBreast</span><span class="op">$</span><span class="va">cnv_clusters</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/FetchData.html" class="external-link">FetchData</a></span><span class="op">(</span><span class="va">HDBreast</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cnv_clusters"</span>, <span class="st">"projected_annots_8um"</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">projected_annots_8um</span>, fill <span class="op">=</span> <span class="va">cnv_clusters</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"fill"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, vjust <span class="op">=</span> <span class="fl">1</span>, hjust <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/FetchData.html" class="external-link">FetchData</a></span><span class="op">(</span><span class="va">HDBreast</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cnv_clusters"</span>, <span class="st">"projected_annots_8um"</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">projected_annots_8um</span>, fill <span class="op">=</span> <span class="va">cnv_clusters</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"fill"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, vjust <span class="op">=</span> <span class="fl">1</span>, hjust <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fastCNV_HD_files/figure-html/cnv_props-1.png" width="480"></p>
 <p>Once we have the clusters, we can do the CNV heatmap again to
 visualize the clusters in it too.</p>
@@ -239,22 +239,20 @@ visualize the clusters in it too.</p>
 </h2>
 <p>In this part of the vignette, we will show how to plot the CNV
 subclonality tree. CNV clusters are needed.</p>
-<p>First, we will build a metacell for each cluster, using
-<code><a href="../reference/generateCNVClonesMatrix.html">generateCNVClonesMatrix()</a></code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cnv_matrix_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateCNVClonesMatrix.html">generateCNVClonesMatrix</a></span><span class="op">(</span><span class="va">HDBreast</span>, values <span class="op">=</span> <span class="st">"calls"</span>, cnv_thresh <span class="op">=</span> <span class="fl">0.09</span>, healthyClusters <span class="op">=</span> <span class="st">"0"</span><span class="op">)</span></span></code></pre></div>
-<p>Now, we build the tree, using <code><a href="../reference/CNVtree.html">CNVtree()</a></code>,
-<code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> and <code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code>.</p>
+<p>We build the tree, using <code><a href="../reference/CNVTree.html">CNVTree()</a></code>. It contains the
+following functions :</p>
 <ul>
-<li><p><code><a href="../reference/CNVtree.html">CNVtree()</a></code> will build the subclonality tree.</p></li>
-<li><p><code><a href="../reference/annotateCNVtree.html">annotateCNVtree()</a></code> will annotate each cnv gain/loss
+<li><p><code>generateCNVClonesMatrix</code> will summarize
+<code><a href="../reference/fastCNV.html">fastCNV()</a></code>’s results into a cluster/chromosome arm CNV
+matrix.</p></li>
+<li><p><code><a href="../reference/buildCNVTree.html">buildCNVTree()</a></code> will build the subclonality
+tree.</p></li>
+<li><p><code><a href="../reference/annotateCNVTree.html">annotateCNVTree()</a></code> will annotate each cnv gain/loss
 in the tree.</p></li>
-<li><p><code><a href="../reference/plotCNVtree.html">plotCNVtree()</a></code> will output the tree.</p></li>
+<li><p><code><a href="../reference/plotCNVTree.html">plotCNVTree()</a></code> will output the tree.</p></li>
 </ul>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVtree.html">CNVtree</a></span><span class="op">(</span><span class="va">cnv_matrix_clusters</span><span class="op">)</span></span>
-<span><span class="va">tree_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotateCNVtree.html">annotateCNVtree</a></span><span class="op">(</span><span class="va">tree</span>, <span class="va">cnv_matrix_clusters</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/plotCNVtree.html">plotCNVtree</a></span><span class="op">(</span><span class="va">tree_data</span>, clone_cols <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tree_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNVTree.html">CNVTree</a></span><span class="op">(</span><span class="va">HDBreast</span>, values <span class="op">=</span><span class="st">"calls"</span>, cnv_thresh <span class="op">=</span> <span class="fl">0.09</span>, healthyClusters <span class="op">=</span> <span class="st">"0"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fastCNV_HD_files/figure-html/tree_cnv-1.png" width="672"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
