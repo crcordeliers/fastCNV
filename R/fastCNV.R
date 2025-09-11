@@ -104,7 +104,7 @@ fastCNV <- function (seuratObj,
     seuratObj <- list(seuratObj) ; names(seuratObj) <- sampleName
   }
 
-  for (i in length(seuratObj)){
+  for (i in 1:length(seuratObj)){
     seuratObj[[i]]@project.name = sampleName[[i]]
   }
 
