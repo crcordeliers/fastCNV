@@ -56,9 +56,62 @@ plotCNVResults <- function(seuratObj,
   }
 
   if (denoise == TRUE) {
-    M <- t(as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")["data"]))
+    mat <- as.matrix(Seurat::GetAssay(seuratObj, "genomicScores")["data"])
+    arms <- rownames(mat)
+
+    # define grouping variable (e.g. 1.p, 1.q, 13.q, etc.)
+    arms_group <- stringr::str_extract(arms, "^[0-9XY]+\\.[pq]")
+
+    # unique arms in the order they appear
+    unique_arms <- unique(arms_group)
+
+    # build new matrix
+    M <- do.call(rbind, lapply(unique_arms, function(arm) {
+      idx <- which(arms_group == arm)
+      rows <- mat[idx, , drop = FALSE]
+
+      # duplicate if fewer than 3
+      if (nrow(rows) < 3) {
+        need <- 3 - nrow(rows)
+        dup_rows <- rows[rep(1:nrow(rows), length.out = need), , drop = FALSE]
+
+        # give unique rownames to avoid collisions
+        rownames(dup_rows) <- paste0(rownames(rows)[rep(1:nrow(rows), length.out = need)], "_dup")
+
+        rows <- rbind(rows, dup_rows)
+      }
+      rows
+    }))
+    M <- t(M)
+
   } else {
-    M <- t(as.matrix(Seurat::GetAssay(seuratObj, "rawGenomicScores")["data"]))
+    mat <- as.matrix(Seurat::GetAssay(seuratObj, "rawGenomicScores")["data"])
+    arms <- rownames(mat)
+
+    # define grouping variable (e.g. 1.p, 1.q, 13.q, etc.)
+    arms_group <- stringr::str_extract(arms, "^[0-9XY]+\\.[pq]")
+
+    # unique arms in the order they appear
+    unique_arms <- unique(arms_group)
+
+    # build new matrix
+    M <- do.call(rbind, lapply(unique_arms, function(arm) {
+      idx <- which(arms_group == arm)
+      rows <- mat[idx, , drop = FALSE]
+
+      # duplicate if fewer than 3
+      if (nrow(rows) < 3) {
+        need <- 3 - nrow(rows)
+        dup_rows <- rows[rep(1:nrow(rows), length.out = need), , drop = FALSE]
+
+        # give unique rownames to avoid collisions
+        rownames(dup_rows) <- paste0(rownames(rows)[rep(1:nrow(rows), length.out = need)], "_dup")
+
+        rows <- rbind(rows, dup_rows)
+      }
+      rows
+    }))
+    M <- t(M)
   }
   if (any(referencePalette == "default")) {
     referencePalette = as.character(paletteer::paletteer_d("pals::glasbey"))
@@ -160,7 +213,7 @@ plotCNVResults <- function(seuratObj,
     use_raster = TRUE,
     clustering_distance_rows = "euclidean",
     clustering_method_rows = "ward.D",
-    column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObj, assay = "genomicScores")["data"])), ".", fixed = TRUE), function(z) z[1])),
+    column_split = as.numeric(sapply(strsplit(colnames(M), ".", fixed = TRUE), function(z) z[1])),
     column_title_gp = grid::gpar(fontsize = 8),
     column_title = c(1:22,"X"),
     row_split = as.factor(split_df[[1]]),
