@@ -2,16 +2,33 @@ name: Sync Fork
 
 on:
   schedule:
-    - cron: '* 2 * * *' # every 30 minutes
-  workflow_dispatch: # on button click
+    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+  workflow_dispatch:  # Manual trigger
 
 jobs:
   sync:
-
     runs-on: ubuntu-latest
-
     steps:
-      - uses: tgymnich/fork-sync@v1.8
+      - name: Checkout fork
+        uses: actions/checkout@v4
         with:
-          base: master
-          head: master
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Sync with upstream
+        run: |
+          git remote add upstream https://github.com/must-bioinfo/fastCNV.git
+          git fetch upstream
+          
+          # Get the default branch name
+          DEFAULT_BRANCH=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+          
+          # Sync the default branch
+          git checkout $DEFAULT_BRANCH
+          git merge upstream/$DEFAULT_BRANCH --ff-only || git merge upstream/$DEFAULT_BRANCH -m "Sync with upstream"
+          git push origin $DEFAULT_BRANCH
