@@ -128,7 +128,7 @@ fastCNV_10XHD <- function(seuratObjHD,
   seuratObjHD[["genomicScores"]] = Seurat::GetAssay(newHDobj, assay = "genomicScores")
   seuratObjHD$cnv_fraction = NA
   seuratObjHD$cnv_fraction[rownames(newHDobj@meta.data)] = newHDobj$cnv_fraction
-  Seurat::DefaultAssay(seuratObjHD) = "Spatial.016um"
+  #Seurat::DefaultAssay(seuratObjHD) = "Spatial.016um"
   seuratObjHD@project.name = sampleName
   rm(newHDobj) ; invisible(gc())
 
