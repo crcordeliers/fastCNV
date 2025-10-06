@@ -57,10 +57,48 @@ plotCNVResultsHD <- function(seuratObjHD,
   }
 
   if (denoise == TRUE) {
-    M <- t(as.matrix(Seurat::GetAssay(seuratObjHD, "genomicScores")["data"]))
-  } else {
-    M <- t(as.matrix(Seurat::GetAssay(seuratObjHD, "rawGenomicScores")["data"]))
-  }
+    mat <- as.matrix(Seurat::GetAssay(seuratObjHD, "genomicScores")["data"])
+    # Make chromosomes with few genomic windows appear bigger
+    arms <- rownames(mat)
+    arms_group <- stringr::str_extract(arms, "^[0-9XY]+\\.[pq]")
+    unique_arms <- unique(arms_group)
+    M <- do.call(rbind, lapply(unique_arms, function(arm) {
+      idx <- which(arms_group == arm)
+      rows <- mat[idx, , drop = FALSE]
+
+      if (nrow(rows) < 3) {
+        need <- 3 - nrow(rows)
+        dup_rows <- rows[rep(1:nrow(rows), length.out = need), , drop = FALSE]
+
+        rownames(dup_rows) <- paste0(rownames(rows)[rep(1:nrow(rows), length.out = need)], "_dup")
+
+        rows <- rbind(rows, dup_rows)
+      }
+      rows
+    }))
+    M <- t(M)
+    } else {
+      mat <- as.matrix(Seurat::GetAssay(seuratObjHD, "rawGenomicScores")["data"])
+      # Make chromosomes with few genomic windows appear bigger
+      arms <- rownames(mat)
+      arms_group <- stringr::str_extract(arms, "^[0-9XY]+\\.[pq]")
+      unique_arms <- unique(arms_group)
+      M <- do.call(rbind, lapply(unique_arms, function(arm) {
+        idx <- which(arms_group == arm)
+        rows <- mat[idx, , drop = FALSE]
+
+        if (nrow(rows) < 3) {
+          need <- 3 - nrow(rows)
+          dup_rows <- rows[rep(1:nrow(rows), length.out = need), , drop = FALSE]
+
+          rownames(dup_rows) <- paste0(rownames(rows)[rep(1:nrow(rows), length.out = need)], "_dup")
+
+          rows <- rbind(rows, dup_rows)
+        }
+        rows
+      }))
+      M <- t(M)
+      }
   if (any(referencePalette == "default")) {
     referencePalette = as.character(paletteer::paletteer_d("pals::glasbey"))
   }
@@ -156,7 +194,7 @@ plotCNVResultsHD <- function(seuratObjHD,
     use_raster = TRUE,
     clustering_distance_rows = "euclidean",
     clustering_method_rows = "ward.D",
-    column_split = as.numeric(sapply(strsplit(rownames(as.matrix(Seurat::GetAssay(seuratObjHD, assay = "genomicScores")["data"])), ".", fixed = TRUE), function(z) z[1])),
+    column_split = as.numeric(sapply(strsplit(colnames(M), ".", fixed = TRUE), function(z) z[1])),
     column_title_gp = grid::gpar(fontsize = 8),
     column_title = c(1:22,"X"),
     row_split = as.factor(split_df[[1]]),
