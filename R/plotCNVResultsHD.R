@@ -182,6 +182,11 @@ plotCNVResultsHD <- function(seuratObjHD,
       )
     )
   }
+  if (is.null(split_df)) {
+    splitting = NULL
+  } else {
+    splitting <- as.factor(split_df[[1]])
+  }
 
   hm <-  ComplexHeatmap::Heatmap(
     M,
@@ -197,7 +202,7 @@ plotCNVResultsHD <- function(seuratObjHD,
     column_split = as.numeric(sapply(strsplit(colnames(M), ".", fixed = TRUE), function(z) z[1])),
     column_title_gp = grid::gpar(fontsize = 8),
     column_title = c(1:22,"X"),
-    row_split = as.factor(split_df[[1]]),
+    row_split = splitting,
     row_title = NULL,
     col = circlize::colorRamp2(c(-0.2, -0.1, -0.05, 0, 0.05, 0.1, 0.2), c("#0B2F7EFF", "#2A4D9EFF", "#A0A0FFFF", "white", "#E3807D", "#A4161A","#7A0A0D")),
     heatmap_legend_param = list(
@@ -244,6 +249,6 @@ plotCNVResultsHD <- function(seuratObjHD,
   }
   message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
 
-  return(hm)
+  #return(hm)
 
 }
