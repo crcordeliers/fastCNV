@@ -203,6 +203,12 @@ plotCNVResults <- function(seuratObj,
     )
   }
 
+  if (is.null(split_df)) {
+    splitting = NULL
+  } else {
+    splitting = as.factor(split_df[[1]])
+  }
+
   hm <-  ComplexHeatmap::Heatmap(
     M,
     right_annotation = annotation_heatmap,
@@ -216,7 +222,7 @@ plotCNVResults <- function(seuratObj,
     column_split = as.numeric(sapply(strsplit(colnames(M), ".", fixed = TRUE), function(z) z[1])),
     column_title_gp = grid::gpar(fontsize = 8),
     column_title = c(1:22,"X"),
-    row_split = as.factor(split_df[[1]]),
+    row_split = splitting,
     row_title = NULL,
     col = circlize::colorRamp2(c(-1, -0.6, -0.3, 0, 0.3, 0.6, 1), c("#0B2F7EFF", "#2A4D9EFF", "#A0A0FFFF", "white", "#E3807D", "#A4161A","#7A0A0D")),
     heatmap_legend_param = list(

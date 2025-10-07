@@ -11,7 +11,7 @@ generating and saving plots."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">fastCNV</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,6 +80,8 @@ generating and saving plots.</p>
 <span>  plotDendrogram <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  plotClustersOnDendrogram <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  plotElbowPlot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  mergeCNV <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  mergeThreshold <span class="op">=</span> <span class="fl">0.98</span>,</span>
 <span>  doPlot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  denoise <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  printPlot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -190,6 +192,14 @@ generating and saving plots.</p>
 
 <dt id="arg-plotelbowplot">plotElbowPlot<a class="anchor" aria-label="anchor" href="#arg-plotelbowplot"></a></dt>
 <dd><p>Logical. Whether to plot the elbow plot used for determining the optimal number of clusters (default = <code>FALSE</code>).</p></dd>
+
+
+<dt id="arg-mergecnv">mergeCNV<a class="anchor" aria-label="anchor" href="#arg-mergecnv"></a></dt>
+<dd><p>Logical. Whether to merge the highly correlated CNV clusters.</p></dd>
+
+
+<dt id="arg-mergethreshold">mergeThreshold<a class="anchor" aria-label="anchor" href="#arg-mergethreshold"></a></dt>
+<dd><p>A numeric value between 0 and 1. Clusters with correlation greater than this threshold will be merged. Default is 0.98.</p></dd>
 
 
 <dt id="arg-doplot">doPlot<a class="anchor" aria-label="anchor" href="#arg-doplot"></a></dt>

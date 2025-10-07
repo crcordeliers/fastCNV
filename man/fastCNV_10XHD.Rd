@@ -29,6 +29,8 @@ fastCNV_10XHD(
   plotDendrogram = FALSE,
   plotClustersOnDendrogram = FALSE,
   plotElbowPlot = FALSE,
+  mergeCNV = TRUE,
+  mergeThreshold = 0.98,
   doPlot = TRUE,
   denoise = TRUE,
   printPlot = FALSE,
@@ -88,6 +90,10 @@ fastCNV_10XHD(
 \item{plotClustersOnDendrogram}{Logical. Whether to highlight clusters on the dendrogram (default = \code{FALSE}).}
 
 \item{plotElbowPlot}{Logical. Whether to plot the elbow plot used for determining the optimal number of clusters (default = \code{FALSE}).}
+
+\item{mergeCNV}{Logical. Whether to merge the highly correlated CNV clusters.}
+
+\item{mergeThreshold}{A numeric value between 0 and 1. Clusters with correlation greater than this threshold will be merged. Default is 0.98.}
 
 \item{doPlot}{If \code{TRUE}, will build a heatmap for each of the samples (default = \code{TRUE}).}
 

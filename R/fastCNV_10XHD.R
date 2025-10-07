@@ -29,6 +29,8 @@
 #' @param plotDendrogram Logical. Whether to plot the dendrogram (default = `FALSE`).
 #' @param plotClustersOnDendrogram Logical. Whether to highlight clusters on the dendrogram (default = `FALSE`).
 #' @param plotElbowPlot Logical. Whether to plot the elbow plot used for determining the optimal number of clusters (default = `FALSE`).
+#' @param mergeCNV Logical. Whether to merge the highly correlated CNV clusters.
+#' @param mergeThreshold A numeric value between 0 and 1. Clusters with correlation greater than this threshold will be merged. Default is 0.98.
 #' @param doPlot If `TRUE`, will build a heatmap for each of the samples (default = `TRUE`).
 #' @param clustersVar The name of the metadata column containing cluster information (default = `"cnv_clusters"`).
 #' @param clusters_palette A color palette for `clustersVar`.
@@ -74,6 +76,9 @@ fastCNV_10XHD <- function(seuratObjHD,
                           plotDendrogram = FALSE,
                           plotClustersOnDendrogram = FALSE,
                           plotElbowPlot = FALSE,
+
+                          mergeCNV = TRUE,
+                          mergeThreshold = 0.98,
 
                           doPlot = TRUE,
                           denoise = TRUE,
@@ -152,6 +157,9 @@ fastCNV_10XHD <- function(seuratObjHD,
                            plotClustersOnDendrogram = plotClustersOnDendrogram,
                            plotElbowPlot = plotElbowPlot)
     invisible(gc())
+    if (mergeCNV == TRUE) {
+      seuratObjHD <- mergeCNVClusters(seuratObj = seuratObjHD, mergeThreshold = mergeThreshold)
+    }
     message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done!")))
   }
 
