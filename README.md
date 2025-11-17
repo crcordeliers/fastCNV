@@ -35,7 +35,7 @@ Currently, fastCNV can be used on **scRNA-seq**, **Visium**, and **Visium HD** d
 ---
 
 ### 2. Does it work on mouse data?  
-Not yet — fastCNV currently only works on **human data**. Support for mouse data is in development.  
+Not yet — fastCNV currently only works on **human data**. Support for mouse data is in development. 
 
 ---
 
