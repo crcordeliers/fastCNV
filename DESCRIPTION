@@ -1,6 +1,6 @@
 Package: fastCNV
 Title: fastCNV
-Version: 1.1.0
+Version: 1.1.0.9999
 Authors@R: 
     c(person("Gadea", "Cabrejas", , "gadea.cabrejas-saiz@u-paris.fr", role = c("aut", "cre")),
       person("Clarice", "Groeneveld", , "clarice.groeneveld@inserm.fr", role = c("aut", "ctb")))
@@ -9,7 +9,7 @@ License: GPL-3
 URL: https://must-bioinfo.github.io/fastCNV
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 biocViews: 
 Imports: 
     biomaRt,

@@ -13,6 +13,7 @@
 #' @param clusters_palette A color palette for `clustersVar`.
 #' You can provide a custom palette as a vector of color codes (e.g., `c("#F8766D", "#A3A500", "#00BF7D")`).
 #' @param outputType Character. Specifies the file format for saving the plot, either `"png"` or `"pdf"`.
+#' @param raster_by_magick Whether to use magick to raster the heatmap. Turn to FALSE if working under Ubuntu 22.
 #'
 #' @importFrom Seurat GetAssay FetchData
 #' @importFrom ComplexHeatmap Heatmap rowAnnotation draw
@@ -38,7 +39,8 @@ plotCNVResultsHD <- function(seuratObjHD,
                              printPlot = FALSE,
                              referencePalette = "default",
                              clusters_palette = "default",
-                             outputType = "png"){
+                             outputType = "png",
+                             raster_by_magick = requireNamespace("magick", quietly = TRUE)){
   message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Plotting CNV heatmap...")))
   if (outputType != "png" && outputType != "pdf"){
     message("Warning : outputType not valid, should be 'pdf' or 'png'. Setting outputType to 'png'")
@@ -197,6 +199,9 @@ plotCNVResultsHD <- function(seuratObjHD,
     show_row_names = FALSE,
     show_column_names = FALSE,
     use_raster = TRUE,
+    raster_by_magick = raster_by_magick,
+    raster_quality = 5,
+    raster_resize_mat = TRUE,
     clustering_distance_rows = "euclidean",
     clustering_method_rows = "ward.D",
     column_split = as.numeric(sapply(strsplit(colnames(M), ".", fixed = TRUE), function(z) z[1])),
@@ -204,7 +209,7 @@ plotCNVResultsHD <- function(seuratObjHD,
     column_title = c(1:22,"X"),
     row_split = splitting,
     row_title = NULL,
-    col = circlize::colorRamp2(c(-0.2, -0.1, -0.05, 0, 0.05, 0.1, 0.2), c("#0B2F7EFF", "#2A4D9EFF", "#A0A0FFFF", "white", "#E3807D", "#A4161A","#7A0A0D")),
+    col = circlize::colorRamp2(c(min(M)/1.5, min(M)/2, min(M)/3, 0, max(M)/3, max(M)/2, max(M)/1.5), c("#0B2F7EFF", "#2A4D9EFF", "#A0A0FFFF", "white", "#E3807D", "#A4161A","#7A0A0D")),
     heatmap_legend_param = list(
       title = "CNV Score",
       title_gp = grid::gpar(fontsize = 11),

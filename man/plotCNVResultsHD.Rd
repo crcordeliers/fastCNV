@@ -15,7 +15,8 @@ plotCNVResultsHD(
   printPlot = FALSE,
   referencePalette = "default",
   clusters_palette = "default",
-  outputType = "png"
+  outputType = "png",
+  raster_by_magick = requireNamespace("magick", quietly = TRUE)
 )
 }
 \arguments{
