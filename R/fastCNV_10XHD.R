@@ -41,6 +41,7 @@
 #' @param splitPlotOnVar The name of the metadata column to split the observations during the `plotCNVResults` step, if different from `referenceVar`.
 #' @param referencePalette A color palette for `referenceVar`.
 #' You can provide a custom palette as a vector of color codes (e.g., `c("#FF0000", "#00FF00")`).
+#' @param raster_by_magick Whether to use magick to raster the heatmap. Turn to FALSE if working under Ubuntu 22.
 #'
 #' @import Seurat
 #' @importFrom crayon red yellow green black
@@ -88,7 +89,8 @@ fastCNV_10XHD <- function(seuratObjHD,
                           clustersVar = "cnv_clusters",
                           clusters_palette = "default",
                           splitPlotOnVar = clustersVar,
-                          referencePalette = "default"){
+                          referencePalette = "default",
+                          raster_by_magick = requireNamespace("magick", quietly = TRUE)){
 
   if(!length(seuratObjHD)==length(sampleName)) stop(crayon::red("seuratObjHD & sampleName should have the same length"))
 
@@ -190,7 +192,8 @@ fastCNV_10XHD <- function(seuratObjHD,
                          clustersVar = clustersVar,
                          clusters_palette = clusters_palette,
                          splitPlotOnVar = splitPlotOnVar,
-                         referencePalette = referencePalette)
+                         referencePalette = referencePalette,
+                         raster_by_magick = raster_by_magick)
         invisible(gc())
       }
     }
