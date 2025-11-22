@@ -53,7 +53,7 @@ HDBreast <- load_HDBreast()
 You can load a separate annotation file for your dataset. It's usefull to have annotated spots for the analysis. 
 
 ```{r annots, eval=FALSE}
-# Import the annotation file corresponding to your sample. For 10X ST data you can annotate your spots with LoupeBrowser
+# Import the annotation file corresponding to your sample. For 10X ST data you can annotate your spots with LoupeBrowser. The example data already has the annotations in it. 
 annotation_file <- read.csv("/path/to/your/annotations/for/VisiumHD.csv")
 
 HDBreast[["annots_8um"]] <- annotation_file$Annotations
@@ -65,7 +65,8 @@ You can take a look at which annotations are present in your objects, in order t
 unique(HDBreast[["annots_8um"]])
 ```
 
-fastCNV will use by default the 16um assay, so if your annotations are done on the 8um resolution you will need to run this function before running fastCNV on the 16um assay.
+fastCNV will use by default the 16µm assay, so if your annotations are done on the 8µm resolution you will need to run this function before running fastCNV on the 16µm assay.
+This function maps the annotations from the 8µm resolution to the 16µm resolution. 
 
 ```{r annotations_8_to_16}
 HDBreast <- annotations8umTo16um(HDBreast, referenceVar = "annots_8um") 
