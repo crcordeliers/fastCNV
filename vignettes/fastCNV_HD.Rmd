@@ -145,10 +145,11 @@ SpatialFeaturePlot(HDBreast, features = "8.q_CNV") +
 ## CNV clusters
 
 In addition to the CNV fraction, fastCNV can also compute the CNV clusters. These can be plotted with the Seurat plotting functions.
-CNVCluster can be quite long with  Visium HD data. We recommend using `tumorLabel` to only cluster the malignant spots instead of all the spots to speed up the analysis. If your data has mostly tumor cells, it might be usefull to split you object into smaller objects to do the clustering.  
+
 
 ```{r plot_cnv_clusters, fig.width=5, fig.height=4}
-HDBreast <- CNVCluster(HDBreast, referenceVar = "projected_annots_8um", tumorLabel = "Tumor")
+HDBreast <- CNVCluster(HDBreast)
+HDBreast <- mergeCNVClusters(HDBreast, mergeThreshold = 0.95)
 
 SpatialDimPlot(HDBreast, group.by = "cnv_clusters") 
 ```
@@ -185,7 +186,7 @@ We build the tree, using `CNVTree()`. It contains the following functions :
   - `plotCNVTree()` will output the tree. 
 
 ```{r tree_cnv, fig.width=7, fig.height=5}
-tree_data <- CNVTree(HDBreast, values ="calls", cnv_thresh = 0.09, healthyClusters = "0")
+tree_data <- CNVTree(HDBreast, values ="calls", cnv_thresh = 0.09, healthyClusters = c("5","6"))
 
 
 ```

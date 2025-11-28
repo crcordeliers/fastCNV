@@ -4,33 +4,14 @@
 \alias{CNVCluster}
 \title{Perform CNV Clustering with Seurat Object}
 \usage{
-CNVCluster(
-  seuratObj,
-  referenceVar = NULL,
-  tumorLabel = NULL,
-  k = NULL,
-  h = NULL,
-  plotDendrogram = F,
-  plotClustersOnDendrogram = F,
-  plotElbowPlot = F
-)
+CNVCluster(seuratObj, k = NULL, h = NULL)
 }
 \arguments{
 \item{seuratObj}{A Seurat object containing a "genomicScores" assay with a matrix of genomic scores for clustering.}
 
-\item{referenceVar}{The name of the metadata column in the Seurat object containing reference annotations.}
-
-\item{tumorLabel}{The label within \code{referenceVar} that specifies the tumor/malignant population (can be any type of annotation).}
-
 \item{k}{Optional. The number of clusters to cut the dendrogram into. If \code{NULL}, the optimal number of clusters is determined automatically using the elbow method.}
 
 \item{h}{Optional. The height at which to cut the dendrogram for clustering. If both \code{k} and \code{h} are provided, \code{k} takes precedence.}
-
-\item{plotDendrogram}{Logical. If \code{TRUE}, plots the dendrogram. Defaults to \code{FALSE}.}
-
-\item{plotClustersOnDendrogram}{Logical. If \code{TRUE}, highlights the clusters on the dendrogram. Defaults to \code{FALSE}.}
-
-\item{plotElbowPlot}{Logical. If \code{TRUE}, plots the elbow plot used for determining the optimal number of clusters. Defaults to \code{FALSE}.}
 }
 \value{
 A Seurat object with an additional metadata column, \code{cnv_clusters}, containing the cluster assignments.
