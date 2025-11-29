@@ -23,12 +23,8 @@ fastCNV_10XHD(
   regionToForce = NULL,
   getCNVPerChromosomeArm = TRUE,
   getCNVClusters = FALSE,
-  tumorLabel = NULL,
   k_clusters = NULL,
   h_clusters = NULL,
-  plotDendrogram = FALSE,
-  plotClustersOnDendrogram = FALSE,
-  plotElbowPlot = FALSE,
   mergeCNV = TRUE,
   mergeThreshold = 0.98,
   doPlot = TRUE,
@@ -39,7 +35,8 @@ fastCNV_10XHD(
   clustersVar = "cnv_clusters",
   clusters_palette = "default",
   splitPlotOnVar = clustersVar,
-  referencePalette = "default"
+  referencePalette = "default",
+  raster_by_magick = requireNamespace("magick", quietly = TRUE)
 )
 }
 \arguments{
@@ -79,17 +76,9 @@ fastCNV_10XHD(
 
 \item{getCNVClusters}{If \code{TRUE}, will perform clustering on the CNV scores and save them in the metadata of the Seurat object as \code{cnv_clusters}.}
 
-\item{tumorLabel}{The label within \code{referenceVar} that specifies the tumor/malignant population (can be any type of annotation).}
-
 \item{k_clusters}{Optional. Number of clusters to cut the dendrogram into. If \code{NULL}, the optimal number of clusters is determined automatically using the elbow method.}
 
 \item{h_clusters}{Optional. The height at which to cut the dendrogram for clustering. If both \code{k} and \code{h} are provided, \code{k} takes precedence.}
-
-\item{plotDendrogram}{Logical. Whether to plot the dendrogram (default = \code{FALSE}).}
-
-\item{plotClustersOnDendrogram}{Logical. Whether to highlight clusters on the dendrogram (default = \code{FALSE}).}
-
-\item{plotElbowPlot}{Logical. Whether to plot the elbow plot used for determining the optimal number of clusters (default = \code{FALSE}).}
 
 \item{mergeCNV}{Logical. Whether to merge the highly correlated CNV clusters.}
 
@@ -114,6 +103,8 @@ You can provide a custom palette as a vector of color codes (e.g., \code{c("#F87
 
 \item{referencePalette}{A color palette for \code{referenceVar}.
 You can provide a custom palette as a vector of color codes (e.g., \code{c("#FF0000", "#00FF00")}).}
+
+\item{raster_by_magick}{Whether to use magick to raster the heatmap. Turn to FALSE if working under Ubuntu 22.}
 }
 \value{
 A Seurat object or a list of Seurat objects after all the analysis is complete. Heatmaps of the CNVs for every object in \code{seuratObj} are generated and saved in the specified path (default = current working directory).

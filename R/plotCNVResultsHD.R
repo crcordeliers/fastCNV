@@ -24,6 +24,7 @@
 #' @importFrom crayon yellow black green
 #' @import stats
 #' @import grDevices
+#' @import magick
 #'
 #' @return This function generates a heatmap and saves it as a `.pdf` or `.png` file in the specified path (default = working directory).
 #'

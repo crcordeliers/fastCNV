@@ -96,7 +96,7 @@ scColon1 <- fastCNV(seuratObj = scColon1, sampleName = "scColon1", referenceVar 
 
 ```
 
-We are now going to run the `fastCNV()` function on a list of Seurat objects. When `fastCNV()` is run on a list of Seurat objects with the default parameters, it builds a pooled reference between all the samples, which is particularly useful for data not containing any healthy cells to build its own reference. 
+We are now going to run the `fastCNV()` function on a list of Seurat objects. When `fastCNV()` is run on a list of Seurat objects with the default parameters, it builds a pooled reference between all the samples, which is particularly useful for data not containing any healthy cells to build its own reference.  
 
 ```{r run2, fig.width = 8, fig.height=6}
 seuratList <- c(scColon2,scColon3,scColon4)

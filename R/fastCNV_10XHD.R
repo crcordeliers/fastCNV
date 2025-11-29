@@ -23,12 +23,8 @@
 #' @param topNGenes Number of top expressed genes to keep (default = 7000).
 #' @param getCNVPerChromosomeArm If `TRUE`, will save the CNV per chromosome arm into the metadata.
 #' @param getCNVClusters If `TRUE`, will perform clustering on the CNV scores and save them in the metadata of the Seurat object as `cnv_clusters`.
-#' @param tumorLabel The label within `referenceVar` that specifies the tumor/malignant population (can be any type of annotation).
 #' @param k_clusters Optional. Number of clusters to cut the dendrogram into. If `NULL`, the optimal number of clusters is determined automatically using the elbow method.
 #' @param h_clusters Optional. The height at which to cut the dendrogram for clustering. If both `k` and `h` are provided, `k` takes precedence.
-#' @param plotDendrogram Logical. Whether to plot the dendrogram (default = `FALSE`).
-#' @param plotClustersOnDendrogram Logical. Whether to highlight clusters on the dendrogram (default = `FALSE`).
-#' @param plotElbowPlot Logical. Whether to plot the elbow plot used for determining the optimal number of clusters (default = `FALSE`).
 #' @param mergeCNV Logical. Whether to merge the highly correlated CNV clusters.
 #' @param mergeThreshold A numeric value between 0 and 1. Clusters with correlation greater than this threshold will be merged. Default is 0.98.
 #' @param doPlot If `TRUE`, will build a heatmap for each of the samples (default = `TRUE`).
@@ -71,12 +67,8 @@ fastCNV_10XHD <- function(seuratObjHD,
                           getCNVPerChromosomeArm = TRUE,
 
                           getCNVClusters = FALSE,
-                          tumorLabel = NULL,
                           k_clusters = NULL,
                           h_clusters = NULL,
-                          plotDendrogram = FALSE,
-                          plotClustersOnDendrogram = FALSE,
-                          plotElbowPlot = FALSE,
 
                           mergeCNV = TRUE,
                           mergeThreshold = 0.98,
@@ -151,13 +143,8 @@ fastCNV_10XHD <- function(seuratObjHD,
     message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Running CNV clustering...")))
     Seurat::DefaultAssay(seuratObjHD) = assay
     seuratObjHD <- CNVCluster(seuratObj = seuratObjHD,
-                           referenceVar = referenceVar,
-                           tumorLabel = tumorLabel,
                            k = k_clusters,
-                           h = h_clusters,
-                           plotDendrogram = plotDendrogram,
-                           plotClustersOnDendrogram = plotClustersOnDendrogram,
-                           plotElbowPlot = plotElbowPlot)
+                           h = h_clusters)
     invisible(gc())
     if (mergeCNV == TRUE) {
       seuratObjHD <- mergeCNVClusters(seuratObj = seuratObjHD, mergeThreshold = mergeThreshold)
@@ -176,7 +163,8 @@ fastCNV_10XHD <- function(seuratObjHD,
                        clustersVar = clustersVar,
                        clusters_palette = clusters_palette,
                        splitPlotOnVar = splitPlotOnVar,
-                       referencePalette = referencePalette)
+                       referencePalette = referencePalette,
+                       raster_by_magick = raster_by_magick)
       invisible(gc())
     }
 

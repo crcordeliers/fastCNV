@@ -37,11 +37,16 @@ plotCNVTree <- function(tree_data, clone_cols = NULL) {
       geom_tippoint()
   } else {
     tree_plot <- tree_plot +
-      geom_tippoint(aes(color = .data$label), , size = 4)
+      geom_tippoint(aes(color = factor(.data$label,
+                                       levels = tree_data$label[tree_data$isTip][
+                                         order(as.numeric(sub(".* (\\d+)$", "\\1", tree_data$label[tree_data$isTip])))
+                                       ])),size = 4)
+
     if(length(clone_cols) == sum(tree_data$isTip)) {
       tree_plot <- tree_plot +
         scale_color_manual(values = clone_cols)
     }
+
   }
   return(tree_plot)
 }
