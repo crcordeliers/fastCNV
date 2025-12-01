@@ -212,7 +212,7 @@ plotCNVResultsHD <- function(seuratObjHD,
     column_title = c(1:22,"X"),
     row_split = splitting,
     row_title = NULL,
-    col = circlize::colorRamp2(c(min(M)/1.5, min(M)/2, min(M)/3, 0, max(M)/3, max(M)/2, max(M)/1.5), c("#0B2F7EFF", "#2A4D9EFF", "#A0A0FFFF", "white", "#E3807D", "#A4161A","#7A0A0D")),
+    col = circlize::colorRamp2(c(min(M), min(M)/2, min(M)/3, 0, max(M)/3, max(M)/2, max(M)), c("#0B2F7EFF", "#2A4D9EFF", "#A0A0FFFF", "white", "#E3807D", "#A4161A","#7A0A0D")),
     heatmap_legend_param = list(
       title = "CNV Score",
       title_gp = grid::gpar(fontsize = 11),
