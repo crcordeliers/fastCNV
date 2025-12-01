@@ -25,6 +25,7 @@
 #' @import stats
 #' @import grDevices
 #' @import magick
+#' @importFrom ragg agg
 #'
 #' @return This function generates a heatmap and saves it as a `.pdf` or `.png` file in the specified path (default = working directory).
 #'
@@ -212,7 +213,7 @@ plotCNVResultsHD <- function(seuratObjHD,
     column_title = c(1:22,"X"),
     row_split = splitting,
     row_title = NULL,
-    col = circlize::colorRamp2(c(min(M), min(M)/2, min(M)/3, 0, max(M)/3, max(M)/2, max(M)), c("#0B2F7EFF", "#2A4D9EFF", "#A0A0FFFF", "white", "#E3807D", "#A4161A","#7A0A0D")),
+    col = circlize::colorRamp2(c(min(M)/1.5, min(M)/2, min(M)/3, 0, max(M)/3, max(M)/2, max(M)/1.5), c("#0B2F7EFF", "#2A4D9EFF", "#A0A0FFFF", "white", "#E3807D", "#A4161A","#7A0A0D")),
     heatmap_legend_param = list(
       title = "CNV Score",
       title_gp = grid::gpar(fontsize = 11),
@@ -237,11 +238,11 @@ plotCNVResultsHD <- function(seuratObjHD,
   if(!is.null(savePath)) {
     if (outputType == "png") {
       fname <- file.path(savePath, docname)
-      png(width = 3500, height = 2200, filename = fname, res = 300)
+      ragg::agg_png(width = 3500, height = 2200, filename = fname, res = 300)
     }
     if (outputType == "pdf"){
       fname <- file.path(savePath, docname)
-      pdf(width = 12, height = 7, file = fname)
+      ragg::agg_pdf(width = 12, height = 7, file = fname)
     }
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"),grid::unit(1, "null")))))
