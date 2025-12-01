@@ -3,8 +3,6 @@
 
 `fastCNV` is an R package that helps you detect, plot and analyse the putative Copy Number Variations (CNVs) in single cell (scRNA-seq) data or Spatial Transcriptomics (ST) data, including Visium HD. Built on `SeuratObject`, it is easily integrated into scRNA-seq or ST pipelines. 
 
-*WARNING:* Project is still under construction and function usage may change.
-
 ## Installation
 
 To install fastCNV, run in R:
@@ -12,6 +10,11 @@ To install fastCNV, run in R:
 ```         
 remotes::install_github("must-bioinfo/fastCNV")
 ```
+
+## Citation
+
+Cabrejas, G. et al. fastCNV: Fast and accurate copy number variation prediction from High-Definition Spatial Transcriptomics and scRNA-Seq Data. bioRxiv 2025.10.22.683855 (2025) doi:10.1101/2025.10.22.683855.
+
 
 ## Usage
 
