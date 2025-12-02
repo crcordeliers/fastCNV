@@ -47,8 +47,10 @@ plotCNVResults <- function(seuratObj,
   if (!is.null(clustersVar)){
     if (clustersVar == "cnv_clusters"){
       if (!(clustersVar %in% names(seuratObj@meta.data))) {
-        if(splitPlotOnVar == clustersVar){
-          splitPlotOnVar = referenceVar
+        if(!is.null(splitPlotOnVar)) {
+          if(splitPlotOnVar == clustersVar){
+            splitPlotOnVar = referenceVar
+          }
         }
         clustersVar = NULL
       }

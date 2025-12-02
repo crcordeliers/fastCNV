@@ -66,7 +66,7 @@ fastCNV_10XHD <- function(seuratObjHD,
 
                           getCNVPerChromosomeArm = TRUE,
 
-                          getCNVClusters = FALSE,
+                          getCNVClusters = TRUE,
                           k_clusters = NULL,
                           h_clusters = NULL,
 
@@ -139,7 +139,6 @@ fastCNV_10XHD <- function(seuratObjHD,
   }
 
   if (getCNVClusters == TRUE){
-    message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," CNV clustering may crash with large Visium HD samples. Turn `getCNVClusters` to `FALSE` to avoid this crashing.")))
     message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Running CNV clustering...")))
     Seurat::DefaultAssay(seuratObjHD) = assay
     seuratObjHD <- CNVCluster(seuratObj = seuratObjHD,

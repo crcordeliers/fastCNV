@@ -25,6 +25,7 @@
 #' @import stats
 #' @import grDevices
 #' @import magick
+#' @importFrom ragg agg
 #'
 #' @return This function generates a heatmap and saves it as a `.pdf` or `.png` file in the specified path (default = working directory).
 #'
@@ -51,8 +52,10 @@ plotCNVResultsHD <- function(seuratObjHD,
   if(!is.null(clustersVar)) {
     if (clustersVar == "cnv_clusters"){
       if (!(clustersVar %in% names(seuratObjHD@meta.data))) {
-        if(splitPlotOnVar == clustersVar){
-          splitPlotOnVar = referenceVar
+        if(!is.null(splitPlotOnVar)) {
+          if(splitPlotOnVar == clustersVar){
+            splitPlotOnVar = referenceVar
+          }
         }
         clustersVar = NULL
       }
@@ -235,11 +238,11 @@ plotCNVResultsHD <- function(seuratObjHD,
   if(!is.null(savePath)) {
     if (outputType == "png") {
       fname <- file.path(savePath, docname)
-      png(width = 3500, height = 2200, filename = fname, res = 300)
+      ragg::agg_png(width = 3500, height = 2200, filename = fname, res = 300)
     }
     if (outputType == "pdf"){
       fname <- file.path(savePath, docname)
-      pdf(width = 12, height = 7, file = fname)
+      ragg::agg_pdf(width = 12, height = 7, file = fname)
     }
     grid::grid.newpage()
     grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow = 2, heights = grid::unit.c(grid::unit(1, "cm"),grid::unit(1, "null")))))
