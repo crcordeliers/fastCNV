@@ -81,7 +81,7 @@ CNVCluster <- function(seuratObj,
 
   } else {
 
-    mat <- GetAssayData(seuratObj, assay = "genomicScores", slot = "data")
+    mat <- GetAssayData(seuratObj, assay = "genomicScores", layer = "data")
     pca_res <- prcomp(t(mat), center = TRUE, scale. = TRUE)
     X <- pca_res$x[, 1:30]
 
