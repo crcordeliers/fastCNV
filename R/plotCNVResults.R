@@ -211,10 +211,17 @@ plotCNVResults <- function(seuratObj,
     splitting = as.factor(split_df[[1]])
   }
 
+  if (dim(M)[1]>60000) {
+    clusterRows = FALSE
+  } else {
+    clusterRows = TRUE
+  }
+
   hm <-  ComplexHeatmap::Heatmap(
     M,
     right_annotation = annotation_heatmap,
     border = TRUE,
+    cluster_rows = clusterRows,
     cluster_columns = FALSE,
     show_row_names = FALSE,
     show_column_names = FALSE,

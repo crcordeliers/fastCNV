@@ -16,7 +16,8 @@ plotCNVResultsHD(
   referencePalette = "default",
   clusters_palette = "default",
   outputType = "png",
-  raster_by_magick = requireNamespace("magick", quietly = TRUE)
+  raster_by_magick = requireNamespace("magick", quietly = TRUE),
+  raster_resize_mat = TRUE
 )
 }
 \arguments{
@@ -43,6 +44,10 @@ You can provide a custom palette as a vector of color codes (e.g., \code{c("#F87
 \item{outputType}{Character. Specifies the file format for saving the plot, either \code{"png"} or \code{"pdf"}.}
 
 \item{raster_by_magick}{Whether to use magick to raster the heatmap. Turn to FALSE if working under Ubuntu 22.}
+
+\item{raster_resize_mat}{Whether resize the matrix to let the dimension of the matrix the same as the dimension of the raster image.
+Default is TRUE.
+Turn to FALSE if \verb{error in mat[seq(ind_r1[i], ind_r2[i]), seq(ind_c1[j], ind_c1[j]), drop = FALSE]}.}
 }
 \value{
 This function generates a heatmap and saves it as a \code{.pdf} or \code{.png} file in the specified path (default = working directory).
