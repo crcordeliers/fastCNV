@@ -10,7 +10,9 @@
 #' @param referenceVar The variable name of the annotations in the Seurat metadata to be used as reference.
 #' @param referenceLabel The label given to the observations you want as reference (can be any type of annotation).
 #' @param assay Name of the assay to run the CNV on. Takes the results of `prepareCountsForCNVAnalysis` by default if available.
-#' @param prepareCounts If `FALSE`, will not run the `prepareCountsForCNVAnalysis` function (default = `TRUE`).
+#' @param prepareCounts One of `TRUE`, `FALSE`, or `"default"` (default).
+#'   When `"default"`, `prepareCountsForCNVAnalysis` is run only if the number
+#'   of cells/spots is below 60,000.
 #' @param aggregFactor The number of counts per spot desired (default = 15 000). If less than 1,000, will not run the `prepareCountsForCNVAnalysis` function.
 #' @param seuratClusterResolution The resolution wanted for the Seurat clusters (default = 0.8).
 #' @param aggregateByVar If `referenceVar` is given, determines whether to use it to pool the observations (default = `TRUE`).
@@ -54,7 +56,7 @@ fastCNV <- function (seuratObj,
                      referenceLabel = NULL,
                      assay = NULL,
 
-                     prepareCounts = TRUE,
+                     prepareCounts = "default",
                      aggregFactor = 15000,
                      seuratClusterResolution = 0.8,
                      aggregateByVar = TRUE,
@@ -102,6 +104,14 @@ fastCNV <- function (seuratObj,
 
   for (i in 1:length(seuratObj)){
     seuratObj[[i]]@project.name = sampleName[[i]]
+  }
+
+  if (prepareCounts == "default"){
+    if (mean(unlist(lapply(seuratObj, function(x) length(Seurat::Cells(x))))) < 60000) {
+      prepareCounts = TRUE
+    } else {
+      prepareCounts = FALSE
+    }
   }
 
   if (prepareCounts == TRUE & aggregFactor>=1000) {

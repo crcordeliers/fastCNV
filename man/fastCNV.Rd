@@ -10,7 +10,7 @@ fastCNV(
   referenceVar = NULL,
   referenceLabel = NULL,
   assay = NULL,
-  prepareCounts = TRUE,
+  prepareCounts = "default",
   aggregFactor = 15000,
   seuratClusterResolution = 0.8,
   aggregateByVar = TRUE,
@@ -54,7 +54,9 @@ fastCNV(
 
 \item{assay}{Name of the assay to run the CNV on. Takes the results of \code{prepareCountsForCNVAnalysis} by default if available.}
 
-\item{prepareCounts}{If \code{FALSE}, will not run the \code{prepareCountsForCNVAnalysis} function (default = \code{TRUE}).}
+\item{prepareCounts}{One of \code{TRUE}, \code{FALSE}, or \code{"default"} (default).
+When \code{"default"}, \code{prepareCountsForCNVAnalysis} is run only if the number
+of cells/spots is below 60,000.}
 
 \item{aggregFactor}{The number of counts per spot desired (default = 15 000). If less than 1,000, will not run the \code{prepareCountsForCNVAnalysis} function.}
 

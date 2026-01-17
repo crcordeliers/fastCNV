@@ -38,6 +38,10 @@
 #' @param referencePalette A color palette for `referenceVar`.
 #' You can provide a custom palette as a vector of color codes (e.g., `c("#FF0000", "#00FF00")`).
 #' @param raster_by_magick Whether to use magick to raster the heatmap. Turn to FALSE if working under Ubuntu 22.
+#' Turn to FALSE if working on Ubuntu 22.
+#' @param raster_resize_mat Whether resize the matrix to let the dimension of the matrix the same as the dimension of the raster image.
+#' Default is TRUE.
+#' Turn to FALSE if `error in mat[seq(ind_r1[i], ind_r2[i]), seq(ind_c1[j], ind_c1[j]), drop = FALSE]`.
 #'
 #' @import Seurat
 #' @importFrom crayon red yellow green black
@@ -82,7 +86,8 @@ fastCNV_10XHD <- function(seuratObjHD,
                           clusters_palette = "default",
                           splitPlotOnVar = clustersVar,
                           referencePalette = "default",
-                          raster_by_magick = requireNamespace("magick", quietly = TRUE)){
+                          raster_by_magick = requireNamespace("magick", quietly = TRUE),
+                          raster_resize_mat = TRUE){
 
   if(!length(seuratObjHD)==length(sampleName)) stop(crayon::red("seuratObjHD & sampleName should have the same length"))
 
@@ -124,29 +129,67 @@ fastCNV_10XHD <- function(seuratObjHD,
                           regionToForce = regionToForce)
   invisible(gc())
 
-  seuratObjHD[["genomicScores"]] = Seurat::GetAssay(newHDobj, assay = "genomicScores")
-  seuratObjHD$cnv_fraction = NA
-  seuratObjHD$cnv_fraction[rownames(newHDobj@meta.data)] = newHDobj$cnv_fraction
-  Seurat::DefaultAssay(seuratObjHD) = assay
-  seuratObjHD@project.name = sampleName
-  rm(newHDobj) ; invisible(gc())
+  if (length(newHDobj) == 1) {
+    seuratObjHD[["genomicScores"]] = Seurat::GetAssay(newHDobj, assay = "genomicScores")
+    seuratObjHD$cnv_fraction = NA
+    seuratObjHD$cnv_fraction[rownames(newHDobj@meta.data)] = newHDobj$cnv_fraction
+    Seurat::DefaultAssay(seuratObjHD) = assay
+    seuratObjHD@project.name = sampleName
+    rm(newHDobj) ; invisible(gc())
+  } else if (length(seuratObjHD) > 1) {
+    for (i in 1:length(newHDobj)){
+      mid <- newHDobj[[i]]
+      seuratObjHD[[i]][["genomicScores"]] = Seurat::GetAssay(mid, assay = "genomicScores")
+      seuratObjHD[[i]]$cnv_fraction = NA
+      seuratObjHD[[i]]$cnv_fraction[rownames(mid@meta.data)] = mid$cnv_fraction
+      Seurat::DefaultAssay(seuratObjHD[[i]]) = assay
+      seuratObjHD[[i]]@project.name = sampleName[[i]]
+      rm(mid) ; invisible(gc())
+    }
+    rm(newHDobj) ; invisible(gc())
+  }
+
 
   if (getCNVPerChromosomeArm == TRUE){
     message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Computing CNV per chromosome arm...")))
-    seuratObjHD <- CNVPerChromosomeArm(seuratObjHD)
-    invisible(gc())
+    if (length(seuratObjHD) == 1) {
+      seuratObjHD <- CNVPerChromosomeArm(seuratObjHD)
+      invisible(gc())
+    } else if (length(seuratObjHD) > 1) {
+      for (i in 1:length(seuratObjHD)){
+        seuratObjHD[[i]] <- CNVPerChromosomeArm(seuratObjHD[[i]])
+        invisible(gc())
+      }
+    }
     message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done!")))
   }
 
   if (getCNVClusters == TRUE){
     message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Running CNV clustering...")))
-    Seurat::DefaultAssay(seuratObjHD) = assay
-    seuratObjHD <- CNVCluster(seuratObj = seuratObjHD,
-                           k = k_clusters,
-                           h = h_clusters)
-    invisible(gc())
+    if (length(seuratObjHD) == 1) {
+      Seurat::DefaultAssay(seuratObjHD) = assay
+      seuratObjHD <- CNVCluster(seuratObj = seuratObjHD,
+                                k = k_clusters,
+                                h = h_clusters)
+      invisible(gc())
+    } else if (length(seuratObjHD) > 1) {
+      for (i in 1:length(seuratObjHD)){
+        Seurat::DefaultAssay(seuratObjHD[[i]]) = assay
+        seuratObjHD[[i]] <- CNVCluster(seuratObj = seuratObjHD[[i]],
+                                  k = k_clusters,
+                                  h = h_clusters)
+        invisible(gc())
+      }
+    }
+
     if (mergeCNV == TRUE) {
-      seuratObjHD <- mergeCNVClusters(seuratObj = seuratObjHD, mergeThreshold = mergeThreshold)
+      if(length(seuratObjHD) == 1) {
+        seuratObjHD <- mergeCNVClusters(seuratObj = seuratObjHD, mergeThreshold = mergeThreshold)
+      } else if (length(seuratObjHD) > 1) {
+        for (i in 1:length(seuratObjHD)){
+          seuratObjHD[[i]] <- mergeCNVClusters(seuratObj = seuratObjHD[[i]], mergeThreshold = mergeThreshold)
+        }
+      }
     }
     message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done!")))
   }
@@ -163,7 +206,8 @@ fastCNV_10XHD <- function(seuratObjHD,
                        clusters_palette = clusters_palette,
                        splitPlotOnVar = splitPlotOnVar,
                        referencePalette = referencePalette,
-                       raster_by_magick = raster_by_magick)
+                       raster_by_magick = raster_by_magick,
+                       raster_resize_mat = raster_resize_mat)
       invisible(gc())
     }
 
@@ -180,7 +224,8 @@ fastCNV_10XHD <- function(seuratObjHD,
                          clusters_palette = clusters_palette,
                          splitPlotOnVar = splitPlotOnVar,
                          referencePalette = referencePalette,
-                         raster_by_magick = raster_by_magick)
+                         raster_by_magick = raster_by_magick,
+                         raster_resize_mat = raster_resize_mat)
         invisible(gc())
       }
     }

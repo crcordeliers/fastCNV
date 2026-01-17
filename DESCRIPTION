@@ -1,6 +1,6 @@
 Package: fastCNV
 Title: fastCNV
-Version: 1.1.2
+Version: 1.1.4
 Authors@R: 
     c(person("Gadea", "Cabrejas", , "gadea.cabrejas-saiz@u-paris.fr", role = c("aut", "cre")),
       person("Clarice", "Groeneveld", , "clarice.groeneveld@inserm.fr", role = c("aut", "ctb")))
@@ -22,6 +22,8 @@ Imports:
     ggtree,
     grDevices,
     grid,
+    magick,
+    ragg,
     paletteer,
     purrr,
     scales,
@@ -36,7 +38,7 @@ Imports:
     graphics
 LazyData: true
 Depends: R (>= 3.5.0)
-Suggests: fastCNVdata, knitr, rmarkdown, patchwork, magick
+Suggests: fastCNVdata, knitr, rmarkdown, patchwork
 VignetteBuilder: knitr
 NeedsCompilation: no
 Packaged: 2024-04-08 13:48:38 UTC; gadea
