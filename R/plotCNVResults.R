@@ -13,6 +13,8 @@
 #' @param clusters_palette A color palette for `clustersVar`.
 #' You can provide a custom palette as a vector of color codes (e.g., `c("#F8766D", "#A3A500", "#00BF7D")`).
 #' @param outputType Character. Specifies the file format for saving the plot, either `"png"` or `"pdf"`.
+#' @param raster_resize_mat Whether resize the matrix to let the dimension of the matrix the same as the dimension of the raster image.
+#' Default is TRUE.
 #'
 #' @importFrom Seurat GetAssay FetchData
 #' @importFrom ComplexHeatmap Heatmap rowAnnotation draw
@@ -38,7 +40,8 @@ plotCNVResults <- function(seuratObj,
                            printPlot = FALSE,
                            referencePalette = "default",
                            clusters_palette = "default",
-                           outputType = "png"){
+                           outputType = "png",
+                           raster_resize_mat = TRUE){
   if (outputType != "png" && outputType != "pdf"){
     message("Warning : outputType not valid, should be 'pdf' or 'png'. Setting outputType to 'png'")
     outputType = "png"
@@ -217,6 +220,12 @@ plotCNVResults <- function(seuratObj,
     clusterRows = TRUE
   }
 
+  if(is_ubuntu22()){
+    raster_by_magick = FALSE
+  } else {
+    raster_by_magick = TRUE
+  }
+
   hm <-  ComplexHeatmap::Heatmap(
     M,
     right_annotation = annotation_heatmap,
@@ -226,6 +235,9 @@ plotCNVResults <- function(seuratObj,
     show_row_names = FALSE,
     show_column_names = FALSE,
     use_raster = TRUE,
+    raster_by_magick = raster_by_magick,
+    raster_quality = 5,
+    raster_resize_mat = raster_resize_mat,
     clustering_distance_rows = "euclidean",
     clustering_method_rows = "ward.D",
     column_split = as.numeric(sapply(strsplit(colnames(M), ".", fixed = TRUE), function(z) z[1])),

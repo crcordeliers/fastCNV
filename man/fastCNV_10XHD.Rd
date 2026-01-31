@@ -36,7 +36,8 @@ fastCNV_10XHD(
   clusters_palette = "default",
   splitPlotOnVar = clustersVar,
   referencePalette = "default",
-  raster_by_magick = requireNamespace("magick", quietly = TRUE)
+  raster_by_magick = requireNamespace("magick", quietly = TRUE),
+  raster_resize_mat = TRUE
 )
 }
 \arguments{
@@ -104,7 +105,8 @@ You can provide a custom palette as a vector of color codes (e.g., \code{c("#F87
 \item{referencePalette}{A color palette for \code{referenceVar}.
 You can provide a custom palette as a vector of color codes (e.g., \code{c("#FF0000", "#00FF00")}).}
 
-\item{raster_by_magick}{Whether to use magick to raster the heatmap. Turn to FALSE if working under Ubuntu 22.}
+\item{raster_resize_mat}{Whether resize the matrix to let the dimension of the matrix the same as the dimension of the raster image.
+Default is TRUE.}
 }
 \value{
 A Seurat object or a list of Seurat objects after all the analysis is complete. Heatmaps of the CNVs for every object in \code{seuratObj} are generated and saved in the specified path (default = current working directory).

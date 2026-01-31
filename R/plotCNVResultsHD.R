@@ -13,11 +13,8 @@
 #' @param clusters_palette A color palette for `clustersVar`.
 #' You can provide a custom palette as a vector of color codes (e.g., `c("#F8766D", "#A3A500", "#00BF7D")`).
 #' @param outputType Character. Specifies the file format for saving the plot, either `"png"` or `"pdf"`.
-#' @param raster_by_magick Whether to use magick to raster the heatmap. Turn to FALSE if working under Ubuntu 22.
-#' Turn to FALSE if working on Ubuntu 22.
 #' @param raster_resize_mat Whether resize the matrix to let the dimension of the matrix the same as the dimension of the raster image.
 #' Default is TRUE.
-#' Turn to FALSE if `error in mat[seq(ind_r1[i], ind_r2[i]), seq(ind_c1[j], ind_c1[j]), drop = FALSE]`.
 #'
 #' @importFrom Seurat GetAssay FetchData
 #' @importFrom ComplexHeatmap Heatmap rowAnnotation draw
@@ -46,7 +43,6 @@ plotCNVResultsHD <- function(seuratObjHD,
                              referencePalette = "default",
                              clusters_palette = "default",
                              outputType = "png",
-                             raster_by_magick = requireNamespace("magick", quietly = TRUE),
                              raster_resize_mat = TRUE){
   message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Plotting CNV heatmap...")))
   if (outputType != "png" && outputType != "pdf"){
@@ -199,6 +195,12 @@ plotCNVResultsHD <- function(seuratObjHD,
     splitting <- as.factor(split_df[[1]])
   }
 
+  if(is_ubuntu22()){
+    raster_by_magick = FALSE
+  } else {
+    raster_by_magick = TRUE
+  }
+
   hm <-  ComplexHeatmap::Heatmap(
     M,
     right_annotation = annotation_heatmap,
@@ -266,3 +268,4 @@ plotCNVResultsHD <- function(seuratObjHD,
   #return(hm)
 
 }
+

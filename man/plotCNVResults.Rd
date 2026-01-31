@@ -15,7 +15,8 @@ plotCNVResults(
   printPlot = FALSE,
   referencePalette = "default",
   clusters_palette = "default",
-  outputType = "png"
+  outputType = "png",
+  raster_resize_mat = TRUE
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ You can provide a custom palette as a vector of color codes (e.g., \code{c("#FF0
 You can provide a custom palette as a vector of color codes (e.g., \code{c("#F8766D", "#A3A500", "#00BF7D")}).}
 
 \item{outputType}{Character. Specifies the file format for saving the plot, either \code{"png"} or \code{"pdf"}.}
+
+\item{raster_resize_mat}{Whether resize the matrix to let the dimension of the matrix the same as the dimension of the raster image.
+Default is TRUE.}
 }
 \value{
 This function generates a heatmap and saves it as a \code{.pdf} or \code{.png} file in the specified path (default = working directory).

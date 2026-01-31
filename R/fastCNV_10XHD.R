@@ -37,11 +37,8 @@
 #' @param splitPlotOnVar The name of the metadata column to split the observations during the `plotCNVResults` step, if different from `referenceVar`.
 #' @param referencePalette A color palette for `referenceVar`.
 #' You can provide a custom palette as a vector of color codes (e.g., `c("#FF0000", "#00FF00")`).
-#' @param raster_by_magick Whether to use magick to raster the heatmap. Turn to FALSE if working under Ubuntu 22.
-#' Turn to FALSE if working on Ubuntu 22.
 #' @param raster_resize_mat Whether resize the matrix to let the dimension of the matrix the same as the dimension of the raster image.
 #' Default is TRUE.
-#' Turn to FALSE if `error in mat[seq(ind_r1[i], ind_r2[i]), seq(ind_c1[j], ind_c1[j]), drop = FALSE]`.
 #'
 #' @import Seurat
 #' @importFrom crayon red yellow green black
@@ -86,7 +83,6 @@ fastCNV_10XHD <- function(seuratObjHD,
                           clusters_palette = "default",
                           splitPlotOnVar = clustersVar,
                           referencePalette = "default",
-                          raster_by_magick = requireNamespace("magick", quietly = TRUE),
                           raster_resize_mat = TRUE){
 
   if(!length(seuratObjHD)==length(sampleName)) stop(crayon::red("seuratObjHD & sampleName should have the same length"))
@@ -196,37 +192,80 @@ fastCNV_10XHD <- function(seuratObjHD,
 
   if (length(seuratObjHD) == 1) {
     if (doPlot == TRUE) {
-      plotCNVResultsHD(seuratObjHD = seuratObjHD,
-                       denoise = denoise,
-                       printPlot = printPlot,
-                       savePath = savePath,
-                       outputType = outputType,
-                       referenceVar = referenceVar,
-                       clustersVar = clustersVar,
-                       clusters_palette = clusters_palette,
-                       splitPlotOnVar = splitPlotOnVar,
-                       referencePalette = referencePalette,
-                       raster_by_magick = raster_by_magick,
-                       raster_resize_mat = raster_resize_mat)
-      invisible(gc())
+      tryCatch(
+        {
+          plotCNVResultsHD(
+            seuratObjHD = seuratObjHD,
+            denoise = denoise,
+            printPlot = printPlot,
+            savePath = savePath,
+            outputType = outputType,
+            referenceVar = referenceVar,
+            clustersVar = clustersVar,
+            clusters_palette = clusters_palette,
+            splitPlotOnVar = splitPlotOnVar,
+            referencePalette = referencePalette,
+            raster_resize_mat = raster_resize_mat
+          )
+          invisible(gc())
+        },
+        error = function(e) {
+          # fallback if error
+          plotCNVResultsHD(
+            seuratObjHD = seuratObjHD,
+            denoise = denoise,
+            printPlot = printPlot,
+            savePath = savePath,
+            outputType = outputType,
+            referenceVar = referenceVar,
+            clustersVar = clustersVar,
+            clusters_palette = clusters_palette,
+            splitPlotOnVar = splitPlotOnVar,
+            referencePalette = referencePalette,
+            raster_resize_mat = FALSE
+          )
+          invisible(gc())
+        }
+      )
     }
 
   } else if (length(seuratObjHD) > 1) {
     if (doPlot == TRUE) {
-      for (i in 1:length(seuratObjHD)) {
-        plotCNVResultsHD(seuratObjHD = seuratObjHD[[i]],
-                         denoise = denoise,
-                         printPlot = printPlot,
-                         savePath = savePath,
-                         outputType = outputType,
-                         referenceVar = referenceVar,
-                         clustersVar = clustersVar,
-                         clusters_palette = clusters_palette,
-                         splitPlotOnVar = splitPlotOnVar,
-                         referencePalette = referencePalette,
-                         raster_by_magick = raster_by_magick,
-                         raster_resize_mat = raster_resize_mat)
-        invisible(gc())
+      for (i in seq_along(seuratObjHD)) {
+        tryCatch(
+          {
+            plotCNVResultsHD(
+              seuratObjHD = seuratObjHD[[i]],
+              denoise = denoise,
+              printPlot = printPlot,
+              savePath = savePath,
+              outputType = outputType,
+              referenceVar = referenceVar,
+              clustersVar = clustersVar,
+              clusters_palette = clusters_palette,
+              splitPlotOnVar = splitPlotOnVar,
+              referencePalette = referencePalette,
+              raster_resize_mat = raster_resize_mat
+            )
+            invisible(gc())
+          },
+          error = function(e) {
+            plotCNVResultsHD(
+              seuratObjHD = seuratObjHD[[i]],
+              denoise = denoise,
+              printPlot = printPlot,
+              savePath = savePath,
+              outputType = outputType,
+              referenceVar = referenceVar,
+              clustersVar = clustersVar,
+              clusters_palette = clusters_palette,
+              splitPlotOnVar = splitPlotOnVar,
+              referencePalette = referencePalette,
+              raster_resize_mat = FALSE
+            )
+            invisible(gc())
+          }
+        )
       }
     }
   }

@@ -188,26 +188,46 @@ fastCNV <- function (seuratObj,
   }
 
   if (doPlot == TRUE) {
-    message(crayon::yellow(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Plotting CNV heatmap...")))
+    message(crayon::yellow(paste0("[", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "] Plotting CNV heatmap...")))
+
     if (length(seuratObj) > 1) {
-      for (i in 1:length(seuratObj)) {
-        if (Seurat::Project(seuratObj[[i]]) == "SeuratProject") {Seurat::Project(seuratObj[[i]]) = paste0("Sample",i)}
-        if ("cnv_clusters" %in% names(seuratObj[[i]]@meta.data)) {splitPlotOnVar = "cnv_clusters"}
-        plotCNVResults(seuratObj[[i]], referenceVar = referenceVar, splitPlotOnVar = splitPlotOnVar,
-                       savePath = savePath, printPlot = printPlot, referencePalette = referencePalette,
-                       clusters_palette = clusters_palette, outputType = outputType, denoise = denoise)
-        invisible(gc())
+      for (i in seq_along(seuratObj)) {
+        if (Seurat::Project(seuratObj[[i]]) == "SeuratProject") Seurat::Project(seuratObj[[i]]) <- paste0("Sample", i)
+
+        tryCatch(
+          { plotCNVResults(seuratObj[[i]], referenceVar = referenceVar, clustersVar = clustersVar,
+                           splitPlotOnVar = splitPlotOnVar,
+                           savePath = savePath, printPlot = printPlot, referencePalette = referencePalette,
+                           clusters_palette = clusters_palette, outputType = outputType, denoise = denoise)
+            invisible(gc()) },
+          error = function(e) {plotCNVResults(seuratObj[[i]], referenceVar = referenceVar, clustersVar = clustersVar,
+                                              splitPlotOnVar = splitPlotOnVar, savePath = savePath,
+                                              printPlot = printPlot, referencePalette = referencePalette,
+                                              clusters_palette = clusters_palette, outputType = outputType,
+                                              denoise = denoise, raster_resize_mat = FALSE)
+            invisible(gc()) }
+        )
       }
     } else {
-      if ("cnv_clusters" %in% names(seuratObj@meta.data)) {splitPlotOnVar = "cnv_clusters"}
-      plotCNVResults(seuratObj = seuratObj, referenceVar = referenceVar, splitPlotOnVar = splitPlotOnVar,
-                     clustersVar = clustersVar, denoise = denoise, savePath = savePath, printPlot = printPlot,
-                     referencePalette = referencePalette, clusters_palette = clusters_palette, outputType = outputType)
-      invisible(gc())
-    }
-    message(crayon::green(paste0("[",format(Sys.time(), "%Y-%m-%d %H:%M:%S"),"]"," Done !")))
-  }
 
+      tryCatch(
+        { plotCNVResults(seuratObj = seuratObj, referenceVar = referenceVar, splitPlotOnVar = splitPlotOnVar,
+                         clustersVar = clustersVar, denoise = denoise, savePath = savePath,
+                         printPlot = printPlot, referencePalette = referencePalette,
+                         clusters_palette = clusters_palette, outputType = outputType)
+          invisible(gc()) },
+        error = function(e) {plotCNVResults(seuratObj = seuratObj, referenceVar = referenceVar,
+                                            splitPlotOnVar = splitPlotOnVar, clustersVar = clustersVar,
+                                            denoise = denoise, savePath = savePath, printPlot = printPlot,
+                                            referencePalette = referencePalette,
+                                            clusters_palette = clusters_palette, outputType = outputType,
+                                            raster_resize_mat = FALSE)
+          invisible(gc()) }
+      )
+    }
+
+    message(crayon::green(paste0("[", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "] Done !")))
+  }
 
 
   return (seuratObj)
