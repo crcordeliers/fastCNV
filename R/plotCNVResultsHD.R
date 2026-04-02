@@ -128,7 +128,7 @@ plotCNVResultsHD <- function(seuratObjHD,
     if (any(clusters_palette == "default")){
       clusters_palette = scales::hue_pal()(length(unique(clusters_df$Clusters)))
     }
-    clusters_colors <- setNames(clusters_palette, sort(unique(clusters_df$Clusters)))
+    clusters_colors <- setNames(clusters_palette[1:length(unique(clusters_df$Clusters))], sort(unique(clusters_df$Clusters)))
   }
 
   if (!is.null(referenceVar) && is.null(clustersVar)) {
